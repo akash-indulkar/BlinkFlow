@@ -18,26 +18,27 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+	
 	@Autowired
-	private UserService uservice;
+	private UserService userService;
 	
 	@PostMapping("/signup")
 	public ResponseEntity<?> signup(@Valid @RequestBody UserRequestDTO reqUser){
-		Optional<UserResponseDTO> response =  uservice.createUser(reqUser);
+		Optional<UserResponseDTO> response =  userService.createUser(reqUser);
 		if(response.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(response.get());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists. Please log in.");
 	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody UserRequestDTO reqUser){
-		Optional<UserResponseDTO> response =  uservice.verifyUser(reqUser);
+		Optional<UserResponseDTO> response =  userService.authenticateUser(reqUser);
 		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials, Please try again.");
-	}
+		}
 	
 	@GetMapping("/me/{id}")
 	public ResponseEntity<?> getInfo(@Valid @PathVariable int id){
-		Optional<UserResponseDTO> response =  uservice.getUserInformation(id);
+		Optional<UserResponseDTO> response =  userService.getUserInformation(id);
 		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found, Please try again.");
 	}

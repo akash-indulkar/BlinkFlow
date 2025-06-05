@@ -19,4 +19,5 @@ public class UserResponseDTO {
 	private String email;
 	@NotBlank(message = "Password is mandatory")
 	private String name;
+	private String token;
 }
