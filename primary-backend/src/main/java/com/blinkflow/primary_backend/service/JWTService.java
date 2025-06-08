@@ -34,11 +34,11 @@ private String secretKey;
 		}
 	}
 
-	public String generateToken(String username) {
+	public String generateToken(Integer id) {
 		Map<String, Object> claims = new HashMap<String, Object>();
 		return Jwts.builder()
 					.setClaims(claims)
-					.setSubject(username)
+					.setSubject(id.toString())
 					.setIssuedAt(new Date(System.currentTimeMillis()))
 					.setExpiration(new Date(System.currentTimeMillis() + 1000*60*5))
 					.signWith(getKey(), SignatureAlgorithm.HS256)
@@ -63,8 +63,9 @@ private String secretKey;
 		return claimResolver.apply(claims);
 	}
 	
-	public String extractUsername(String token) {
-		return extractClaim(token, Claims :: getSubject);
+	public Integer extractUserID(String token) {
+		String userStrID = extractClaim(token, Claims :: getSubject);
+		return Integer.valueOf(userStrID);
 	}
 	
 	public Date extractExpiration (String token) {
@@ -75,9 +76,9 @@ private String secretKey;
 		return extractExpiration(token).before(new Date());
 	}
 	
-	public boolean validateToken(String token, UserDetails userDetails) {
-		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+	public boolean validateToken(String token, Integer userID) {
+		final Integer extractedUserID = extractUserID(token);
+		return (extractedUserID.equals(userID) && !isTokenExpired(token));
 	}
 	
 }

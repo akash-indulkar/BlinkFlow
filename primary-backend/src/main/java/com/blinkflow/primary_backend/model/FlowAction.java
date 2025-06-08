@@ -35,5 +35,5 @@ public class FlowAction {
 	@ManyToOne
 	@JoinColumn(name = "available_action_id", nullable = false)
 	private AvailableAction actionType;
-	int sortingOrder;
+	private int sortingOrder;
 }

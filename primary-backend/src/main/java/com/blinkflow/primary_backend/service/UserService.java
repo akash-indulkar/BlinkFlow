@@ -5,12 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.blinkflow.primary_backend.dto.UserRequestDTO;
 import com.blinkflow.primary_backend.dto.UserResponseDTO;
 import com.blinkflow.primary_backend.mapper.UserMapper;
 import com.blinkflow.primary_backend.model.User;
+import com.blinkflow.primary_backend.model.UserPrincipal;
 import com.blinkflow.primary_backend.repositary.UserRepositary;
 
 import jakarta.validation.Valid;
@@ -34,8 +36,8 @@ public class UserService {
 		if(!auth.isAuthenticated()) {
 			return Optional.empty();
 		}
-		String token = jwtService.generateToken(reqUser.getEmail());
 		User user = urepo.findByEmail(reqUser.getEmail());
+		String token = jwtService.generateToken(user.getId());
 		UserResponseDTO response = UserMapper.toResponseDTO(user);
 		response.setToken(token);
 		return Optional.of(response);
@@ -47,15 +49,17 @@ public class UserService {
 		User newUser = UserMapper.toEntity(reqUser);
 		newUser.setPassword(encoder.encode(newUser.getPassword()));
 		User savedUser = urepo.save(newUser);
-		String token = jwtService.generateToken(savedUser.getEmail());
+		String token = jwtService.generateToken(savedUser.getId());
 		UserResponseDTO response = UserMapper.toResponseDTO(savedUser);
 		response.setToken(token);
 		return Optional.of(response);
 	}
 
 
-	public Optional<UserResponseDTO> getUserInformation(@Valid int id) {
-		User user = urepo.findById(id).get();
+	public Optional<UserResponseDTO> getMyInformation() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal(); 
+		User user = urepo.findById(userPrincipal.getUser().getId()).get();
 		if(user == null) return Optional.empty();
 		UserResponseDTO response = UserMapper.toResponseDTO(user);
 		return Optional.of(response);

@@ -36,9 +36,9 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials, Please try again.");
 		}
 	
-	@GetMapping("/me/{id}")
-	public ResponseEntity<?> getInfo(@Valid @PathVariable int id){
-		Optional<UserResponseDTO> response =  userService.getUserInformation(id);
+	@GetMapping("/me")
+	public ResponseEntity<?> getMyInfo(){
+		Optional<UserResponseDTO> response =  userService.getMyInformation();
 		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found, Please try again.");
 	}

@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.blinkflow.primary_backend.model.User;
 import com.blinkflow.primary_backend.service.CustomUserDetailsService;
 import com.blinkflow.primary_backend.service.JWTService;
 import jakarta.servlet.FilterChain;
@@ -29,15 +31,15 @@ public class JWTFilter extends OncePerRequestFilter{
 		throws ServletException, IOException {
 		String authHeader = request.getHeader("Authorization");
 		String token = null;
-		String username = null;
+		Integer userID = null;
 		if(authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.split(" ")[1];
-			username = jwtService.extractUsername(token);
+			userID = jwtService.extractUserID(token);
 		}
 		
-		if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = myUser.loadUserByUsername(username);
-			if(jwtService.validateToken(token, userDetails)) {
+		if(userID != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			UserDetails userDetails = myUser.loadUserById(userID);
+			if(jwtService.validateToken(token, userID)) {
 				UsernamePasswordAuthenticationToken authToken = 
 						new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
