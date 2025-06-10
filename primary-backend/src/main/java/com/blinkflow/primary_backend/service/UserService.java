@@ -13,14 +13,14 @@ import com.blinkflow.primary_backend.dto.UserResponseDTO;
 import com.blinkflow.primary_backend.mapper.UserMapper;
 import com.blinkflow.primary_backend.model.User;
 import com.blinkflow.primary_backend.model.UserPrincipal;
-import com.blinkflow.primary_backend.repositary.UserRepositary;
+import com.blinkflow.primary_backend.repository.UserRepository;
 
 import jakarta.validation.Valid;
 
 @Service
 public class UserService {
 	@Autowired
-	private UserRepositary urepo;
+	private UserRepository urepo;
 	
 	@Autowired
 	private JWTService jwtService;

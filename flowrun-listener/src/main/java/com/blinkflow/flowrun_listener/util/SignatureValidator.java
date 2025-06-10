@@ -1,0 +1,23 @@
+package com.blinkflow.flowrun_listener.util;
+
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HexFormat;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
+public class SignatureValidator {
+
+	public static Boolean verifySignature(String receivedSignature, String secret, String rawPayload) throws InvalidKeyException, NoSuchAlgorithmException {
+		final SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        final Mac mac = Mac.getInstance("HmacSHA256");
+        mac.init(keySpec);
+        final byte[] digest = mac.doFinal(rawPayload.getBytes(StandardCharsets.UTF_8));
+        final HexFormat hex = HexFormat.of();
+
+        final String calculatedSignature = "sha256=" + hex.formatHex(digest);
+        return (MessageDigest.isEqual(calculatedSignature.getBytes(), receivedSignature.getBytes()));
+	}
+}

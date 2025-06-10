@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.blinkflow.primary_backend.model.AvailableAction;
-import com.blinkflow.primary_backend.repositary.AvailableActionRepository;
+import com.blinkflow.primary_backend.repository.AvailableActionRepository;
 
 @Service
 public class AvailableActionService {
