@@ -8,7 +8,7 @@ public class SignatureGetter {
 		while(headers.hasMoreElements()) {
 			String header = headers.nextElement();
 			if(header.toLowerCase().contains("signature")) {
-				return request.getHeader(header);
+				if(request.getHeader(header).startsWith("sha256")) return request.getHeader(header);
 			}
 		}
 		return null;

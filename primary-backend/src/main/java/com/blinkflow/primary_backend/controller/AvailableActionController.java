@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.blinkflow.primary_backend.model.AvailableAction;
+import com.blinkflow.primary_backend.dto.AvailableResponseDTO;
 import com.blinkflow.primary_backend.service.AvailableActionService;
 
 @RestController
@@ -19,7 +19,7 @@ public class AvailableActionController {
 	
 	@GetMapping("/availableactions")
 	public ResponseEntity<?> getActions(){
-		Optional<List<AvailableAction>> response = actionService.getAvailableActions();
+		Optional<List<AvailableResponseDTO>> response = actionService.getAvailableActions();
 		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong while fetching available actions");
 	}

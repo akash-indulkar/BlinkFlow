@@ -1,9 +1,11 @@
 package com.blinkflow.primary_backend.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.blinkflow.primary_backend.dto.AvailableResponseDTO;
 import com.blinkflow.primary_backend.model.AvailableAction;
 import com.blinkflow.primary_backend.repository.AvailableActionRepository;
 
@@ -12,9 +14,13 @@ public class AvailableActionService {
 	@Autowired
 	private AvailableActionRepository actionRepo;
 
-	public Optional<List<AvailableAction>> getAvailableActions() {
+	public Optional<List<AvailableResponseDTO>> getAvailableActions() {
 		List<AvailableAction> availableActions = actionRepo.findAll();
 		if(availableActions == null) return Optional.empty();
-		return Optional.of(availableActions);
+		List<AvailableResponseDTO> response = new ArrayList<AvailableResponseDTO>();
+		for(AvailableAction action : availableActions) {
+			response.add(AvailableResponseDTO.builder().id(action.getId()).name(action.getName()).image(action.getImage()).build());
+		}
+		return Optional.of(response);
 	}
 }

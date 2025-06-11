@@ -16,7 +16,6 @@ public class SignatureValidator {
         mac.init(keySpec);
         final byte[] digest = mac.doFinal(rawPayload.getBytes(StandardCharsets.UTF_8));
         final HexFormat hex = HexFormat.of();
-
         final String calculatedSignature = "sha256=" + hex.formatHex(digest);
         return (MessageDigest.isEqual(calculatedSignature.getBytes(), receivedSignature.getBytes()));
 	}
