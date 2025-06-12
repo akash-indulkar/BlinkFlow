@@ -12,7 +12,7 @@
 	<artifactId>primary-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>primary-backend</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Primary backend which handles user authentication, authorization, and flow creation APIs</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -30,10 +30,6 @@
 		<java.version>24</java.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
