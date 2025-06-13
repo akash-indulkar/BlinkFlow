@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class Flow {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;

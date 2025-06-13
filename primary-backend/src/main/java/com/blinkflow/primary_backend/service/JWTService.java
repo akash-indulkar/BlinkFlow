@@ -34,7 +34,7 @@ private String secretKey;
 		}
 	}
 
-	public String generateToken(Integer id) {
+	public String generateToken(Long id) {
 		Map<String, Object> claims = new HashMap<String, Object>();
 		return Jwts.builder()
 					.setClaims(claims)
@@ -63,9 +63,9 @@ private String secretKey;
 		return claimResolver.apply(claims);
 	}
 	
-	public Integer extractUserID(String token) {
+	public Long extractUserID(String token) {
 		String userStrID = extractClaim(token, Claims :: getSubject);
-		return Integer.valueOf(userStrID);
+		return Long.valueOf(userStrID);
 	}
 	
 	public Date extractExpiration (String token) {
@@ -76,8 +76,8 @@ private String secretKey;
 		return extractExpiration(token).before(new Date());
 	}
 	
-	public boolean validateToken(String token, Integer userID) {
-		final Integer extractedUserID = extractUserID(token);
+	public boolean validateToken(String token, Long userID) {
+		final Long extractedUserID = extractUserID(token);
 		return (extractedUserID.equals(userID) && !isTokenExpired(token));
 	}
 	

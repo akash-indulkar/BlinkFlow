@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class FlowRun {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	@Column(columnDefinition = "TEXT")
 	@Convert(converter = JsonToMapConverter.class)
 	private Map<String, Object> metadata;

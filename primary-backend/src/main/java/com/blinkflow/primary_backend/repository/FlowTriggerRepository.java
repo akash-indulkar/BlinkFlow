@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.blinkflow.primary_backend.model.FlowTrigger;
 
 @Repository
-public interface FlowTriggerRepository extends JpaRepository<FlowTrigger, Integer>{
+public interface FlowTriggerRepository extends JpaRepository<FlowTrigger, Long>{
 
 }

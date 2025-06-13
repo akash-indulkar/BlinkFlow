@@ -15,7 +15,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	@Autowired
 	private UserRepository urepo;
 	
-	public UserDetails loadUserById(Integer userID) throws UsernameNotFoundException {
+	public UserDetails loadUserById(Long userID) throws UsernameNotFoundException {
 		Optional<User> user = urepo.findById(userID);
 		if(user.isEmpty()) {
 			throw new UsernameNotFoundException("User not found");

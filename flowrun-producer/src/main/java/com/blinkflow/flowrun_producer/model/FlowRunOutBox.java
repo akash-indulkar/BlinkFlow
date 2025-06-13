@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class FlowRunOutBox {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	@OneToOne
 	@JoinColumn(name="flow_run_id", nullable = false)
 	private FlowRun flowRun;

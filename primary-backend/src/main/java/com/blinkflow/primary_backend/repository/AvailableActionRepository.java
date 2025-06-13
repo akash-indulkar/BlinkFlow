@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.blinkflow.primary_backend.model.AvailableAction;
 
 @Repository
-public interface AvailableActionRepository extends JpaRepository<AvailableAction, Integer> {
+public interface AvailableActionRepository extends JpaRepository<AvailableAction, Long> {
 	
 }

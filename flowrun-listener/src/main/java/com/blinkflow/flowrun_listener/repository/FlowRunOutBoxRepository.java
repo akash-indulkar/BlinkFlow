@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.blinkflow.flowrun_listener.model.FlowRunOutBox;
 
 @Repository
-public interface FlowRunOutBoxRepository extends JpaRepository<FlowRunOutBox, Integer>{
+public interface FlowRunOutBoxRepository extends JpaRepository<FlowRunOutBox, Long>{
 
 }

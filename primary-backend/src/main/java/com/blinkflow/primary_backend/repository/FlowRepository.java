@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.blinkflow.primary_backend.model.Flow;
 
 @Repository
-public interface FlowRepository extends JpaRepository<Flow, Integer>{
-	List<Flow> findAllByUserId(Integer userId);
-	Flow findByUserIdAndId(int userID, int flowID);
+public interface FlowRepository extends JpaRepository<Flow, Long>{
+	List<Flow> findAllByUserId(Long userId);
+	Flow findByUserIdAndId(Long userID, Long flowID);
 }

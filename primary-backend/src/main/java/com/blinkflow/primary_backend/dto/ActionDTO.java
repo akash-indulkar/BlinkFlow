@@ -14,9 +14,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ActionDTO {
 	@NotNull
-	private int availableActionID;
+	private Long availableActionID;
 	@NotEmpty
 	private Map<String, Object> metadata;
 	@NotNull
-	private int sortingOrder;
+	private Integer sortingOrder;
 }

@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 public class FlowRun {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	@Column(columnDefinition = "TEXT")
 	@Convert(converter = JsonToMapConverter.class)
 	private Map<String, Object> metadata;
@@ -35,7 +35,7 @@ public class FlowRun {
 	@JoinColumn(name = "flow_id", nullable = false)
 	private Flow flow;
 	@OneToOne(mappedBy = "flowRun")
-	private FlowRunOutBox outBoxRun;
+	private FlowRunOutBox FlowRunOutBox;
 	@Enumerated(EnumType.STRING)
 	private FlowRunStatus status;
 }

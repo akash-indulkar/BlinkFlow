@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 public class FlowAction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	@ManyToOne
 	@JoinColumn(name = "flow_id")
 	private Flow flow;
@@ -33,5 +33,5 @@ public class FlowAction {
 	@ManyToOne
 	@JoinColumn(name = "available_action_id", nullable = false)
 	private AvailableAction actionType;
-	private int sortingOrder;
+	private Integer sortingOrder;
 }

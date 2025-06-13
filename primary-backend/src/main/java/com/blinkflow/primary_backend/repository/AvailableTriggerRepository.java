@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import com.blinkflow.primary_backend.model.AvailableTrigger;
 
 @Repository
-public interface AvailableTriggerRepository extends JpaRepository<AvailableTrigger, Integer>{
+public interface AvailableTriggerRepository extends JpaRepository<AvailableTrigger, Long>{
 
 }

@@ -37,7 +37,7 @@ public class FlowController {
 	}
 	
 	@GetMapping("/{flowID}")
-	public ResponseEntity<?> getFlow(@PathVariable int flowID){
+	public ResponseEntity<?> getFlow(@PathVariable Long flowID){
 		Optional<FlowResponseDTO> response = flowService.getFlowByID(flowID);
 		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch your flows");

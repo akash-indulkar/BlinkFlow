@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class FlowTrigger {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	@OneToOne
 	@JoinColumn(name = "flow_id")
 	private Flow flow;

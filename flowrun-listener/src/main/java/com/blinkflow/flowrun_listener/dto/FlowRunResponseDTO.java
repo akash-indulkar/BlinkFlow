@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 public class FlowRunResponseDTO {
-	private int flowRunID;
+	private Long flowRunID;
 	private FlowRunStatus status;
 	private String message;
 }

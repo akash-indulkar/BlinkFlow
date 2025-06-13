@@ -84,7 +84,7 @@ public class FlowService {
 		return Optional.of(flowResponses);
 	}
 
-	public Optional<FlowResponseDTO> getFlowByID(int flowID) {
+	public Optional<FlowResponseDTO> getFlowByID(Long flowID) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 		Flow flow = flowRepo.findByUserIdAndId(userPrincipal.getUser().getId(), flowID);

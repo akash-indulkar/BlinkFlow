@@ -28,7 +28,7 @@ public class FlowRunController {
 	private FlowRunService flowRunService;
 	
 	@PostMapping("/initiate/{userID}/{flowID}")
-	public ResponseEntity<?> initiateFlowRun(@PathVariable int userID, @PathVariable int flowID, @RequestBody Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException{
+	public ResponseEntity<?> initiateFlowRun(@PathVariable Long userID, @PathVariable Long flowID, @RequestBody Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException{
 		Optional<FlowRunResponseDTO> response = flowRunService.intiateFlowRun(userID, flowID, requestBody, request);
 		if(response.isPresent()) return ResponseEntity.status(HttpStatus.ACCEPTED).body(response.get());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong");

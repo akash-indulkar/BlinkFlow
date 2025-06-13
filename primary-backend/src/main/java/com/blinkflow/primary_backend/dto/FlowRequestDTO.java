@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FlowRequestDTO {
 	@NotNull
-	private int userID;
+	private Long userID;
 	@NotNull
-	private int availableTriggerID;
+	private Long availableTriggerID;
 	@NotEmpty
 	private Map<String, Object> triggerMetadata;
 	@NotEmpty

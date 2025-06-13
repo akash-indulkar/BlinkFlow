@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserResponseDTO {
 	@NotBlank(message = "Name is mandatory")
-	private int id;
+	private Long id;
 	@Email
 	@NotBlank(message = "Email is mandatory")
 	private String email;

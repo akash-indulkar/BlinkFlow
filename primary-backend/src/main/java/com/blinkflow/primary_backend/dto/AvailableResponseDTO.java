@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AvailableResponseDTO {
 	@NotNull
-	private int id;
+	private Long id;
 	@NotBlank
 	private String name;
 	@NotBlank

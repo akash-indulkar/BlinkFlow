@@ -29,7 +29,7 @@ public class JWTFilter extends OncePerRequestFilter{
 		throws ServletException, IOException {
 		String authHeader = request.getHeader("Authorization");
 		String token = null;
-		Integer userID = null;
+		Long userID = null;
 		if(authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.split(" ")[1];
 			userID = jwtService.extractUserID(token);

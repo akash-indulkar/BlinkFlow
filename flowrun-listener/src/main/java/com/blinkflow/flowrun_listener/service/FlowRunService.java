@@ -34,7 +34,7 @@ public class FlowRunService {
 	private FlowRunOutBoxRepository flowRunOutBoxRepo;
 
     @Transactional
-	public Optional<FlowRunResponseDTO> intiateFlowRun(int userID, int flowID, Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException {
+	public Optional<FlowRunResponseDTO> intiateFlowRun(Long userID, Long flowID, Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException {
 		Flow flow = flowRepo.findByUserIdAndId(userID, flowID);
 		if(flow == null) return Optional.empty();
 		
