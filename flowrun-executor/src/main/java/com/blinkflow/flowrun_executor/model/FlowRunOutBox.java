@@ -1,4 +1,4 @@
-package com.blinkflow.primary_backend.model;
+package com.blinkflow.flowrun_executor.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

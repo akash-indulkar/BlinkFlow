@@ -34,8 +34,6 @@ public class FlowRun {
 	@ManyToOne()
 	@JoinColumn(name = "flow_id", nullable = false)
 	private Flow flow;
-	@OneToOne(mappedBy = "flowRun")
-	private FlowRunOutBox outBoxRun;
 	@Enumerated(EnumType.STRING)
 	private FlowRunStatus status;
 }

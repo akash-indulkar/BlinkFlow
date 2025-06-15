@@ -7,8 +7,11 @@ public class SignatureGetter {
 	public static String getSignatureFromHeader(Enumeration<String> headers, HttpServletRequest request) {
 		while(headers.hasMoreElements()) {
 			String header = headers.nextElement();
-			if(header.toLowerCase().contains("signature")) {
-				if(request.getHeader(header).startsWith("sha256") || !request.getHeader(header).startsWith("sha1")) return request.getHeader(header);
+			if(header.toLowerCase().contains("-signature")) {
+				if(request.getHeader(header).startsWith("sha256") || !request.getHeader(header).startsWith("sha1")) {
+					System.out.println(request.getHeader(header));
+					return request.getHeader(header);
+				}
 			}
 		}
 		return null;

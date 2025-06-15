@@ -2,23 +2,19 @@ package com.blinkflow.flowrun_producer.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
+import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.blinkflow.flowrun_producer.dto.FlowRunEventPayload;
 import com.blinkflow.flowrun_producer.model.FlowRun;
 import com.blinkflow.flowrun_producer.model.FlowRunOutBox;
 import com.blinkflow.flowrun_producer.model.enums.FlowRunStatus;
 import com.blinkflow.flowrun_producer.repository.FlowRunOutBoxRepository;
 import com.blinkflow.flowrun_producer.repository.FlowRunRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class FlowRunProducerService {
@@ -26,7 +22,7 @@ public class FlowRunProducerService {
 	private String kafkaTopic;
 	
 	@Autowired
-	private KafkaTemplate<String, Object> kafkaTemplate;
+	private KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate;
 	
 	@Autowired
 	private FlowRunOutBoxRepository flowRunOutBoxRepo;
@@ -34,22 +30,20 @@ public class FlowRunProducerService {
 	@Autowired
 	private FlowRunRepository flowRunRepository;
 	
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 500)
 	@Transactional
-	public void pollAndPublish() throws JsonProcessingException {
+	public void pollAndPublish() throws InterruptedException, ExecutionException {
 		List<FlowRunOutBox> flowRunOutBoxs = flowRunOutBoxRepo.findTop10ByOrderByIdAsc();
 		if(flowRunOutBoxs.isEmpty()) return;
-		kafkaTemplate.executeInTransaction(tx -> {
-			List<FlowRun> flowRuns = new ArrayList<FlowRun>();
-			for(FlowRunOutBox flowRunOutBox : flowRunOutBoxs) {
-				FlowRunEventPayload payload = FlowRunEventPayload.builder().flowRunID(flowRunOutBox.getFlowRun().getId()).Stage(0).build();
-				tx.send(kafkaTopic, payload);
-				flowRunOutBox.getFlowRun().setStatus(FlowRunStatus.RUNNING);
-				flowRuns.add(flowRunOutBox.getFlowRun());
-			}
-			flowRunRepository.saveAll(flowRuns);
-			flowRunOutBoxRepo.deleteAll(flowRunOutBoxs);
-			return true;
-		});
+		List<FlowRun> flowRuns = new ArrayList<FlowRun>();
+		for(FlowRunOutBox flowRunOutBox : flowRunOutBoxs) {
+			FlowRunEventPayload payload = FlowRunEventPayload.builder().flowRunID(flowRunOutBox.getFlowRunID()).Stage(0).build();
+			kafkaTemplate.send(kafkaTopic, payload).get();
+			FlowRun flowRun = flowRunRepository.findById(flowRunOutBox.getFlowRunID()).get();
+			flowRun.setStatus(FlowRunStatus.RUNNING);
+			flowRuns.add(flowRun);
+		}
+		flowRunRepository.saveAll(flowRuns);
+		flowRunOutBoxRepo.deleteAll(flowRunOutBoxs);
 	}		
 }

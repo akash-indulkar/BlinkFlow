@@ -1,8 +1,8 @@
-package com.blinkflow.flowrun_listener.model;
+package com.blinkflow.flowrun_executor.model;
 
 import java.util.Map;
-import com.blinkflow.flowrun_listener.config.JsonToMapConverter;
-import com.blinkflow.flowrun_listener.model.enums.FlowRunStatus;
+import com.blinkflow.flowrun_executor.config.JsonToMapConverter;
+import com.blinkflow.flowrun_executor.model.enums.FlowRunStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;

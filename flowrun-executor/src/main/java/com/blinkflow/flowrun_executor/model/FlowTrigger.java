@@ -1,13 +1,10 @@
-package com.blinkflow.flowrun_listener.model;
+package com.blinkflow.flowrun_executor.model;
 
 import java.util.Map;
-import com.blinkflow.flowrun_listener.config.JsonToMapConverter;
-import com.blinkflow.flowrun_listener.model.enums.FlowRunStatus;
+import com.blinkflow.flowrun_executor.config.JsonToMapConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,18 +19,19 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class FlowRun {
+@AllArgsConstructor
+public class FlowTrigger {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@OneToOne
+	@JoinColumn(name = "flow_id")
+	private Flow flow;
 	@Column(columnDefinition = "TEXT")
 	@Convert(converter = JsonToMapConverter.class)
-	private Map<String, Object> metadata;
-	@ManyToOne()
-	@JoinColumn(name = "flow_id", nullable = false)
-	private Flow flow;
-	@Enumerated(EnumType.STRING)
-	private FlowRunStatus status;
+    private Map<String, Object> metadata;
+	@ManyToOne
+	@JoinColumn(name = "available_trigger_id", nullable = false)
+	private AvailableTrigger triggerType;
 }
