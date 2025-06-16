@@ -64,6 +64,7 @@ public class FlowRunService {
 		
 		FlowRunResponseDTO response = FlowRunResponseDTO.builder()
 										.flowRunID(savedFlowRun.getId())
+										.status(savedFlowRun.getStatus())
 										.message("FlowRun has been initiated")
 										.build();
 		return Optional.of(response);
