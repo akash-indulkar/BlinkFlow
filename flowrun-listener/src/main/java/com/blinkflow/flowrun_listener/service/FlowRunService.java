@@ -37,22 +37,17 @@ public class FlowRunService {
 	public Optional<FlowRunResponseDTO> intiateFlowRun(Long userID, Long flowID, Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException {
 		Flow flow = flowRepo.findByUserIdAndId(userID, flowID);
 		if(flow == null) return Optional.empty();
-		System.out.println("1");
 		
 		Object secretObj = flow.getFlowTrigger().getMetadata().get("secret");
 		if(secretObj != null) {
-			System.out.println("1");
 			final String secret = String.valueOf(secretObj);
 			Enumeration<String> headers = request.getHeaderNames();
 			final String receivedSignature = SignatureGetter.getSignatureFromHeader(headers, request);
 			if(receivedSignature == null) return Optional.empty();
-			System.out.println("1");
 			final String rawPayload = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 			if(rawPayload.isEmpty()) return Optional.empty();
-			System.out.println("1");
 			Boolean isSignatureValid = SignatureValidator.verifySignature(receivedSignature, secret, rawPayload);
 			if(!isSignatureValid) return Optional.empty();
-			System.out.println("1");
 		}
 		
 		FlowRun flowRun = FlowRun.builder()

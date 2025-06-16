@@ -29,17 +29,18 @@ public class KafkaConfig {
     @Bean
     public ConsumerFactory<String, FlowRunEventPayload> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
+        JsonDeserializer<FlowRunEventPayload> deserializer = new JsonDeserializer<>(FlowRunEventPayload.class);
+        deserializer.setRemoveTypeHeaders(false);
+        deserializer.addTrustedPackages("com.blinkflow.flowrun_producer.dto,com.blinkflow.flowrun_executor.dto");
+        deserializer.setUseTypeMapperForKey(true);
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-        config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class.getName());
-        config.put(JsonDeserializer.VALUE_DEFAULT_TYPE, FlowRunEventPayload.class.getName());
-        config.put(JsonDeserializer.TRUSTED_PACKAGES, "com.blinkflow.flowrun_producer.dto, com.blinkflow.flowrun_executor.dto");
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
         config.put(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         config.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        return new DefaultKafkaConsumerFactory<>(config);
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), deserializer);
     }
 
     @Bean
