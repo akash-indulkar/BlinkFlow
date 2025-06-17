@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FlowRunEventPayload {
 	private Long flowRunID;
-	private Integer Stage;
+	private Integer stage;
+	private Integer retryCount;
 }
