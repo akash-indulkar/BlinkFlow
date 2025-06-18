@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Email {
-	public static void sendEmail(Map<String, Object> metadata) {
+	public static void sendEmail(Map<String, Object> metadata) throws Exception {
 		System.out.println("send email service " + metadata.toString());
 	}
 }

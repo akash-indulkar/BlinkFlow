@@ -37,7 +37,7 @@ public class FlowRunProducerService {
 		if(flowRunOutBoxs.isEmpty()) return;
 		List<FlowRun> flowRuns = new ArrayList<FlowRun>();
 		for(FlowRunOutBox flowRunOutBox : flowRunOutBoxs) {
-			FlowRunEventPayload payload = FlowRunEventPayload.builder().flowRunID(flowRunOutBox.getFlowRunID()).stage(1).build();
+			FlowRunEventPayload payload = FlowRunEventPayload.builder().flowRunID(flowRunOutBox.getFlowRunID()).stage(1).retryCount(0).build();
 			kafkaTemplate.send(kafkaTopic, payload).get();
 			FlowRun flowRun = flowRunRepository.findById(flowRunOutBox.getFlowRunID()).get();
 			flowRun.setStatus(FlowRunStatus.RUNNING);
