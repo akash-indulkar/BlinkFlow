@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 public class FlowResponseDTO {
 	@NotNull
 	private Long flowID;
+	@NotNull
+	private Long userID;
 	@NotBlank
 	private String flowTriggerName;
 	@NotEmpty

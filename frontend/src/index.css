@@ -5,3 +5,11 @@
 body {
   background-color: #fffdf9;
 }
+
+.hide-handle {
+  visibility: hidden;
+}
+
+.main-content {
+  padding-top: 5rem;
+}

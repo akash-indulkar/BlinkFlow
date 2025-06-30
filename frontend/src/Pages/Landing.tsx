@@ -1,8 +1,8 @@
-import { Hero } from "../components/Hero"
-import { HeroVideo } from "../components/HeroVideo"
+import { Hero } from "../components/landing/Hero"
+import { HeroVideo } from "../components/landing/HeroVideo"
 
 export const Landing = () => {
-    return <div className="pb-48">
+    return <div className="pb-48 main-content">
         <Hero />
         <div className="pt-8">
             <HeroVideo />

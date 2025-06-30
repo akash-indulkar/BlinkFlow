@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Feature } from "./Feature"
-import { PrimaryButton } from "./buttons/PrimaryButton"
-import { SecondaryButton } from "./buttons/SecondaryButton"
+import { PrimaryButton } from "../buttons/PrimaryButton"
+import { SecondaryButton } from "../buttons/SecondaryButton"
 
 export const Hero = () => {
     const router = useNavigate();

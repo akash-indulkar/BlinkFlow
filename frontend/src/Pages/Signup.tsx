@@ -11,7 +11,7 @@ export const Signup = () => {
     const [password, setPassword] = useState("");
     const router = useNavigate();
 
-    return <div className="flex justify-center">
+    return <div className="main-content flex justify-center">
             <div className="flex pt-8 max-w-4xl">
                 <div className="flex-1 pt-20 px-4">
                     <div className="font-semibold text-3xl pb-4">

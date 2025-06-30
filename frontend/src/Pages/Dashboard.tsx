@@ -4,15 +4,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DarkButton } from "../components/buttons/DarkButton";
 import { Flow } from "../utils/Flow";
+import { FlowTable } from "../components/FlowTable";
 
 function useFlows() {
     const [loading, setLoading] = useState(true);
     const [flows, setFlows] = useState<Flow[]>([]);
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/flow`, {
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/flow/`, {
             headers: {
-                "Authorization": localStorage.getItem("token"),
+                "Authorization": "Bearer " + localStorage.getItem("token"),
                 "Content-type": "application/json"
             }
         })
@@ -31,7 +32,7 @@ export const Dashboard = () => {
     const { loading, flows } = useFlows();
     const router = useNavigate();
 
-    return <div className="flex-col justify-center ">
+    return <div className="main-content flex-col justify-center ">
 
         <div className="flex justify-center pt-8">
             <div className="max-w-screen-lg	 w-full">
@@ -91,20 +92,3 @@ export const Dashboard = () => {
     </div>
 }
 
-function FlowTable({ flows }: { flows : Flow[] }) {
-
-    return <div className="p-8 w-full">
-        <div className="flex justify-between px-4">
-            <div className="flex justify-betweenp" >
-                <div className="pr-48">Name</div>
-                <div >ID</div>
-            </div>
-            <div >Webhook URL</div>
-        </div>
-        {flows.map(flow => <div className=" flex justify-center border-b border-t px-4">
-            <div className="flex pr-4"><img src={flow.trigger.type.image} className="w-[30px] h-[30px]" /> {flow.actions.map(x => <img src={x.type.image} className="w-[30px] h-[30px]" />)}</div>
-            <div className="flex pr-4">{flow.id}</div>
-            <div >{`${import.meta.env.VITE_HOOKS_URL}/hooks/catch/1/${flow.id}`}</div>
-        </div>)}
-    </div>
-}

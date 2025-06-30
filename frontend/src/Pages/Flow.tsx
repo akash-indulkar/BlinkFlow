@@ -1,197 +1,268 @@
+import { useCallback, useEffect, useState } from 'react';
+import {
+  Background,
+  ReactFlow,
+  useNodesState,
+  useEdgesState,
+  type Node,
+  type Edge,
+  NodeTypes,
+  MarkerType,
+} from '@xyflow/react';
 
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { PrimaryButton } from "../components/buttons/PrimaryButton";
-import { FlowCell } from "../components/FlowCell";
-import { Input } from "../components/Input";
+import '@xyflow/react/dist/style.css';
+import { CustomNode } from '../components/ReactFlow/CustomNode';
+import axios from 'axios';
+import { PrimaryButton } from '../components/buttons/PrimaryButton';
+import { useNavigate } from 'react-router-dom';
+import { AddActionNode } from '../components/ReactFlow/AddActionNode';
+import { Modal } from '../components/Modal';
 
 function useAvailableActionsAndTriggers() {
-    const [availableActions, setAvailableActions] = useState([]);
-    const [availableTriggers, setAvailableTriggers] = useState([]);
+  const [availableActions, setAvailableActions] = useState([]);
+  const [availableTriggers, setAvailableTriggers] = useState([]);
 
-    useEffect(() => {
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/triggers/availabletriggers`)
-            .then(res => setAvailableTriggers(res.data.availableTriggers))
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/triggers/availabletriggers`)
+      .then(res => setAvailableTriggers(res.data))
 
-        axios.get(`${import.meta.env.VITE_BACKEND_URL}/actions/availableactions`)
-            .then(res => setAvailableActions(res.data.availableActions))
-    }, [])
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/actions/availableactions`)
+      .then(res => setAvailableActions(res.data))
+  }, [])
 
-    return {
-        availableActions,
-        availableTriggers
-    }
+  return {
+    availableActions,
+    availableTriggers
+  }
 }
+
+const nodeTypes: NodeTypes = {
+  customNode: CustomNode,
+  addActionNode: AddActionNode,
+}
+
+const nodeOrigin: [number, number] = [0.5, 0];
 
 export const Flow = () => {
-    const router = useNavigate();
-    const { availableActions, availableTriggers } = useAvailableActionsAndTriggers();
-    const [selectedTrigger, setSelectedTrigger] = useState<{
-        id: string;
-        name: string;
-    }>();
+  const router = useNavigate();
+  const { availableActions, availableTriggers } = useAvailableActionsAndTriggers();
+  const [selectedTrigger, setSelectedTrigger] = useState<{ id: number, name: string, image: string }>();
+  const [selectedActions, setSelectedActions] = useState<{
+    index: number;
+    availableActionId: number;
+    availableActionName: string;
+    availableActionImage: string;
+    metadata: any;
+  }[]>([
+    {
+      index: 2,
+      availableActionId: 0,
+      availableActionName: '',
+      availableActionImage: '',
+      metadata: {},
+    }
+  ]);
 
-    const [selectedActions, setSelectedActions] = useState<{
-        index: number;
-        availableActionId: string;
-        availableActionName: string;
-        metadata: any;
-    }[]>([]);
-    const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null);
+  const [flowName, setFlowName] = useState("My Zap " + Math.floor(Math.random()*1000) );
+  const [isEditing, setIsEditing] = useState(false);
+  const addAction = useCallback(() => {
+    setSelectedActions(prev => [
+      ...prev,
+      {
+        index: prev.length + 2,
+        availableActionId: 0,
+        availableActionName: '',
+        availableActionImage: '',
+        metadata: {}
+      }
+    ]);
+  }, []);
 
-    return <div>
+  useEffect(() => {
+    const newNodes: Node[] = [];
 
-        <div className="flex justify-end p-4">
-            <PrimaryButton onClick={async () => {
-                if (!selectedTrigger?.id) {
-                    return;
-                }
+    newNodes.push({
+      id: '0',
+      type: 'customNode',
+      position: { x: 775, y: 150 },
+      data: {
+        name: selectedTrigger?.name || "Select a Trigger",
+        image: selectedTrigger?.image || "",
+        index: 1,
+        type: "Trigger",
+        onClick: () => setSelectedModalIndex(1),
+        onDelete: () => { }
+      }
+    });
 
-                await axios.post(`${import.meta.env.VITE_BACKEND_URL}/flow/create`, {
-                    "availableTriggerId": selectedTrigger.id,
-                    "triggerMetadata": {},
-                    "actions": selectedActions.map(action => ({
-                        availableActionId: action.availableActionId,
-                        actionMetadata: action.metadata
-                    }))
-                }, {
-                    headers: {
-                        Authorization: localStorage.getItem("token")
-                    }
-                })
-                
-                router("/dashboard");
-            }}>Publish</PrimaryButton>
-        </div>
-        <div className="w-full min-h-screen flex flex-col justify-start">
-            <div className="flex justify-center">
-                <FlowCell onClick={() => {
-                    setSelectedModalIndex(1);
-                }} name={selectedTrigger?.name ? selectedTrigger.name : "Trigger"} index={1} />
-            </div>
-            <div className="w-full pt-2 pb-2">
-                {selectedActions.map((action) => <div className="pt-2 flex justify-center"> <FlowCell onClick={() => {
-                    setSelectedModalIndex(action.index);
-                }} name={action.availableActionName ? action.availableActionName : "Action"} index={action.index} /> </div>)}
-            </div>
-            <div className="flex justify-center">
-                <div>
-                    <PrimaryButton onClick={() => {
-                        setSelectedActions(action => [...action, {
-                            index: action.length + 2,
-                            availableActionId: "",
-                            availableActionName: "",
-                            metadata: {}
-                        }])
-                    }}><div className="text-2xl">
-                        +
-                    </div></PrimaryButton>
-                </div>
-            </div>
-        </div>
-        {selectedModalIndex && <Modal availableItems={selectedModalIndex === 1 ? availableTriggers : availableActions} onSelect={(props: null | { name: string; id: string; metadata: any; }) => {
-            if (props === null) {
-                setSelectedModalIndex(null);
-                return;
+    selectedActions.forEach((action, i) => {
+      newNodes.push({
+        id: `${action.index}`,
+        type: 'customNode',
+        position: { x: 775, y: 150 + (i + 1) * 120 },
+        data: {
+          name: action.availableActionName || "Select an Action",
+          image: action.availableActionImage || "",
+          index: action.index,
+          type: "Action",
+          onClick: () => setSelectedModalIndex(action.index),
+          onDelete: () => {
+            setSelectedActions(prev =>
+              prev
+                .filter(a => a.index !== action.index)
+                .map((a, newIndex) => ({
+                  ...a,
+                  index: newIndex + 2,
+                }))
+            );
+          }
+        }
+      });
+    });
+
+    newNodes.push({
+      id: 'add-button',
+      type: 'addActionNode',
+      position: {
+        x: 775,
+        y: 240 + selectedActions.length * 120,
+      },
+      data: {
+        onClick: addAction
+      }
+    });
+
+    const newEdges: Edge[] = [];
+    if (selectedActions.length > 0) {
+      newEdges.push({
+        id: `e-0-${selectedActions[0].index}`,
+        source: '0',
+        target: `${selectedActions[0].index}`,
+        type: 'straight',
+        style: { stroke: '  #994d00', strokeWidth: 2, strokeDasharray: '1.5 1.6' },
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+          color: '#994d00'
+        }
+      });
+
+      for (let i = 1; i < selectedActions.length; i++) {
+        newEdges.push({
+          id: `e-${selectedActions[i - 1].index}-${selectedActions[i].index}`,
+          source: `${selectedActions[i - 1].index}`,
+          target: `${selectedActions[i].index}`,
+          type: 'straight',
+          style: { stroke: '  #994d00', strokeWidth: 2, strokeDasharray: '1.5 1.6' },
+          markerEnd: {
+            type: MarkerType.ArrowClosed,
+            color: '#994d00'
+          }
+        });
+      }
+    }
+
+    setNodes(newNodes);
+    setEdges(newEdges);
+  }, [selectedActions, selectedTrigger]);
+
+  return (
+    <div style={{ height: '100vh', position: 'relative' }}>
+      <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md shadow-xl px-4 py-2 rounded-full flex items-center gap-2 border border-gray-200">
+        {isEditing ? (
+          <input
+            value={flowName}
+            onChange={(e) => setFlowName(e.target.value)}
+            onBlur={() => setIsEditing(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") setIsEditing(false);
+            }}
+            autoFocus
+            className="bg-transparent outline-none font-sans text-base antialiased"
+          />
+        ) : (
+          <>
+            <h2 className="font-sans text-base antialiased">{flowName}</h2>
+            <button
+              onClick={() => setIsEditing(true)}
+              className="hover:text-blue-500 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+              </svg>
+
+            </button>
+          </>
+        )}
+      </div>
+      <div className="flex justify-end p-4 absolute right-0 top-20 z-50">
+        <PrimaryButton onClick={async () => {
+          if (!selectedTrigger?.id) {
+            return;
+          }
+
+          await axios.post(`${import.meta.env.VITE_BACKEND_URL}/flow/create`, {
+            "name" : flowName,
+            "availableTriggerID": selectedTrigger.id,
+            "triggerMetadata": {},
+            "flowActions": selectedActions.map(action => ({
+              availableActionID: action.availableActionId,
+              metadata: action.metadata,
+              sortingOrder: action.index
+            }))
+          }, {
+            headers: {
+              Authorization: localStorage.getItem("token")
             }
-            if (selectedModalIndex === 1) {
-                setSelectedTrigger({
-                    id: props.id,
-                    name: props.name
-                })
-            } else {
-                setSelectedActions(a => {
-                    let newActions = [...a];
-                    newActions[selectedModalIndex - 2] = {
-                        index: selectedModalIndex,
-                        availableActionId: props.id,
-                        availableActionName: props.name,
-                        metadata: props.metadata
-                    }
-                    return newActions
-                })
+          })
+
+          router("/dashboard");
+        }}>Create</PrimaryButton>
+      </div>
+      {selectedModalIndex && <Modal availableItems={selectedModalIndex === 1 ? availableTriggers : availableActions} onSelect={(props: null | { name: string; id: number; image: string, metadata: any; }) => {
+        if (props === null) {
+          setSelectedModalIndex(null);
+          return;
+        }
+        if (selectedModalIndex === 1) {
+          setSelectedTrigger({
+            id: props.id,
+            name: props.name,
+            image: props.image
+          })
+        } else {
+          setSelectedActions(actions => {
+            let newActions = [...actions];
+            newActions[selectedModalIndex - 2] = {
+              index: selectedModalIndex,
+              availableActionId: props.id,
+              availableActionName: props.name,
+              metadata: props.metadata,
+              availableActionImage: props.image
             }
-            setSelectedModalIndex(null);
-        }} index={selectedModalIndex} />}
+            return newActions
+          })
+        }
+        setSelectedModalIndex(null);
+      }} index={selectedModalIndex} />}
+
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
+        zoomOnScroll={false}
+        nodeOrigin={nodeOrigin}
+        defaultViewport={{ x: 0, y: 0, zoom: 1 }}
+        nodesDraggable={false}
+        zoomOnDoubleClick={false}
+      >
+        <Background gap={5} size={0.5} />
+      </ReactFlow>
     </div>
+  );
 }
 
-function Modal({ index, onSelect, availableItems }: { index: number, onSelect: (props: null | { name: string; id: string; metadata: any; }) => void, availableItems: {id: string, name: string, image: string;}[] }) {
-    const [step, setStep] = useState(0);
-    const [selectedAction, setSelectedAction] = useState<{
-        id: string;
-        name: string;
-    }>();
-    const isTrigger = index === 1;
-
-    return <div className="fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-slate-100 bg-opacity-70 flex">
-        <div className="relative p-4 w-full max-w-2xl max-h-full">
-            <div className="relative bg-white rounded-lg shadow ">
-                <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
-                    <div className="text-xl">
-                        Select {index === 1 ? "Trigger" : "Action"}
-                    </div>
-                    <button onClick={() => {
-                        onSelect(null);
-                    }} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="default-modal">
-                        <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                        </svg>
-                        <span className="sr-only">Close modal</span>
-                    </button>
-                </div>
-                <div className="p-4 md:p-5 space-y-4">
-                    {step === 1 && selectedAction?.id === "email" && <EmailSelector setMetadata={(metadata) => {
-                        onSelect({
-                            ...selectedAction,
-                            metadata
-                        })
-                    }} />}
-
-
-                    {step === 0 && <div>{availableItems.map(({id, name, image}) => {
-                            return <div onClick={() => {
-                                if (isTrigger) {
-                                    onSelect({
-                                        id,
-                                        name,
-                                        metadata: {}
-                                    })
-                                } else {
-                                    setStep(s => s + 1);
-                                    setSelectedAction({
-                                        id,
-                                        name
-                                    })
-                                }
-                            }} className="flex border p-4 cursor-pointer hover:bg-slate-100">
-                                <img src={image} width={30} className="rounded-full" /> <div className="flex flex-col justify-center"> {name} </div>
-                            </div>
-                        })}</div>}                    
-                </div>
-            </div>
-        </div>
-    </div>
-
-}
-
-function EmailSelector({setMetadata}: {
-    setMetadata: (params: any) => void;
-}) {
-    const [email, setEmail] = useState("");
-    const [body, setBody] = useState("");
-
-    return <div>
-        <Input label={"To"} type={"text"} placeholder="To" onChange={(e) => setEmail(e.target.value)}></Input>
-        <Input label={"Body"} type={"text"} placeholder="Body" onChange={(e) => setBody(e.target.value)}></Input>
-        <div className="pt-2">
-            <PrimaryButton onClick={() => {
-                setMetadata({
-                    email,
-                    body
-                })
-            }}>Submit</PrimaryButton>
-        </div>
-    </div>
-}

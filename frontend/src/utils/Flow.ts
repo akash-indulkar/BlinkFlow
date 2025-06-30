@@ -1,7 +1,7 @@
 export interface Flow {
-    "id": string,
+    "flowID": string,
     "triggerId": string,
-    "userId": number,
+    "userID": number,
     "actions": {
         "id": string,
         "flowId": string,

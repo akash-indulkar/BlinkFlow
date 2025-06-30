@@ -44,7 +44,7 @@ public class FlowService {
 		if (user.isEmpty())
 			return Optional.empty();
 
-		Flow flow = Flow.builder().user(user.get()).build();
+		Flow flow = Flow.builder().name(flowReq.getName()).user(user.get()).build();
 
 		Optional<AvailableTrigger> availableTriggerType = availableTriggerRepo
 				.findById(flowReq.getAvailableTriggerID());

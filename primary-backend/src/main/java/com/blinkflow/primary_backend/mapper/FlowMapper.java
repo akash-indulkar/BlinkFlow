@@ -8,6 +8,7 @@ public class FlowMapper {
 	
 	public static FlowResponseDTO toResponseDTO(Flow flow){
 		return FlowResponseDTO.builder()
+				.userID(flow.getUser().getId())
 				.flowID(flow.getId())
 				.flowTriggerName(flow.getFlowTrigger().getTriggerType().getName())
 				.flowActions(flow.getFlowActions().stream().map(action -> action.getActionType().getName()).collect(Collectors.toList()))

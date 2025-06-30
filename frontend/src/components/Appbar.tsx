@@ -8,20 +8,20 @@ export const Appbar = () => {
     const router = useNavigate();
     const [loading, setLoading] = useState(true);
     const [name, setName] = useState("")
-
+    
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/me`, {
             headers: {
-                "Authorization": localStorage.getItem("token"),
+                "Authorization": "Bearer " + localStorage.getItem("token"),
                 "Content-type": "application/json"
             }
         })
             .then(res => {
-                setName(res.data.user.name)
+                setName(res.data.name)
                 setLoading(false)
             })
 
     if (loading) {
-        return <div className="flex border-b justify-between p-4">
+        return <div className="flex fixed top-0 left-0 w-full z-50 border-b bg-[#fffdf9] justify-between py-3 px-6">
             <button className="flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
                 router("/")
             }}>
@@ -42,7 +42,7 @@ export const Appbar = () => {
             </div>
         </div>
     }
-    return <div className="flex border-b justify-between p-4">
+    return <div className="flex border-b fixed top-0 left-0 w-full z-50 border-b bg-[#fffdf9] justify-between p-4">
         <button className="flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
             router("/")
         }}>
