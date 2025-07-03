@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { EmailSelector } from "./EmailSelector";
+import { GenericWebhookConfigurer } from "./configurer/GenericWebhookConfigurer";
+import { EmailActionConfigurer } from "./configurer/EmailActionConfigurer";
 
 export const Modal = ({ index, onSelect, availableItems }: { index: number, onSelect: (props: null | { name: string; id: number; image: string, metadata: any; }) => void, availableItems: { id: number, name: string, image: string; }[] }) => {
     const [step, setStep] = useState(0);
     const [selectedAction, setSelectedAction] = useState<{
+        id: number;
+        name: string;
+        image: string
+    }>();
+    const [selectedTrigger, setSelectedTrigger] = useState<{
         id: number;
         name: string;
         image: string
@@ -27,22 +33,20 @@ export const Modal = ({ index, onSelect, availableItems }: { index: number, onSe
                     </button>
                 </div>
                 <div className="p-4 md:p-5 space-y-4">
-                    {step === 1 && selectedAction?.name === "add a row to google sheet" && <EmailSelector setMetadata={(metadata) => {
+                    {step === 1 && selectedAction?.name === "Send an email" && <EmailActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata
                         })
+                        console.log(metadata)
                     }} />}
-                    
-
-
                     {step === 0 && <div>{availableItems.map(({ id, name, image }) => {
                         return <div onClick={() => {
                             if (isTrigger) {
-                                onSelect({
+                                setStep(s => s+1)
+                                setSelectedTrigger({
                                     id,
                                     name,
-                                    metadata: {},
                                     image
                                 })
                             } else {
@@ -57,9 +61,17 @@ export const Modal = ({ index, onSelect, availableItems }: { index: number, onSe
                             <img src={image} width={30} className="rounded-full" /> <div className="flex flex-col justify-center"> {name} </div>
                         </div>
                     })}</div>}
+                    {selectedTrigger && selectedTrigger?.name === "Catch a Webhook" && <GenericWebhookConfigurer setMetadata={(metadata) => {
+                        onSelect({
+                            ...selectedTrigger,
+                            metadata
+                        })
+                        console.log(metadata)
+                    }} />}
                 </div>
             </div>
         </div>
+
     </div>
 
 }

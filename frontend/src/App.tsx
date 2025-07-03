@@ -5,7 +5,6 @@ import { Signup } from './Pages/Signup';
 import { Login } from './Pages/Login';
 import { Dashboard } from './Pages/Dashboard';
 import { Flow } from './Pages/Flow';
-import { FlowDemo } from './Pages/FlowDemo';
 
 
 function App() {
@@ -22,7 +21,6 @@ function App() {
                     <Route path={"/login"} element={<Login/>} />
                     <Route path={"/dashboard"} element={<Dashboard/>} />
                     <Route path={"/flow/create"} element={<Flow/>} />
-                    <Route path={"/demo"} element={<FlowDemo/>} />
                 </Routes>
             </Router>
 
