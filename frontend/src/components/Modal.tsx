@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { GenericWebhookConfigurer } from "./configurer/GenericWebhookConfigurer";
 import { EmailActionConfigurer } from "./configurer/EmailActionConfigurer";
+import { NotionActionConfigurer } from "./configurer/NotionActionConfigurer";
 
 export const Modal = ({ index, onSelect, availableItems }: { index: number, onSelect: (props: null | { name: string; id: number; image: string, metadata: any; }) => void, availableItems: { id: number, name: string, image: string; }[] }) => {
     const [step, setStep] = useState(0);
@@ -34,6 +35,13 @@ export const Modal = ({ index, onSelect, availableItems }: { index: number, onSe
                 </div>
                 <div className="p-4 md:p-5 space-y-4">
                     {step === 1 && selectedAction?.name === "Send an email" && <EmailActionConfigurer setMetadata={(metadata) => {
+                        onSelect({
+                            ...selectedAction,
+                            metadata
+                        })
+                        console.log(metadata)
+                    }} />}
+                    {step === 1 && selectedAction?.name === "Add to Notion doc" && <NotionActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata
