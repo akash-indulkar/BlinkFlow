@@ -23,6 +23,7 @@ public class UserController {
 	
 	@PostMapping("/signup")
 	public ResponseEntity<?> signup(@Valid @RequestBody UserRequestDTO reqUser){
+		System.out.println(reqUser);
 		Optional<UserResponseDTO> response =  userService.createUser(reqUser);
 		if(response.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(response.get());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists. Please log in.");

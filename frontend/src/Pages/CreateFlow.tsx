@@ -43,7 +43,7 @@ const nodeTypes: NodeTypes = {
 
 const nodeOrigin: [number, number] = [0.5, 0];
 
-export const Flow = () => {
+export const CreateFlow = () => {
   const router = useNavigate();
   const { availableActions, availableTriggers } = useAvailableActionsAndTriggers();
   const [selectedTrigger, setSelectedTrigger] = useState<{ id: number, name: string, image: string }>();

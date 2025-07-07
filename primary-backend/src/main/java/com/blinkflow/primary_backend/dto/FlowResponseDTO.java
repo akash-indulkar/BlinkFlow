@@ -16,10 +16,16 @@ import lombok.NoArgsConstructor;
 public class FlowResponseDTO {
 	@NotNull
 	private Long flowID;
+	@NotBlank
+	private String name;
 	@NotNull
 	private Long userID;
 	@NotBlank
 	private String flowTriggerName;
+	@NotBlank
+	private String flowTriggerImage;
 	@NotEmpty
-	private List<String> flowActions;
+	private List<String> flowActionNames;
+	@NotEmpty
+	private List<String> flowActionImages;
 }

@@ -4,7 +4,8 @@ import { Landing } from './Pages/Landing';
 import { Signup } from './Pages/Signup';
 import { Login } from './Pages/Login';
 import { Dashboard } from './Pages/Dashboard';
-import { Flow } from './Pages/Flow';
+import { CreateFlow } from './Pages/CreateFlow';
+import { EditFlow } from './Pages/EditFlow';
 
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
                     <Route path={"/signup"} element={<Signup/>} />
                     <Route path={"/login"} element={<Login/>} />
                     <Route path={"/dashboard"} element={<Dashboard/>} />
-                    <Route path={"/flow/create"} element={<Flow/>} />
+                    <Route path={"/flow/create"} element={<CreateFlow/>} />
+                    <Route path={"/flow/edit/:flowID"} element={<EditFlow/>} />
                 </Routes>
             </Router>
 

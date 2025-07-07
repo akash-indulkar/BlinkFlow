@@ -93,4 +93,48 @@ public class FlowService {
 		FlowResponseDTO response = FlowMapper.toResponseDTO(flow);
 		return Optional.of(response);
 	}
+
+	public Optional<String> deleteFlowByID(Long flowID) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+		Flow flow = flowRepo.findByUserIdAndId(userPrincipal.getUser().getId(), flowID);
+		if (flow == null)
+			return Optional.empty();
+		flowRepo.deleteByUserIdAndId(userPrincipal.getUser().getId(), flowID);
+		return Optional.of("Flow with ID:" + flow.getId() + " is deleted successfully.");
+	}
+
+	public Optional<FlowResponseDTO> updateFlowByID(Long flowID, @Valid FlowRequestDTO flowReq) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+		Flow flow = flowRepo.findByUserIdAndId(userPrincipal.getUser().getId(), flowID);
+		
+		if(flow == null)
+			return Optional.empty();
+		
+		Flow newFlow = Flow.builder().name(flowReq.getName()).user(userPrincipal.getUser()).build();
+		Optional<AvailableTrigger> availableTriggerType = availableTriggerRepo
+				.findById(flowReq.getAvailableTriggerID());
+		if (availableTriggerType.isEmpty())
+			return Optional.empty();
+		
+		FlowTrigger trigger = FlowTrigger.builder().metadata(flowReq.getTriggerMetadata())
+				.triggerType(availableTriggerType.get()).flow(newFlow).build();
+
+		List<FlowAction> actions = new ArrayList<FlowAction>();
+		for (ActionDTO action : flowReq.getFlowActions()) {
+			Optional<AvailableAction> availableActionType = availableActionRepo.findById(action.getAvailableActionID());
+			if (availableActionType.isEmpty())
+				return Optional.empty();
+			FlowAction flowAction = FlowAction.builder().metadata(action.getMetadata()).flow(flow)
+					.actionType(availableActionType.get()).sortingOrder(action.getSortingOrder()).build();
+			actions.add(flowAction);
+		}
+		
+		newFlow.setFlowTrigger(trigger);
+		newFlow.setFlowActions(actions);
+		Flow savedFlow = flowRepo.save(newFlow);
+		FlowResponseDTO response = FlowMapper.toResponseDTO(savedFlow);
+		return Optional.of(response);
+	}
 }

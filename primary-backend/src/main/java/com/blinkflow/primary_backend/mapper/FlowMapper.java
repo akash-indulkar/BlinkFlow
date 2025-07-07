@@ -10,8 +10,10 @@ public class FlowMapper {
 		return FlowResponseDTO.builder()
 				.userID(flow.getUser().getId())
 				.flowID(flow.getId())
+				.name(flow.getName())
 				.flowTriggerName(flow.getFlowTrigger().getTriggerType().getName())
-				.flowActions(flow.getFlowActions().stream().map(action -> action.getActionType().getName()).collect(Collectors.toList()))
+				.flowActionNames(flow.getFlowActions().stream().map(action -> action.getActionType().getName()).collect(Collectors.toList()))
+				.flowActionImages(flow.getFlowActions().stream().map(action -> action.getActionType().getImage()).collect(Collectors.toList()))
 				.build();
 	}
 }

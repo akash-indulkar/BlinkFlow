@@ -9,4 +9,5 @@ import com.blinkflow.primary_backend.model.Flow;
 public interface FlowRepository extends JpaRepository<Flow, Long>{
 	List<Flow> findAllByUserId(Long userId);
 	Flow findByUserIdAndId(Long userID, Long flowID);
+	void deleteByUserIdAndId(Long userID, Long flowID);
 }

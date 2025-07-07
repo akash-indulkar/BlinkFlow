@@ -30,7 +30,7 @@ export const Login = () => {
                 <div className="flex-1 pt-6 pb-6 mt-12 px-4 border rounded">
                     <Input onChange={e => {
                         setEmail(e.target.value)
-                    }} label={"Email"} type="text" placeholder="Your Email"></Input>
+                    }} label={"Email"} type="email" placeholder="Your Email"></Input>
                     <Input onChange={e => {
                         setPassword(e.target.value);
                     }} label={"Password"} type="password" placeholder="Password"></Input>
