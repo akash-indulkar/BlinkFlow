@@ -47,28 +47,78 @@ export const EditFlow = () => {
   const router = useNavigate();
   const { flowID } = useParams();
   const { availableActions, availableTriggers } = useAvailableActionsAndTriggers();
-  const [selectedTrigger, setSelectedTrigger] = useState<{ id: number, name: string, image: string }>();
+  const [existingFlowName, setExistingFlowName] = useState<string>("")
+  const [existingTrigger, setExistingTrigger] = useState<{ availableTriggerID: number, name: string, image: string, metadata: any }>();
+  const [existingActions, setExistingActions] = useState<{
+    index: number;
+    availableActionId: number;
+    availableActionName: string;
+    availableActionImage: string;
+    metadata: any;
+  }[]>([]);
+  const [selectedTrigger, setSelectedTrigger] = useState<{ availableTriggerID: number, name: string, image: string, metadata: any }>();
   const [selectedActions, setSelectedActions] = useState<{
     index: number;
     availableActionId: number;
     availableActionName: string;
     availableActionImage: string;
     metadata: any;
-  }[]>([
-    {
-      index: 2,
-      availableActionId: 0,
-      availableActionName: '',
-      availableActionImage: '',
-      metadata: {},
-    }
-  ]);
-
+  }[]>([]);
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null);
-  const [flowName, setFlowName] = useState("My Zap " + Math.floor(Math.random()*1000) );
+  const [flowName, setFlowName] = useState<string>(existingFlowName);
   const [isEditing, setIsEditing] = useState(false);
+  const [userID, setUserID] = useState();
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/flow/${flowID}`, {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+        "Content-type": "application/json"
+      }
+    })
+      .then(response => {
+        setExistingFlowName(response.data.name)
+        setUserID(response.data.userID)
+        setExistingTrigger({
+          availableTriggerID: response.data.availableTriggerID,
+          name: response.data.flowTriggerName,
+          image: response.data.flowTriggerImage,
+          metadata: response.data.flowTriggerMetadata
+        })
+        const formattedActions = response.data.flowActions.map((action : {
+            availableActionID: number,
+            flowActionName: string,
+            flowActionImage: string,
+            metadata: any,
+            sortingOrder: number
+        }) => ({
+          index: action.sortingOrder,
+          availableActionId: action.availableActionID,
+          availableActionName: action.flowActionName,
+          availableActionImage: action.flowActionImage,
+          metadata: action.metadata
+        }));
+        setExistingActions(formattedActions)
+
+      })
+  }, [])
+
+  useEffect(() => {
+    if (existingTrigger && existingActions) {
+      const initialActions = existingActions.map((action) => ({
+        index: action.index,
+        availableActionId: action.availableActionId,
+        availableActionName: action.availableActionName,
+        availableActionImage: action.availableActionImage,
+        metadata: action.metadata,
+      }));
+      setSelectedActions(initialActions);
+      setSelectedTrigger(existingTrigger)
+    }
+  }, [existingTrigger, existingActions]);
+
   const addAction = useCallback(() => {
     setSelectedActions(prev => [
       ...prev,
@@ -98,7 +148,6 @@ export const EditFlow = () => {
         onDelete: () => { }
       }
     });
-
     selectedActions.forEach((action, i) => {
       newNodes.push({
         id: `${action.index}`,
@@ -164,7 +213,6 @@ export const EditFlow = () => {
         });
       }
     }
-
     setNodes(newNodes);
     setEdges(newEdges);
   }, [selectedActions, selectedTrigger]);
@@ -200,14 +248,14 @@ export const EditFlow = () => {
       </div>
       <div className="flex justify-end p-4 absolute right-0 top-20 z-50">
         <PrimaryButton onClick={async () => {
-          if (!selectedTrigger?.id) {
+          if (!selectedTrigger?.availableTriggerID) {
             return;
           }
-
           await axios.put(`${import.meta.env.VITE_BACKEND_URL}/flow/update/${flowID}`, {
-            "name" : flowName,
-            "availableTriggerID": selectedTrigger.id,
-            "triggerMetadata": {},
+            "userID" : userID,
+            "name": flowName,
+            "availableTriggerID": selectedTrigger.availableTriggerID,
+            "triggerMetadata": selectedTrigger.metadata,
             "flowActions": selectedActions.map(action => ({
               availableActionID: action.availableActionId,
               metadata: action.metadata,
@@ -218,9 +266,8 @@ export const EditFlow = () => {
               Authorization: localStorage.getItem("token")
             }
           })
-
           router("/dashboard");
-        }}>Update</PrimaryButton>
+        }}>Save Changes</PrimaryButton>
       </div>
       {selectedModalIndex && <Modal availableItems={selectedModalIndex === 1 ? availableTriggers : availableActions} onSelect={(props: null | { name: string; id: number; image: string, metadata: any; }) => {
         if (props === null) {
@@ -229,9 +276,10 @@ export const EditFlow = () => {
         }
         if (selectedModalIndex === 1) {
           setSelectedTrigger({
-            id: props.id,
+            availableTriggerID: props.id,
             name: props.name,
-            image: props.image
+            image: props.image,
+            metadata: props.metadata
           })
         } else {
           setSelectedActions(actions => {

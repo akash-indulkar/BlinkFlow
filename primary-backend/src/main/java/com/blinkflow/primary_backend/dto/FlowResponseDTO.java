@@ -1,6 +1,7 @@
 package com.blinkflow.primary_backend.dto;
 
 import java.util.List;
+import java.util.Map;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -20,12 +21,14 @@ public class FlowResponseDTO {
 	private String name;
 	@NotNull
 	private Long userID;
+	@NotNull
+	private Long availableTriggerID;
 	@NotBlank
 	private String flowTriggerName;
 	@NotBlank
 	private String flowTriggerImage;
 	@NotEmpty
-	private List<String> flowActionNames;
+	private Map<String, Object> flowTriggerMetadata;
 	@NotEmpty
-	private List<String> flowActionImages;
+	private List<ActionDTO> flowActions;
 }

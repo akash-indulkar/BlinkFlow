@@ -46,7 +46,7 @@ const nodeOrigin: [number, number] = [0.5, 0];
 export const CreateFlow = () => {
   const router = useNavigate();
   const { availableActions, availableTriggers } = useAvailableActionsAndTriggers();
-  const [selectedTrigger, setSelectedTrigger] = useState<{ id: number, name: string, image: string }>();
+  const [selectedTrigger, setSelectedTrigger] = useState<{ availableTriggerID: number, name: string, image: string, metadata: any }>();
   const [selectedActions, setSelectedActions] = useState<{
     index: number;
     availableActionId: number;
@@ -66,8 +66,21 @@ export const CreateFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null);
-  const [flowName, setFlowName] = useState("My Zap " + Math.floor(Math.random()*1000) );
+  const [flowName, setFlowName] = useState("My Zap " + Math.floor(Math.random() * 1000));
   const [isEditing, setIsEditing] = useState(false);
+  const [userID, setUserID] = useState<number>();
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/me`, {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token"),
+        "Content-type": "application/json"
+      }
+    })
+      .then(res => {
+        setUserID(res.data.id)
+      })
+  })
+
   const addAction = useCallback(() => {
     setSelectedActions(prev => [
       ...prev,
@@ -199,14 +212,15 @@ export const CreateFlow = () => {
       </div>
       <div className="flex justify-end p-4 absolute right-0 top-20 z-50">
         <PrimaryButton onClick={async () => {
-          if (!selectedTrigger?.id) {
+          if (!selectedTrigger?.availableTriggerID) {
             return;
           }
 
           await axios.post(`${import.meta.env.VITE_BACKEND_URL}/flow/create`, {
-            "name" : flowName,
-            "availableTriggerID": selectedTrigger.id,
-            "triggerMetadata": {},
+            "userID": userID,
+            "name": flowName,
+            "availableTriggerID": selectedTrigger.availableTriggerID,
+            "triggerMetadata": selectedTrigger.metadata,
             "flowActions": selectedActions.map(action => ({
               availableActionID: action.availableActionId,
               metadata: action.metadata,
@@ -228,9 +242,10 @@ export const CreateFlow = () => {
         }
         if (selectedModalIndex === 1) {
           setSelectedTrigger({
-            id: props.id,
+            availableTriggerID: props.id,
             name: props.name,
-            image: props.image
+            image: props.image,
+            metadata: props.metadata
           })
         } else {
           setSelectedActions(actions => {
