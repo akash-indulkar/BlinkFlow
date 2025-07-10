@@ -18,15 +18,17 @@ import { useNavigate } from 'react-router-dom';
 import { AddActionNode } from '../components/ReactFlow/AddActionNode';
 import { Modal } from '../components/Modal';
 
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 function useAvailableActionsAndTriggers() {
   const [availableActions, setAvailableActions] = useState([]);
   const [availableTriggers, setAvailableTriggers] = useState([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/triggers/availabletriggers`)
+    axios.get(`${backendURL}/triggers/availabletriggers`)
       .then(res => setAvailableTriggers(res.data))
 
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/actions/availableactions`)
+    axios.get(`${backendURL}/actions/availableactions`)
       .then(res => setAvailableActions(res.data))
   }, [])
 
@@ -66,11 +68,12 @@ export const CreateFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null);
-  const [flowName, setFlowName] = useState("My Zap " + Math.floor(Math.random() * 1000));
+  const [flowName, setFlowName] = useState("My Flow " + Math.floor(Math.random() * 1000));
   const [isEditing, setIsEditing] = useState(false);
   const [userID, setUserID] = useState<number>();
+
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/me`, {
+    axios.get(`${backendURL}/user/me`, {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token"),
         "Content-type": "application/json"
@@ -215,8 +218,7 @@ export const CreateFlow = () => {
           if (!selectedTrigger?.availableTriggerID) {
             return;
           }
-
-          await axios.post(`${import.meta.env.VITE_BACKEND_URL}/flow/create`, {
+          console.log({
             "userID": userID,
             "name": flowName,
             "availableTriggerID": selectedTrigger.availableTriggerID,
@@ -228,7 +230,22 @@ export const CreateFlow = () => {
             }))
           }, {
             headers: {
-              Authorization: localStorage.getItem("token")
+              Authorization: "Bearer " + localStorage.getItem("token")
+            }
+          })
+          await axios.post(`${backendURL}/flow/create`, {
+            "userID": userID,
+            "name": flowName,
+            "availableTriggerID": selectedTrigger.availableTriggerID,
+            "triggerMetadata": selectedTrigger.metadata,
+            "flowActions": selectedActions.map(action => ({
+              availableActionID: action.availableActionId,
+              metadata: action.metadata,
+              sortingOrder: action.index
+            }))
+          }, {
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("token")
             }
           })
 

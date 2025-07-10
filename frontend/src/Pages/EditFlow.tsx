@@ -18,18 +18,23 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AddActionNode } from '../components/ReactFlow/AddActionNode';
 import { Modal } from '../components/Modal';
 
+
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 function useAvailableActionsAndTriggers() {
   const [availableActions, setAvailableActions] = useState([]);
   const [availableTriggers, setAvailableTriggers] = useState([]);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/triggers/availabletriggers`)
+    axios.get(`${backendURL}/triggers/availabletriggers`)
       .then(res => setAvailableTriggers(res.data))
 
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/actions/availableactions`)
+    axios.get(`${backendURL}/actions/availableactions`)
       .then(res => setAvailableActions(res.data))
   }, [])
 
+  console.log(availableTriggers)
+  console.log(availableActions)
   return {
     availableActions,
     availableTriggers
@@ -72,7 +77,7 @@ export const EditFlow = () => {
   const [userID, setUserID] = useState();
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/flow/${flowID}`, {
+    axios.get(`${backendURL}/flow/${flowID}`, {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token"),
         "Content-type": "application/json"
@@ -87,12 +92,12 @@ export const EditFlow = () => {
           image: response.data.flowTriggerImage,
           metadata: response.data.flowTriggerMetadata
         })
-        const formattedActions = response.data.flowActions.map((action : {
-            availableActionID: number,
-            flowActionName: string,
-            flowActionImage: string,
-            metadata: any,
-            sortingOrder: number
+        const formattedActions = response.data.flowActions.map((action: {
+          availableActionID: number,
+          flowActionName: string,
+          flowActionImage: string,
+          metadata: any,
+          sortingOrder: number
         }) => ({
           index: action.sortingOrder,
           availableActionId: action.availableActionID,
@@ -101,7 +106,7 @@ export const EditFlow = () => {
           metadata: action.metadata
         }));
         setExistingActions(formattedActions)
-
+        console.log(response.data)
       })
   }, [])
 
@@ -116,6 +121,7 @@ export const EditFlow = () => {
       }));
       setSelectedActions(initialActions);
       setSelectedTrigger(existingTrigger)
+      setFlowName(existingFlowName)
     }
   }, [existingTrigger, existingActions]);
 
@@ -233,7 +239,7 @@ export const EditFlow = () => {
           />
         ) : (
           <>
-            <h2 className="font-sans text-base antialiased">{flowName}</h2>
+            <h2 className="truncate overflow-hidden text-ellipsis max-w-[140px] font-sans text-base antialiased">{flowName}</h2>
             <button
               onClick={() => setIsEditing(true)}
               className="hover:text-blue-500 transition-colors"
@@ -251,8 +257,8 @@ export const EditFlow = () => {
           if (!selectedTrigger?.availableTriggerID) {
             return;
           }
-          await axios.put(`${import.meta.env.VITE_BACKEND_URL}/flow/update/${flowID}`, {
-            "userID" : userID,
+          console.log({
+            "userID": userID,
             "name": flowName,
             "availableTriggerID": selectedTrigger.availableTriggerID,
             "triggerMetadata": selectedTrigger.metadata,
@@ -263,7 +269,22 @@ export const EditFlow = () => {
             }))
           }, {
             headers: {
-              Authorization: localStorage.getItem("token")
+              Authorization : "Bearer " + localStorage.getItem("token")
+            }
+          })
+          await axios.put(`${backendURL}/flow/update/${flowID}`, {
+            "userID": userID,
+            "name": flowName,
+            "availableTriggerID": selectedTrigger.availableTriggerID,
+            "triggerMetadata": selectedTrigger.metadata,
+            "flowActions": selectedActions.map(action => ({
+              availableActionID: action.availableActionId,
+              metadata: action.metadata,
+              sortingOrder: action.index
+            }))
+          }, {
+            headers: {
+              Authorization : "Bearer " + localStorage.getItem("token")
             }
           })
           router("/dashboard");

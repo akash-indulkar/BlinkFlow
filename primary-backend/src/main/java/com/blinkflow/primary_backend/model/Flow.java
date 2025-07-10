@@ -30,7 +30,7 @@ public class Flow {
 	private User user;
 	@OneToOne(mappedBy = "flow", cascade = CascadeType.ALL)
 	private FlowTrigger flowTrigger;
-	@OneToMany(mappedBy = "flow", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "flow", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<FlowAction> flowActions;
 	@OneToMany(mappedBy = "flow", cascade = CascadeType.ALL)
 	private List<FlowRun> flowRuns;

@@ -8,8 +8,8 @@ export const Appbar = () => {
     const router = useNavigate();
     const [loading, setLoading] = useState(true);
     const [name, setName] = useState("")
-
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/me`, {
+    const backendURL = import.meta.env.VITE_BACKEND_URL;
+    axios.get(`${backendURL}/user/me`, {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem("token"),
             "Content-type": "application/json"

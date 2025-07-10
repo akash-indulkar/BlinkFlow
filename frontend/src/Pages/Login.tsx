@@ -9,6 +9,7 @@ export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useNavigate();
+    const backendURL = import.meta.env.VITE_BACKEND_URL;
     
     return <div> 
 
@@ -34,9 +35,9 @@ export const Login = () => {
                     <Input onChange={e => {
                         setPassword(e.target.value);
                     }} label={"Password"} type="password" placeholder="Password"></Input>
-                    <div className="pt-4">
+                    <div className="pt-4 mt-4">
                         <PrimaryButton onClick={async () => {
-                            const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`, JSON.stringify({
+                            const res = await axios.post(`${backendURL}/user/login`, JSON.stringify({
                                 email,
                                 password,
                             }), {

@@ -10,6 +10,7 @@ export const Signup = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useNavigate();
+    const backendURL = import.meta.env.VITE_BACKEND_URL;
 
     return <div className="main-content flex justify-center">
         <div className="flex pt-8 max-w-4xl">
@@ -39,7 +40,7 @@ export const Signup = () => {
 
                 <div className="pt-4">
                     <PrimaryButton onClick={async () => {
-                        const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, JSON.stringify({
+                        const response = await axios.post(`${backendURL}/user/signup`, JSON.stringify({
                             email,
                             password,
                             name

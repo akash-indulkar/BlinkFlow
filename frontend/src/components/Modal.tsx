@@ -64,7 +64,7 @@ export const Modal = ({ index, onSelect, availableItems }: { index: number, onSe
                                 })
                             }
                         }} className="flex border p-4 cursor-pointer hover:bg-slate-100">
-                            <img src={image} width={30} className="rounded-full" /> <div className="flex flex-col justify-center"> {name} </div>
+                            <img src={image} className="m-1" width={30} /> <div className="flex flex-col justify-center"> {name} </div>
                         </div>
                     })}</div>}
                     {selectedTrigger && selectedTrigger?.name === "Catch a Webhook" && <GenericWebhookConfigurer setMetadata={(metadata) => {

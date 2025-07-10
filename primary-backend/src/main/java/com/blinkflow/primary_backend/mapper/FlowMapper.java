@@ -13,7 +13,7 @@ public class FlowMapper {
 				.flowID(flow.getId())
 				.name(flow.getName())
 				.userID(flow.getUser().getId())
-				.availableTriggerID(flow.getFlowTrigger().getId())
+				.availableTriggerID(flow.getFlowTrigger().getTriggerType().getId())
 				.flowTriggerName(flow.getFlowTrigger().getTriggerType().getName())
 				.flowTriggerImage(flow.getFlowTrigger().getTriggerType().getImage())
 				.flowTriggerMetadata(flow.getFlowTrigger().getMetadata())

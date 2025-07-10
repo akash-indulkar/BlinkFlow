@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.blinkflow.primary_backend.dto.ActionDTO;
 import com.blinkflow.primary_backend.dto.FlowRequestDTO;
 import com.blinkflow.primary_backend.dto.FlowResponseDTO;
@@ -62,7 +64,7 @@ public class FlowService {
 					.actionType(availableActionType.get()).sortingOrder(action.getSortingOrder()).build();
 			actions.add(flowAction);
 		}
-
+		
 		flow.setFlowTrigger(trigger);
 		flow.setFlowActions(actions);
 		Flow savedFlow = flowRepo.save(flow);
@@ -94,6 +96,7 @@ public class FlowService {
 		return Optional.of(response);
 	}
 
+	 @Transactional
 	public Optional<String> deleteFlowByID(Long flowID) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -112,16 +115,19 @@ public class FlowService {
 		if(flow == null)
 			return Optional.empty();
 		
-		Flow newFlow = Flow.builder().name(flowReq.getName()).user(userPrincipal.getUser()).build();
+		flow.setName(flowReq.getName());
+		
 		Optional<AvailableTrigger> availableTriggerType = availableTriggerRepo
 				.findById(flowReq.getAvailableTriggerID());
 		if (availableTriggerType.isEmpty())
 			return Optional.empty();
 		
-		FlowTrigger trigger = FlowTrigger.builder().metadata(flowReq.getTriggerMetadata())
-				.triggerType(availableTriggerType.get()).flow(newFlow).build();
+		FlowTrigger trigger = flow.getFlowTrigger();
+		trigger.setTriggerType(availableTriggerType.get());
+		trigger.setMetadata(flowReq.getTriggerMetadata());
 
-		List<FlowAction> actions = new ArrayList<FlowAction>();
+		List<FlowAction> actions = flow.getFlowActions();
+		actions.clear();
 		for (ActionDTO action : flowReq.getFlowActions()) {
 			Optional<AvailableAction> availableActionType = availableActionRepo.findById(action.getAvailableActionID());
 			if (availableActionType.isEmpty())
@@ -130,10 +136,8 @@ public class FlowService {
 					.actionType(availableActionType.get()).sortingOrder(action.getSortingOrder()).build();
 			actions.add(flowAction);
 		}
-		
-		newFlow.setFlowTrigger(trigger);
-		newFlow.setFlowActions(actions);
-		Flow savedFlow = flowRepo.save(newFlow);
+
+		Flow savedFlow = flowRepo.save(flow);
 		FlowResponseDTO response = FlowMapper.toResponseDTO(savedFlow);
 		return Optional.of(response);
 	}
