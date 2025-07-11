@@ -27,7 +27,7 @@ export const Appbar = () => {
         })
 
     if (loading) {
-        return <div className="flex fixed top-0 left-0 w-full z-50 border-b bg-[#fffdf9] justify-between py-3 px-6">
+        return <div className="flex shadow-md fixed top-0 left-0 w-full z-50 bg-[#fffdf9] justify-between py-3 px-6">
             <button className="flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
                 router("/")
             }}>

@@ -11,14 +11,14 @@ export const Login = () => {
     const [password, setPassword] = useState("");
     const router = useNavigate();
     const backendURL = import.meta.env.VITE_BACKEND_URL;
-    
-    return <div> 
+
+    return <div>
 
         <div className="main-content flex justify-center">
             <div className="flex pt-8 max-w-4xl">
                 <div className="flex-1 pt-20 px-4">
                     <div className="font-semibold text-3xl pb-4">
-                    Join millions worldwide who automate their work using BlinkFlow.
+                        Join millions worldwide who automate their work using BlinkFlow.
                     </div>
                     <div className="pb-6 pt-4">
                         <CheckFeature label={"Easy setup, no coding required"} />
@@ -38,17 +38,22 @@ export const Login = () => {
                     }} label={"Password"} type="password" placeholder="Password"></Input>
                     <div className="pt-4 mt-4">
                         <PrimaryButton onClick={async () => {
-                            const res = await axios.post(`${backendURL}/user/login`, JSON.stringify({
-                                email,
-                                password,
-                            }), {
-                                headers: {
-                                    "Content-type": "application/json"
-                                }
-                            });
-                            localStorage.setItem("token", res.data.token);
-                            toast.success("You've logged in successfully!")
-                            router("/dashboard");
+                            let res;
+                            try {
+                                res = await axios.post(`${backendURL}/user/login`, JSON.stringify({
+                                    email,
+                                    password,
+                                }), {
+                                    headers: {
+                                        "Content-type": "application/json"
+                                    }
+                                });
+                                localStorage.setItem("token", res.data.token);
+                                toast.success("You've logged in successfully!")
+                                router("/dashboard");
+                            } catch (error) {
+                                toast.error("Invalid credentials")
+                            }
                         }} size="big">Login</PrimaryButton>
                     </div>
                 </div>

@@ -217,40 +217,30 @@ export const CreateFlow = () => {
       <div className="flex justify-end p-4 absolute right-0 top-20 z-50">
         <PrimaryButton onClick={async () => {
           if (!selectedTrigger?.availableTriggerID) {
+            toast.error("No trigger selected!")
             return;
           }
-          console.log({
-            "userID": userID,
-            "name": flowName,
-            "availableTriggerID": selectedTrigger.availableTriggerID,
-            "triggerMetadata": selectedTrigger.metadata,
-            "flowActions": selectedActions.map(action => ({
-              availableActionID: action.availableActionId,
-              metadata: action.metadata,
-              sortingOrder: action.index
-            }))
-          }, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
-            }
-          })
-          await axios.post(`${backendURL}/flow/create`, {
-            "userID": userID,
-            "name": flowName,
-            "availableTriggerID": selectedTrigger.availableTriggerID,
-            "triggerMetadata": selectedTrigger.metadata,
-            "flowActions": selectedActions.map(action => ({
-              availableActionID: action.availableActionId,
-              metadata: action.metadata,
-              sortingOrder: action.index
-            }))
-          }, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
-            }
-          })
-          toast.success("Flow created successfully!")
-          router("/dashboard");
+          try {
+            await axios.post(`${backendURL}/flow/create`, {
+              "userID": userID,
+              "name": flowName,
+              "availableTriggerID": selectedTrigger.availableTriggerID,
+              "triggerMetadata": selectedTrigger.metadata,
+              "flowActions": selectedActions.map(action => ({
+                availableActionID: action.availableActionId,
+                metadata: action.metadata,
+                sortingOrder: action.index
+              }))
+            }, {
+              headers: {
+                Authorization: "Bearer " + localStorage.getItem("token")
+              }
+            })
+            toast.success("Flow created successfully!")
+            router("/dashboard");
+          } catch (error) {
+            toast.error("No actions selected!")
+          }
         }}>Create</PrimaryButton>
       </div>
       {selectedModalIndex && <Modal availableItems={selectedModalIndex === 1 ? availableTriggers : availableActions} onSelect={(props: null | { name: string; id: number; image: string, metadata: any; }) => {
