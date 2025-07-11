@@ -4,6 +4,7 @@ import { CheckFeature } from "../components/CheckFeature"
 import { Input } from "../components/Input"
 import { useState } from "react"
 import axios from "axios"
+import toast from "react-hot-toast"
 
 export const Signup = () => {
     const [name, setName] = useState("");
@@ -50,6 +51,7 @@ export const Signup = () => {
                             }
                         });
                         localStorage.setItem("token", response.data.token);
+                        toast.success("You account has been created successfully!")
                         router("/dashboard");
                     }} size="big">Get started free</PrimaryButton>
                 </div>

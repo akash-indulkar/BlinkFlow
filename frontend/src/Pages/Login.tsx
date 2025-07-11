@@ -4,6 +4,7 @@ import { CheckFeature } from "../components/CheckFeature";
 import { Input } from "../components/Input";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
@@ -46,6 +47,7 @@ export const Login = () => {
                                 }
                             });
                             localStorage.setItem("token", res.data.token);
+                            toast.success("You've logged in successfully!")
                             router("/dashboard");
                         }} size="big">Login</PrimaryButton>
                     </div>

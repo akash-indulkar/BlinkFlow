@@ -17,6 +17,7 @@ import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AddActionNode } from '../components/ReactFlow/AddActionNode';
 import { Modal } from '../components/Modal';
+import toast from 'react-hot-toast';
 
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
@@ -287,6 +288,7 @@ export const EditFlow = () => {
               Authorization : "Bearer " + localStorage.getItem("token")
             }
           })
+          toast.success("Flow updated successfully!")
           router("/dashboard");
         }}>Save Changes</PrimaryButton>
       </div>

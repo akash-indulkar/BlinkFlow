@@ -3,12 +3,18 @@ import { LinkButton } from "./buttons/LinkButton"
 import { PrimaryButton } from "./buttons/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ConfirmationToast } from "./ConfirmationToast";
 
 export const Appbar = () => {
     const router = useNavigate();
     const [loading, setLoading] = useState(true);
     const [name, setName] = useState("")
+    const [showModal, setShowModal] = useState<boolean>(false);
     const backendURL = import.meta.env.VITE_BACKEND_URL;
+    const logoutUser = () => {
+        localStorage.setItem("token", "")
+        window.location.href = "/";
+    }
     axios.get(`${backendURL}/user/me`, {
         headers: {
             "Authorization": "Bearer " + localStorage.getItem("token"),
@@ -48,15 +54,15 @@ export const Appbar = () => {
             BlinkFlow
         </button>
         <div className="text-2xl font-bold font-semibold text-center max-w-xl ">
-            {"Hello! "+ name}
+            {"Hello! " + name}
         </div>
         <div className="flex justify-center">
             <PrimaryButton onClick={() => {
-                localStorage.setItem("token", "")
-                window.location.href = "/";
+                setShowModal(true)
             }}>
                 Logout
             </PrimaryButton>
+            {showModal && <ConfirmationToast message="Do you really want to log out?" onConfirm={() => logoutUser()} onCancel={() => { setShowModal(false) }} />}
         </div>
     </div>
 

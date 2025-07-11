@@ -6,6 +6,7 @@ import { Login } from './Pages/Login';
 import { Dashboard } from './Pages/Dashboard';
 import { CreateFlow } from './Pages/CreateFlow';
 import { EditFlow } from './Pages/EditFlow';
+import { Toaster } from 'react-hot-toast';
 
 
 function App() {
@@ -18,12 +19,13 @@ function App() {
                 <Appbar />
                 <Routes>
                     <Route path={"/"} element={<Landing />} />
-                    <Route path={"/signup"} element={<Signup/>} />
-                    <Route path={"/login"} element={<Login/>} />
-                    <Route path={"/dashboard"} element={<Dashboard/>} />
-                    <Route path={"/flow/create"} element={<CreateFlow/>} />
-                    <Route path={"/flow/edit/:flowID"} element={<EditFlow/>} />
-                </Routes>
+                    <Route path={"/signup"} element={<Signup />} />
+                    <Route path={"/login"} element={<Login />} />
+                    <Route path={"/dashboard"} element={<Dashboard />} />
+                    <Route path={"/flow/create"} element={<CreateFlow />} />
+                    <Route path={"/flow/edit/:flowID"} element={<EditFlow />} />
+                </Routes>  
+                <Toaster position="top-right" />
             </Router>
 
         </div>

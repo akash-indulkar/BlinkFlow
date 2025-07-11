@@ -17,6 +17,7 @@ import { PrimaryButton } from '../components/buttons/PrimaryButton';
 import { useNavigate } from 'react-router-dom';
 import { AddActionNode } from '../components/ReactFlow/AddActionNode';
 import { Modal } from '../components/Modal';
+import toast from 'react-hot-toast';
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -248,7 +249,7 @@ export const CreateFlow = () => {
               Authorization: "Bearer " + localStorage.getItem("token")
             }
           })
-
+          toast.success("Flow created successfully!")
           router("/dashboard");
         }}>Create</PrimaryButton>
       </div>
