@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  background-color: #fffdf9;
+  background-color: #f9faff;
 }
 
 .hide-handle {
@@ -12,4 +12,10 @@ body {
 
 .main-content {
   padding-top: 5rem;
+}
+
+@media (max-width: 768px) {
+  video.bg-video {
+    display: none;
+  }
 }

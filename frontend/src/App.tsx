@@ -7,6 +7,7 @@ import { Dashboard } from './Pages/Dashboard';
 import { CreateFlow } from './Pages/CreateFlow';
 import { EditFlow } from './Pages/EditFlow';
 import { Toaster } from 'react-hot-toast';
+import { NotFound } from './Pages/NotFound';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                     <Route path={"/dashboard"} element={<Dashboard />} />
                     <Route path={"/flow/create"} element={<CreateFlow />} />
                     <Route path={"/flow/edit/:flowID"} element={<EditFlow />} />
+                    <Route path={"/*"} element={<NotFound />} />
                 </Routes>  
                 <Toaster position="top-right" />
             </Router>

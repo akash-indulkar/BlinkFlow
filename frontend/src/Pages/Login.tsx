@@ -29,14 +29,14 @@ export const Login = () => {
                     <CheckFeature label={"14-day trial of premium features & apps"} />
 
                 </div>
-                <div className="flex-1 pt-6 pb-6 mt-12 px-4 border rounded">
+                <div className="flex-1 bg-[white] pt-6 pb-6 mt-20 px-4 border rounded">
                     <Input onChange={e => {
                         setEmail(e.target.value)
                     }} label={"Email"} type="email" placeholder="Your Email"></Input>
                     <Input onChange={e => {
                         setPassword(e.target.value);
                     }} label={"Password"} type="password" placeholder="Password"></Input>
-                    <div className="pt-4 mt-4">
+                    <div className="pt-2 mt-4">
                         <PrimaryButton onClick={async () => {
                             let res;
                             try {

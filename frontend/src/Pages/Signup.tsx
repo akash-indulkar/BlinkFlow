@@ -28,7 +28,7 @@ export const Signup = () => {
                 <CheckFeature label={"14-day trial of premium features & apps"} />
 
             </div>
-            <div className="flex-1 pt-6 pb-6 mt-12 px-4 border rounded">
+            <div className="flex-1 bg-[white]  pt-6 pb-6 mt-12 px-4 border rounded">
                 <Input label={"Name"} onChange={e => {
                     setName(e.target.value)
                 }} type="text" placeholder="Your name"></Input>
