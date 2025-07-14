@@ -15,24 +15,30 @@ export const Appbar = () => {
         localStorage.setItem("token", "")
         window.location.href = "/";
     }
-    axios.get(`${backendURL}/user/me`, {
-        headers: {
-            "Authorization": "Bearer " + localStorage.getItem("token"),
-            "Content-type": "application/json"
-        }
-    })
-        .then(res => {
-            setName(res.data.name)
-            setLoading(false)
+    try {
+        axios.get(`${backendURL}/user/me`, {
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token"),
+                "Content-type": "application/json"
+            }
         })
-
+            .then(res => {
+                setName(res.data.name)
+                setLoading(false)
+            })
+    } catch (error) {
+        console.log("hii")
+    }
     if (loading) {
         return <div className="flex shadow-md fixed top-0 left-0 w-full z-50 bg-[#f9faff] justify-between py-3 px-6">
-            <button className="flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
-                router("/")
-            }}>
-                BlinkFlow
-            </button>
+            <div className="flex justify center items-center">
+                <img className="w-8 h-8 rounded" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752500433/original-059561fd46a70134d86947adc772082f_wysnzz.jpg"></img>
+                <button className="px-1 flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
+                    router("/")
+                }}>
+                    BlinkFlow
+                </button>
+            </div>
             <div className="flex">
                 <div className="pr-4">
                     <LinkButton onClick={() => {
@@ -47,12 +53,15 @@ export const Appbar = () => {
             </div>
         </div>
     }
-    return <div className="flex shadow-md fixed top-0 left-0 w-full z-50 border-b bg-[#fffdf9] justify-between py-3 px-6">
-        <button className="flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
-            router("/")
-        }}>
-            BlinkFlow
-        </button>
+    return <div className="flex shadow-md fixed top-0 left-0 w-full z-50 border-b bg-[#f9faff] justify-between py-3 px-6">
+        <div className="flex justify center items-center">
+            <img className="w-8 h-8 rounded" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752500433/original-059561fd46a70134d86947adc772082f_wysnzz.jpg"></img>
+            <button className="px-1 flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
+                router("/")
+            }}>
+                BlinkFlow
+            </button>
+        </div>
         <div className="text-2xl font-bold font-semibold text-center max-w-xl ">
             {"Hello! " + name}
         </div>

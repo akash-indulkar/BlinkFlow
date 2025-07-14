@@ -3,6 +3,7 @@ import { GenericWebhookConfigurer } from "./configurer/GenericWebhookConfigurer"
 import { EmailActionConfigurer } from "./configurer/EmailActionConfigurer";
 import { NotionActionConfigurer } from "./configurer/NotionActionConfigurer";
 import { SlackActionConfigurer } from "./configurer/SlackActionConfigurer";
+import { TelegramActionConfigurer } from "./configurer/TelegramActionConfigurer";
 
 export const Modal = ({ index, onSelect, availableItems }: { index: number, onSelect: (props: null | { name: string; id: number; image: string, metadata: any; }) => void, availableItems: { id: number, name: string, image: string; }[] }) => {
     const [step, setStep] = useState(0);
@@ -48,6 +49,12 @@ export const Modal = ({ index, onSelect, availableItems }: { index: number, onSe
                         })
                     }} />}
                     {step === 1 && selectedAction?.name === "Send a slack notification" && <SlackActionConfigurer setMetadata={(metadata) => {
+                        onSelect({
+                            ...selectedAction,
+                            metadata
+                        })
+                    }} />}
+                    {step === 1 && selectedAction?.name === "Send a message to Telegram channel" && <TelegramActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata

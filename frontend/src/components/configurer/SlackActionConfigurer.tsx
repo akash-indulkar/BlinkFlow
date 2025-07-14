@@ -15,11 +15,11 @@ export const SlackActionConfigurer = ({ setMetadata }: {
     };
 
     return <form onSubmit={handleSubmit}>
-        <Input label={"Bot User OAuth Token"} type={"password"} placeholder="Your Secret" onChange={(e) => {
+        <Input label={"Bot User OAuth Token"} type={"password"} placeholder="Token" onChange={(e) => {
             setOAuthToken(e.target.value)
             e.target.setCustomValidity("")
         }}></Input>
-        <Input label={"Target Slack Channel ID"} type={"text"} placeholder="Page ID" onChange={(e) => {
+        <Input label={"Target Slack Channel ID"} type={"text"} placeholder="Channel ID" onChange={(e) => {
             setChannelID(e.target.value)
             e.target.setCustomValidity("")
         }}></Input>

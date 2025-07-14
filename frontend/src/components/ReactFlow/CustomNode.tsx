@@ -16,7 +16,7 @@ export const CustomNode = ({ data }: NodeProps<CustomNodePropsType>) => {
                 <div className="text-lg">
                     {index}.
                 </div>
-                {(name === "Select a Trigger") ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="26" width="26"  color="GrayWarm10" name="miscBoltOutlined"><path fill="#2D2E2E" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm1-14-5.87 7H11v5l5.87-7H13V6Z"></path></svg> : <div className="mx-1"><img src={image} width={30} /> <div className="flex flex-col justify-center" /></div>}
+                {(name === "Select a Trigger") ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="26" width="26" color="GrayWarm10" name="miscBoltOutlined"><path fill="#2D2E2E" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm1-14-5.87 7H11v5l5.87-7H13V6Z"></path></svg> : <div className="mx-1"><img src={image} width={30} /></div>}
                 <div className='text-lg'>
                     {name}
                 </div>
@@ -32,7 +32,7 @@ export const CustomNode = ({ data }: NodeProps<CustomNodePropsType>) => {
                         <div className="text-lg">
                             {index}.
                         </div>
-                        {(name === "Select an Action") ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="26" width="26" color="GrayWarm10" name="miscBoltOutlined"><path fill="#2D2E2E" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm1-14-5.87 7H11v5l5.87-7H13V6Z"></path></svg> : <div className="mx-1"><img src={image} width={30} /> <div className="flex flex-col justify-center" /></div>}
+                        {(name === "Select an Action") ? <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="26" width="26" color="GrayWarm10" name="miscBoltOutlined"><path fill="#2D2E2E" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm1-14-5.87 7H11v5l5.87-7H13V6Z"></path></svg> : <div className="mx-1 flex items-center justify-center"><img src={image} width={30} /></div>}
                         <div className='text-lg overflow-hidden whitespace-nowrap text-ellipsis'>
                             {name}
                         </div>
