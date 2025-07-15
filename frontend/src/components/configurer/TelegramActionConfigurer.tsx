@@ -6,11 +6,11 @@ export const TelegramActionConfigurer = ({ setMetadata }: {
     setMetadata: (params: any) => void;
 }) => {
     const [botToken, setBotToken] = useState("");
-    const [channelID, setChannelID] = useState("");
+    const [channelUsername, setChannelUsername] = useState("");
     const handleSubmit = () => {
         setMetadata({
             botToken,
-            channelID
+            channelUsername
         });
     };
 
@@ -20,7 +20,7 @@ export const TelegramActionConfigurer = ({ setMetadata }: {
             e.target.setCustomValidity("")
         }}></Input>
         <Input label={"Target Telegram Channel Username"} type={"text"} placeholder="Channel Username" onChange={(e) => {
-            setChannelID(e.target.value)
+            setChannelUsername(e.target.value)
             e.target.setCustomValidity("")
         }}></Input>
         <div className="pt-4 pb-4 border-black text-xs text-gray-500">To enable integration with your Telegram channel, please provide your <strong>Bot Token</strong> and your <strong>Channel Username</strong> of the target Telegram channel.
@@ -36,6 +36,6 @@ export const TelegramActionConfigurer = ({ setMetadata }: {
             {" "}, then add the bot to your target Telegram channel as an administrator with permission to post messages. You can find your channel username in your channel's invite link as "https://t.me/yourchannelusername".
             Your token will be stored securely and only used to access your authorized channel.
         </div>
-        <BaseButton isInactive={!botToken.trim() || !channelID.trim()}>Submit</BaseButton>
+        <BaseButton isInactive={!botToken.trim() || !channelUsername.trim()}>Submit</BaseButton>
     </form>
 }

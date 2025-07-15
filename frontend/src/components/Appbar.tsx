@@ -25,8 +25,11 @@ export const Appbar = () => {
             .then(res => {
                 setName(res.data.name)
                 setLoading(false)
+                console.log(res)
             })
     } catch (error) {
+    }
+    if(loading){
         console.log("hii")
     }
     if (loading) {
