@@ -45,7 +45,7 @@ export const TrelloCardActionConfigurer = ({ setMetadata }: {
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
             >Trello Power-Up</a>.
-            To know how to get a you API key and generate API Token, <a
+            To know how to get a your API key and generate API Token, <a
                 href="https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/"
                 target="_blank"
                 rel="noopener noreferrer"
