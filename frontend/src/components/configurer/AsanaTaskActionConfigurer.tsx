@@ -15,7 +15,7 @@ export const AsanaTaskActionConfigurer = ({ setMetadata }: {
     };
 
     return <form onSubmit={handleSubmit}>
-        <Input label={"Personal AccessToken"} type={"password"} placeholder="Token" onChange={(e) => {
+        <Input label={"Personal Access Token"} type={"password"} placeholder="Token" onChange={(e) => {
             setPersonalAccessToken(e.target.value)
             e.target.setCustomValidity("")
         }}></Input>
