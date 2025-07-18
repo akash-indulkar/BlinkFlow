@@ -7,7 +7,7 @@ import { ConfirmationToast } from "./ConfirmationToast";
 
 export const Appbar = () => {
     const router = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [name, setName] = useState("")
     const [showModal, setShowModal] = useState<boolean>(false);
     const backendURL = import.meta.env.VITE_BACKEND_URL;
@@ -24,15 +24,13 @@ export const Appbar = () => {
         })
             .then(res => {
                 setName(res.data.name)
-                setLoading(false)
+                setIsLoading(false)
                 console.log(res)
             })
     } catch (error) {
     }
-    if(loading){
-        console.log("hii")
-    }
-    if (loading) {
+
+    if (isLoading) {
         return <div className="flex shadow-md fixed top-0 left-0 w-full z-50 bg-[#f9faff] justify-between py-3 px-6">
             <div className="flex justify center items-center">
                 <img className="w-8 h-8 rounded" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752500433/original-059561fd46a70134d86947adc772082f_wysnzz.jpg"></img>

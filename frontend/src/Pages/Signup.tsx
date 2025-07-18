@@ -5,15 +5,18 @@ import { Input } from "../components/Input"
 import { useState } from "react"
 import axios from "axios"
 import toast from "react-hot-toast"
+import { Loader } from "../components/Loader"
 
 export const Signup = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const router = useNavigate();
     const backendURL = import.meta.env.VITE_BACKEND_URL;
 
     return <div className="main-content flex justify-center">
+        {isLoading && <Loader/>}
         <div className="flex pt-8 max-w-4xl">
             <div className="flex-1 pt-20 px-4">
                 <div className="font-semibold text-3xl pb-4">
@@ -41,18 +44,25 @@ export const Signup = () => {
 
                 <div className="pt-4">
                     <PrimaryButton onClick={async () => {
-                        const response = await axios.post(`${backendURL}/user/signup`, JSON.stringify({
-                            email,
-                            password,
-                            name
-                        }), {
-                            headers: {
-                                "Content-type": "application/json"
-                            }
-                        });
-                        localStorage.setItem("token", response.data.token);
-                        toast.success("You account has been created successfully!")
-                        router("/dashboard");
+                        
+                        try {
+                            setIsLoading(true)
+                            const response = await axios.post(`${backendURL}/user/signup`, JSON.stringify({
+                                email,
+                                password,
+                                name
+                            }), {
+                                headers: {
+                                    "Content-type": "application/json"
+                                }
+                            });
+                            setIsLoading(false)
+                            localStorage.setItem("token", response.data.token);
+                            toast.success("You account has been created successfully!")
+                            router("/dashboard");
+                        } catch (error) {
+                            setIsLoading(false)
+                        }
                     }} size="big">Get started free</PrimaryButton>
                 </div>
             </div>

@@ -18,8 +18,19 @@ export default {
         slate: {
           100: "#ebe9df"
         }
+      },
+      animation: {
+        'loader-bar': 'loaderBarAnim 1.5s infinite linear',
+      },
+      keyframes: {
+        loaderBarAnim: {
+          '0%': { width: '0%', left: '100%' },
+          '50%': { width: '70%', left: '30%' },
+          '100%': { width: '100%', left: '0%' },
+        }
       }
     },
   },
   plugins: [],
 }
+

@@ -5,15 +5,17 @@ import { Input } from "../components/Input";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Loader } from "../components/Loader";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const router = useNavigate();
     const backendURL = import.meta.env.VITE_BACKEND_URL;
 
     return <div>
-
+        {isLoading && <Loader/>}
         <div className="main-content flex justify-center">
             <div className="flex pt-8 max-w-4xl">
                 <div className="flex-1 pt-20 px-4">
@@ -40,6 +42,7 @@ export const Login = () => {
                         <PrimaryButton onClick={async () => {
                             let res;
                             try {
+                                setIsLoading(true)
                                 res = await axios.post(`${backendURL}/user/login`, JSON.stringify({
                                     email,
                                     password,
@@ -50,8 +53,10 @@ export const Login = () => {
                                 });
                                 localStorage.setItem("token", res.data.token);
                                 toast.success("You've logged in successfully!")
+                                setIsLoading(false)
                                 router("/dashboard");
                             } catch (error) {
+                                setIsLoading(false)
                                 toast.error("Invalid credentials")
                             }
                         }} size="big">Login</PrimaryButton>

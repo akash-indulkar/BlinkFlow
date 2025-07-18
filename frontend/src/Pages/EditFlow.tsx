@@ -18,6 +18,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AddActionNode } from '../components/ReactFlow/AddActionNode';
 import { Modal } from '../components/Modal';
 import toast from 'react-hot-toast';
+import { Loader } from '../components/Loader';
 
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
@@ -76,6 +77,7 @@ export const EditFlow = () => {
   const [flowName, setFlowName] = useState<string>(existingFlowName);
   const [isEditing, setIsEditing] = useState(false);
   const [userID, setUserID] = useState();
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
   useEffect(() => {
     axios.get(`${backendURL}/flow/${flowID}`, {
@@ -222,16 +224,17 @@ export const EditFlow = () => {
     }
     setNodes(newNodes);
     setEdges(newEdges);
+    setIsLoading(false)
   }, [selectedActions, selectedTrigger]);
 
   return (
     <div style={{ height: '100vh', position: 'relative' }}>
-      <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md shadow-xl px-4 py-2 rounded-full flex items-center gap-2 border border-gray-200">
+      {isLoading && <Loader />}
+      <div onClick={() => setIsEditing(true)} onBlur={() => setIsEditing(false)} className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md shadow-xl px-4 py-2 rounded-full flex items-center gap-2 border border-gray-200">
         {isEditing ? (
           <input
             value={flowName}
             onChange={(e) => setFlowName(e.target.value)}
-            onBlur={() => setIsEditing(false)}
             onKeyDown={(e) => {
               if (e.key === "Enter") setIsEditing(false);
             }}
@@ -242,7 +245,6 @@ export const EditFlow = () => {
           <>
             <h2 className="truncate overflow-hidden text-ellipsis max-w-[140px] font-sans text-base antialiased">{flowName}</h2>
             <button
-              onClick={() => setIsEditing(true)}
               className="hover:text-blue-500 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
@@ -253,7 +255,12 @@ export const EditFlow = () => {
           </>
         )}
       </div>
-      <div className="flex justify-end p-4 absolute right-0 top-20 z-50">
+      <div className="flex justify-end p-2 absolute right-0 top-20 z-50">
+        <PrimaryButton onClick={() => {
+          router("/dashboard")
+        }}>Go to Dashboard</PrimaryButton>
+      </div>
+      <div className="flex justify-end p-4 absolute right-0 top-[120px] z-50">
         <PrimaryButton onClick={async () => {
           if (!selectedTrigger?.availableTriggerID) {
             return;
@@ -270,7 +277,7 @@ export const EditFlow = () => {
             }))
           }, {
             headers: {
-              Authorization : "Bearer " + localStorage.getItem("token")
+              Authorization: "Bearer " + localStorage.getItem("token")
             }
           })
           await axios.put(`${backendURL}/flow/update/${flowID}`, {
@@ -285,12 +292,12 @@ export const EditFlow = () => {
             }))
           }, {
             headers: {
-              Authorization : "Bearer " + localStorage.getItem("token")
+              Authorization: "Bearer " + localStorage.getItem("token")
             }
           })
           toast.success("Flow updated successfully!")
           router("/dashboard");
-        }}>Save Changes</PrimaryButton>
+        }}> Save Changes </PrimaryButton>
       </div>
       {selectedModalIndex && <Modal availableItems={selectedModalIndex === 1 ? availableTriggers : availableActions} onSelect={(props: null | { name: string; id: number; image: string, metadata: any; }) => {
         if (props === null) {

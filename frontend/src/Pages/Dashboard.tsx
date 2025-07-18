@@ -5,11 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { Flow } from "../utils/Flow";
 import { FlowTable } from "../components/FlowTable";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
+import { Loader } from "../components/Loader";
 
 function useFlows() {
-    const [loading, setLoading] = useState(true);
     const [flows, setFlows] = useState<Flow[]>([]);
     const backendURL = import.meta.env.VITE_BACKEND_URL;
+    const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
         axios.get(`${backendURL}/flow/`, {
@@ -20,21 +21,22 @@ function useFlows() {
         })
             .then(res => {
                 setFlows(res.data);
-                setLoading(false)
+                setIsLoading(false)
             })
     }, []);
 
     return {
-        loading, flows, setFlows
+        isLoading, flows, setFlows
     }
 }
 
 export const Dashboard = () => {
-    const { loading, flows, setFlows } = useFlows();
+    const { isLoading, flows, setFlows } = useFlows();
     const router = useNavigate();
 
-    if (flows.length == 0) {
+    if (!isLoading && flows.length === 0) {
         return <div className="pt-10 main-content flex-col justify-center ">
+            {isLoading && <Loader />}
             <div className="flex justify-center pt-8">
                 <img src="https://res.cloudinary.com/dadualj4l/image/upload/v1752380954/BlinkFlowCloudStore/not_found_dog-98fd5bff8642dd0089c45b3a82fe5d56_a5wiaw.svg"></img>
             </div>
@@ -48,6 +50,7 @@ export const Dashboard = () => {
     }
 
     return <div className="main-content flex-col justify-center ">
+        {isLoading && <Loader />}
         <div className="flex justify-center pt-8">
             <div className="max-w-screen-lg	 w-full">
                 <div className="flex justify-between ">
@@ -81,7 +84,7 @@ export const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            {loading ?
+            {isLoading ?
                 <div className="flex justify-center">
                     <div className="divide-y divide-gray-300 max-w-screen-lg w-full border border-gray-300 rounded-md overflow-hidden">
                         <div role="status" className="divide-y divide-gray-300 max-w-screen-lg w-full divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 p-4 dark:border-gray-700">
