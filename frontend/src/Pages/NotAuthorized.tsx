@@ -1,16 +1,17 @@
-import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../components/Loader";
+import { useContext, useState } from "react";
+import { AuthContext } from "../auth/AuthContext";
+import { CheckFeature } from "../components/CheckFeature";
 import { Input } from "../components/Input";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Loader } from "../components/Loader";
-import { AuthContext } from "../auth/AuthContext";
 
-
-export const Login = () => {
+export const NotAuthorized = () => {
     const { login } = useContext(AuthContext);
     const [email, setEmail] = useState("");
+
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const router = useNavigate();
@@ -20,13 +21,14 @@ export const Login = () => {
         {isLoading && <Loader />}
         <div className="main-content flex justify-center">
             <div className="flex mt-20 p-6 rounded shadow-lg max-w-4xl bg-white">
-                <div className="flex-1  px-4">
-                    <img className="flex justify-center" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752934191/original-9962183004b3c442a836dc3b3e43d49b_lsnezv.jpg"></img>
+                <div className="flex-1 justify-center items-center px-4">
+                    <img className="flex justify-center" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752934191/original-9962183004b3c442a836dc3b3e43d49b_lsnezv.jpg"/>
                 </div>
+
                 <div className="flex-1">
                     <div className="px-4">
                         <div className="pt-2 font-semibold text-2xl text-center w-[400px]">
-                           Welcome back!
+                            Sorry, you've logged out!
                         </div>
                         <div className="text-sm text-center w-[400px]">
                             Log into your account to access your dashboard.
@@ -68,5 +70,5 @@ export const Login = () => {
                 </div>
             </div>
         </div>
-    </div >
+    </div>
 }

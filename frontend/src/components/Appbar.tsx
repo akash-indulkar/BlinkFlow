@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { LinkButton } from "./buttons/LinkButton"
 import { PrimaryButton } from "./buttons/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ConfirmationToast } from "./ConfirmationToast";
+import { AuthContext } from "../auth/AuthContext";
 
 export const Appbar = () => {
     const router = useNavigate();
@@ -11,10 +12,7 @@ export const Appbar = () => {
     const [name, setName] = useState("")
     const [showModal, setShowModal] = useState<boolean>(false);
     const backendURL = import.meta.env.VITE_BACKEND_URL;
-    const logoutUser = () => {
-        localStorage.setItem("token", "")
-        window.location.href = "/";
-    }
+    const { logout } = useContext(AuthContext)
     try {
         axios.get(`${backendURL}/user/me`, {
             headers: {
@@ -72,7 +70,10 @@ export const Appbar = () => {
             }}>
                 Logout
             </PrimaryButton>
-            {showModal && <ConfirmationToast message="Do you really want to log out?" onConfirm={() => logoutUser()} onCancel={() => { setShowModal(false) }} />}
+            {showModal && <ConfirmationToast message="Do you really want to log out?" onConfirm={() => {
+                logout()
+                window.location.href = "/";
+            }} onCancel={() => { setShowModal(false) }} />}
         </div>
     </div>
 
