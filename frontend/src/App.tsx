@@ -8,9 +8,9 @@ import { CreateFlow } from './Pages/CreateFlow';
 import { EditFlow } from './Pages/EditFlow';
 import { Toaster } from 'react-hot-toast';
 import { NotFound } from './Pages/NotFound';
-import PrivateRoute from './auth/PrivateRoute';
 import { NotAuthorized } from './Pages/NotAuthorized';
 import OAuth2Redirect from './Pages/OAuth2Redirect';
+import { PrivateRoute } from './auth/PrivateRoute';
 
 
 function App() {
