@@ -2,6 +2,7 @@ package com.blinkflow.primary_backend.security;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,6 +33,9 @@ public class SecurityConfig {
     @Autowired
     private CustomOAuth2SuccessHandler successHandler;
    
+    @Value("${frontend.redirect.url}")
+	private String frontendRedirectURL;
+    
 	@Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
@@ -50,7 +54,10 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authProvider())
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-				.oauth2Login(oauth -> oauth.successHandler(successHandler));
+				.oauth2Login(oauth -> oauth.successHandler(successHandler)
+											.failureHandler((request, response, exception) -> {
+												response.sendRedirect(frontendRedirectURL + "?error=true");
+											}));
 		
 		return http.build();
 		

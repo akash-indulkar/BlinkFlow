@@ -4,6 +4,14 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+primary-backend/.env
+
+
 ### STS ###
 .apt_generated
 .classpath
