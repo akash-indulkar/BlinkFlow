@@ -10,6 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import { NotFound } from './Pages/NotFound';
 import PrivateRoute from './auth/PrivateRoute';
 import { NotAuthorized } from './Pages/NotAuthorized';
+import OAuth2Redirect from './Pages/OAuth2Redirect';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                     <Route path={"/"} element={<Landing/>} />
                     <Route path={"/signup"} element={<Signup/>} />
                     <Route path={"/login"} element={<Login/>} />
+                    <Route path={"/login/oauth2/redirect"} element={<OAuth2Redirect/>} />
                     <Route path={"/login/redirect"} element={<NotAuthorized/>}/>
                     <Route path={"/dashboard"} element={<PrivateRoute><Dashboard /></PrivateRoute>}/>
                     <Route path={"/flow/create"} element={<PrivateRoute><CreateFlow/></PrivateRoute>}/>

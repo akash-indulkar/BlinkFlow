@@ -6,6 +6,7 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import { Loader } from "../components/Loader"
 import { AuthContext } from "../auth/AuthContext"
+import { GoogleLoginButton } from "../auth/GoogleLoginButton"
 
 export const Signup = () => {
     const { login } = useContext(AuthContext);
@@ -18,8 +19,8 @@ export const Signup = () => {
 
     return <div className="main-content flex justify-center">
         {isLoading && <Loader />}
-        <div className="flex mt-[50px] p-10 rounded shadow-lg max-w-4xl bg-white">
-            <div className="flex-1 justify-center items-center  h-130 w-130 pt-10">
+        <div className="flex mt-[14px] p-10 rounded shadow-lg max-w-4xl bg-white">
+            <div className="flex-1 justify-center items-center  h-130 w-130 pt-20">
                 <img className="flex justify-center" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752934191/original-9962183004b3c442a836dc3b3e43d49b_lsnezv.jpg" />
             </div>
             <div className="flex-1">
@@ -31,7 +32,10 @@ export const Signup = () => {
                         14-day trial of premium features & apps
                     </div>
                 </div>
-                <div className="shadow-lg bg-[white] px-4 py-3 m-5 rounded w-[400px]">
+                <div className="shadow-lg border bg-[white] px-4 py-4 m-5 rounded w-[400px]">
+                    <GoogleLoginButton/>
+                    <div className="my-2 text-center text-gray-500">or</div>
+
                     <Input label={"Name"} onChange={e => {
                         setName(e.target.value)
                     }} type="text" placeholder="Your name"></Input>

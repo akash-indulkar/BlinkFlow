@@ -28,6 +28,9 @@ public class SecurityConfig {
 	
 	@Autowired
 	private JWTFilter jwtFilter;
+	
+    @Autowired
+    private CustomOAuth2SuccessHandler successHandler;
    
 	@Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -37,7 +40,7 @@ public class SecurityConfig {
     @Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
 		
-		return http
+				http
 				.cors().and()
 				.csrf(customizer -> customizer.disable())
 				.authorizeHttpRequests(request -> request
@@ -47,7 +50,9 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authProvider())
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-				.build();
+				.oauth2Login(oauth -> oauth.successHandler(successHandler));
+		
+		return http.build();
 		
 	}
     

@@ -2,11 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { Loader } from "../components/Loader";
 import { useContext, useState } from "react";
 import { AuthContext } from "../auth/AuthContext";
-import { CheckFeature } from "../components/CheckFeature";
 import { Input } from "../components/Input";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { GoogleLoginButton } from "../auth/GoogleLoginButton";
 
 export const NotAuthorized = () => {
     const { login } = useContext(AuthContext);
@@ -20,9 +20,9 @@ export const NotAuthorized = () => {
     return <div>
         {isLoading && <Loader />}
         <div className="main-content flex justify-center">
-            <div className="flex mt-20 p-6 rounded shadow-lg max-w-4xl bg-white">
+            <div className="flex mt-16 p-6 rounded shadow-lg max-w-4xl bg-white">
                 <div className="flex-1 justify-center items-center px-4">
-                    <img className="flex justify-center" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752934191/original-9962183004b3c442a836dc3b3e43d49b_lsnezv.jpg"/>
+                    <img className="flex justify-center" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752934191/original-9962183004b3c442a836dc3b3e43d49b_lsnezv.jpg" />
                 </div>
 
                 <div className="flex-1">
@@ -34,7 +34,10 @@ export const NotAuthorized = () => {
                             Log into your account to access your dashboard.
                         </div>
                     </div>
-                    <div className="shadow-lg bg-[white] px-4 py-3 m-6 rounded w-[400px]">
+                    <div className="shadow-lg border bg-[white] px-4 py-4 m-6 rounded w-[400px]">
+                        <GoogleLoginButton/>
+                        <div className="my-2 text-center text-gray-500">or</div>
+
                         <Input onChange={e => {
                             setEmail(e.target.value)
                         }} label={"Email"} type="email" placeholder="Your Email"></Input>

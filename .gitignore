@@ -1,1 +1,28 @@
-/.metadata/
+
+*.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# === React Frontend ===
+frontend/node_modules/
+frontend/build/
+frontend/.env
+frontend/.next/
+frontend/.parcel-cache/
+frontend/.turbo/
+
+# === Spring Boot primary-backend ===
+primary-backend/target/
+primary-backend/.mvn/
+primary-backend/logs/
+primary-backend/.env
+primary-backend/.classpath
+primary-backend/.project
+primary-backend/.settings/
+primary-backend/*.iml
+primary-backend/mvnw
+primary-backend/mvnw.cmd
+
+.metadata/
