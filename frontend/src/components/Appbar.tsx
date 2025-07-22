@@ -43,7 +43,7 @@ export const Appbar = () => {
                         router("/login")
                     }}>Login</LinkButton>
                 </div>
-                <PrimaryButton onClick={() => {
+                <PrimaryButton minWidth="min-w-[100px]" isLoading={false} onClick={() => {
                     router("/signup")
                 }}>
                     Signup
@@ -64,7 +64,7 @@ export const Appbar = () => {
             {"Hello! " + name}
         </div>
         <div className="flex justify-center">
-            <PrimaryButton onClick={() => {
+            <PrimaryButton minWidth="min-w-[120px]" isLoading={false} onClick={() => {
                 setShowModal(true)
             }}>
                 Logout

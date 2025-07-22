@@ -40,7 +40,8 @@ function useAvailableActionsAndTriggers() {
   return {
     availableActions,
     availableTriggers,
-    isLoading
+    isLoading,
+    setIsLoading
   }
 }
 
@@ -53,7 +54,7 @@ const nodeOrigin: [number, number] = [0.5, 0];
 
 export const CreateFlow = () => {
   const router = useNavigate();
-  const { availableActions, availableTriggers, isLoading } = useAvailableActionsAndTriggers();
+  const { availableActions, availableTriggers, isLoading, setIsLoading } = useAvailableActionsAndTriggers();
   const [selectedTrigger, setSelectedTrigger] = useState<{ availableTriggerID: number, name: string, image: string, metadata: any }>();
   const [selectedActions, setSelectedActions] = useState<{
     index: number;
@@ -74,7 +75,7 @@ export const CreateFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [selectedModalIndex, setSelectedModalIndex] = useState<null | number>(null);
-  const [flowName, setFlowName] = useState("My Flow " + Math.floor(Math.random() * 1000));
+  const [flowName, setFlowName] = useState("Untitled Flow " + Math.floor(Math.random() * 1000));
   const [isEditing, setIsEditing] = useState(false);
   const [userID, setUserID] = useState<number>();
 
@@ -219,16 +220,17 @@ export const CreateFlow = () => {
         )}
       </div>
       <div className="flex justify-end p-2 absolute right-0 top-20 z-50">
-        <PrimaryButton onClick={() => {
+        <PrimaryButton minWidth='min-w-[165px]' isLoading={false} onClick={() => {
           router("/dashboard")
         }}>Go to Dashboard</PrimaryButton>
       </div>
-      <div className="flex justify-end px-9 py-4 absolute right-0 top-[120px] z-50"> <PrimaryButton onClick={async () => {
+      <div className="flex justify-end px-9 py-4 absolute right-0 top-[120px] z-50"> <PrimaryButton minWidth='min-w-[98px]' isLoading={isLoading} onClick={async () => {
         if (!selectedTrigger?.availableTriggerID) {
           toast.error("No trigger selected!")
           return;
         }
         try {
+          setIsLoading(true)
           await axios.post(`${backendURL}/flow/create`, {
             "userID": userID,
             "name": flowName,
@@ -244,9 +246,14 @@ export const CreateFlow = () => {
               Authorization: "Bearer " + localStorage.getItem("token")
             }
           })
-          toast.success("Flow created successfully!")
-          router("/dashboard");
+          setTimeout(() => {
+            setIsLoading(false)
+            toast.success("Flow created successfully!")
+            router("/dashboard");
+          }, 5000)
+
         } catch (error) {
+          setIsLoading(false)
           toast.error("No actions selected!")
         }
       }}>Create</PrimaryButton>
@@ -290,6 +297,7 @@ export const CreateFlow = () => {
         defaultViewport={{ x: 0, y: 0, zoom: 1 }}
         nodesDraggable={false}
         zoomOnDoubleClick={false}
+        proOptions={{ hideAttribution: true }}
       >
         <Background gap={5} size={0.5} />
       </ReactFlow>

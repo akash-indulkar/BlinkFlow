@@ -6,7 +6,7 @@ import { Input } from "../components/Input";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { GoogleLoginButton } from "../auth/GoogleLoginButton";
+import { GoogleLoginButton } from "../components/buttons/GoogleLoginButton";
 
 export const NotAuthorized = () => {
     const { login } = useContext(AuthContext);
@@ -45,7 +45,7 @@ export const NotAuthorized = () => {
                             setPassword(e.target.value);
                         }} label={"Password"} type="password" placeholder="Password"></Input>
                         <div className="pt-2 mt-4">
-                            <PrimaryButton onClick={async () => {
+                            <PrimaryButton minWidth="min-w-[340px]" isLoading={isLoading} onClick={async () => {
                                 let res;
                                 try {
                                     setIsLoading(true)

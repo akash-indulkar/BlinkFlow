@@ -42,7 +42,7 @@ export const Dashboard = () => {
             </div>
             <div className="flex justify-center pt-8">
                 <span className="text-2xl px-2">You don't have any flow, Let's create one</span>
-                <PrimaryButton onClick={() => {
+                <PrimaryButton minWidth="min-w-[98px]" isLoading={false} onClick={() => {
                     router("/flow/create");
                 }}>Create</PrimaryButton>
             </div>
@@ -57,7 +57,7 @@ export const Dashboard = () => {
                     <div className="text-2xl font-bold">
                         My Flows
                     </div>
-                    <PrimaryButton onClick={() => {
+                    <PrimaryButton minWidth="min-w-[98px]" isLoading={false} onClick={() => {
                         router("/flow/create");
                     }}>Create</PrimaryButton>
                 </div>

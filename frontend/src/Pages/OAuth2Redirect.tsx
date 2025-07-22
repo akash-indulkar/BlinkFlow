@@ -12,7 +12,6 @@ export default function OAuth2Redirect() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const error = urlParams.get('error');
-    console.log(token)
     if (token) {
       login(token)
       toast.success("Welcome to the dashboard!")

@@ -22,11 +22,11 @@ export const Modal = ({ index, onSelect, availableItems }: { index: number, onSe
     }>();
     const isTrigger = index === 1;
 
-    return <div className="fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-indigo-50 bg-opacity-70 flex">
+    return <div className="fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] bg-black/10 transition-transform transition-discrete duration-150 ease-in max-h-full backdrop-blur-sm bg-opacity-70  flex">
         <div className="relative p-4 w-full max-w-2xl max-h-full">
-            <div className="relative bg-white rounded-lg shadow ">
+            <div className="relative bg-white rounded-lg shadow-md ">
                 <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t ">
-                    <div className="text-xl">
+                    <div className="text-xl font-medium">
                         Select {index === 1 ? "Trigger" : "Action"}
                     </div>
                     <button onClick={() => {
@@ -98,8 +98,8 @@ export const Modal = ({ index, onSelect, availableItems }: { index: number, onSe
                                     image
                                 })
                             }
-                        }} className="flex border p-4 cursor-pointer hover:bg-indigo-50">
-                            <img src={image} className="m-1" width={30} /> <div className="flex flex-col justify-center"> {name} </div>
+                        }} className="flex p-2 cursor-pointer hover:bg-indigo-50">
+                            <img src={image} className="m-1" width={20}  /> <div className="font-sans p-1 text-center font-medium flex flex-col text-base justify-center"> {name} </div>
                         </div>
                     })}</div>}
                     {selectedTrigger && selectedTrigger?.name === "Catch a Webhook" && <GenericWebhookConfigurer setMetadata={(metadata) => {

@@ -20,7 +20,7 @@ export default {
         }
       },
       animation: {
-        'loader-bar': 'loaderBarAnim 1.5s infinite linear',
+        'loader-bar': 'loaderBarAnim 1.5s infinite linear'
       },
       keyframes: {
         loaderBarAnim: {

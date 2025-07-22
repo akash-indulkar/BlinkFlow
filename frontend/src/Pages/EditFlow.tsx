@@ -256,30 +256,16 @@ export const EditFlow = () => {
         )}
       </div>
       <div className="flex justify-end p-2 absolute right-0 top-20 z-50">
-        <PrimaryButton onClick={() => {
+        <PrimaryButton minWidth='min-w-[170px]' isLoading={false} onClick={() => {
           router("/dashboard")
         }}>Go to Dashboard</PrimaryButton>
       </div>
       <div className="flex justify-end p-4 absolute right-0 top-[120px] z-50">
-        <PrimaryButton onClick={async () => {
+        <PrimaryButton minWidth='min-w-[145px]' isLoading={isLoading}  onClick={async () => {
           if (!selectedTrigger?.availableTriggerID) {
             return;
           }
-          console.log({
-            "userID": userID,
-            "name": flowName,
-            "availableTriggerID": selectedTrigger.availableTriggerID,
-            "triggerMetadata": selectedTrigger.metadata,
-            "flowActions": selectedActions.map(action => ({
-              availableActionID: action.availableActionId,
-              metadata: action.metadata,
-              sortingOrder: action.index
-            }))
-          }, {
-            headers: {
-              Authorization: "Bearer " + localStorage.getItem("token")
-            }
-          })
+        
           await axios.put(`${backendURL}/flow/update/${flowID}`, {
             "userID": userID,
             "name": flowName,

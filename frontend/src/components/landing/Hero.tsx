@@ -45,7 +45,7 @@ export const Hero = () => {
         </div>
         <div className="flex justify-center pt-4 pb-8">
             {isLoggedIn && <div className="flex">
-                <PrimaryButton onClick={() => {
+                <PrimaryButton minWidth="min-w-[300px]" isLoading={false} onClick={() => {
                     setIsLoading(true)
                     router("/flow/create")
                     setIsLoading(false)
@@ -59,7 +59,7 @@ export const Hero = () => {
                 </div>
             </div>}
             {!isLoggedIn && <div className="flex">
-                <PrimaryButton onClick={() => {
+                <PrimaryButton minWidth="min-w-[300px]" isLoading={false} onClick={() => {
                     setIsLoading(true)
                     router("/signup")
                     setIsLoading(false)

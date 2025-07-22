@@ -6,7 +6,7 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import { Loader } from "../components/Loader"
 import { AuthContext } from "../auth/AuthContext"
-import { GoogleLoginButton } from "../auth/GoogleLoginButton"
+import { GoogleLoginButton } from "../components/buttons/GoogleLoginButton"
 
 export const Signup = () => {
     const { login } = useContext(AuthContext);
@@ -47,7 +47,7 @@ export const Signup = () => {
                     }} label={"Password"} type="password" placeholder="Password"></Input>
 
                     <div className="pt-4">
-                        <PrimaryButton onClick={async () => {
+                        <PrimaryButton minWidth="min-w-[340px]" isLoading={isLoading} onClick={async () => {
 
                             try {
                                 setIsLoading(true)
