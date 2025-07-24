@@ -18,7 +18,7 @@ function App() {
     return (
         <div style={{
             height: "100vh",
-        }}>
+        }} className='font-opensans'>
             <Router>
                 <Appbar />
                 <Routes>

@@ -5,6 +5,8 @@ import { SecondaryButton } from "../buttons/SecondaryButton"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Loader } from "../Loader";
+import { HeroVideo } from "./HeroVideo";
+import { LogoCarousel } from "../LogoCarousel";
 
 export const Hero = () => {
     const backendURL = import.meta.env.VITE_BACKEND_URL;
@@ -34,16 +36,17 @@ export const Hero = () => {
     return <div>
         {isLoading && <Loader />}
         <div className="flex justify-center">
-            <div className="text-5xl font-bold font-semibold text-center pt-8 max-w-xl">
+                <div className="text-6xl font-gothic pb-6 text-center max-w-3xl">
                 Automate as fast as you can type !
             </div>
         </div>
-        <div className="flex justify-center pb-8">
-            <div className="text-xl font-bold font-normal text-center pt-8 max-w-2xl">
+        <div className="flex justify-center pb-0">
+            <div className="text-xl font-bold font-opensans font-normal text-center max-w-3xl">
                 AI gives you automation superpowers, and BlinkFlow puts them to work. Pairing AI and BlinkFlow helps you turn ideas into workflows and bots that work for you.
             </div>
         </div>
-        <div className="flex justify-center pt-4 pb-8">
+        <HeroVideo />
+        <div className="flex justify-center  mt-[480px] pb-8">
             {isLoggedIn && <div className="flex">
                 <PrimaryButton minWidth="min-w-[300px]" isLoading={false} onClick={() => {
                     setIsLoading(true)
@@ -73,11 +76,12 @@ export const Hero = () => {
                 </div>
             </div>}
         </div>
-
-        <div className="flex justify-center pt-4 pb-8">
+        <div className="flex justify-center pb-5 pt-4">
             <Feature title={"Free Forever"} subtitle={"for core features"} />
             <Feature title={"More apps"} subtitle={"than any other platforms"} />
             <Feature title={"Cutting Edge"} subtitle={"AI Features"} />
         </div>
+        <span className="font-opensans flex pb-2 justify-center text-center text-xl text-slate-500">Integrated with</span>
+        <LogoCarousel/>
     </div>
 }

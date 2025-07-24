@@ -31,7 +31,7 @@ export const Appbar = () => {
         return <div className="flex shadow-md fixed top-0 left-0 w-full z-50 bg-[#f9faff] justify-between py-3 px-6">
             <div className="flex justify center items-center">
                 <img className="w-8 h-8 rounded" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752500433/original-059561fd46a70134d86947adc772082f_wysnzz.jpg"></img>
-                <button className="px-1 flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
+                <button className="px-1 flex flex-col justify-center text-2xl font-merriweather font-extrabold" onClick={() => {
                     router("/")
                 }}>
                     BlinkFlow
@@ -54,7 +54,7 @@ export const Appbar = () => {
     return <div className="flex shadow-md fixed top-0 left-0 w-full z-50 border-b bg-[#f9faff] justify-between py-3 px-6">
         <div className="flex justify center items-center">
             <img className="w-8 h-8 rounded" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752500433/original-059561fd46a70134d86947adc772082f_wysnzz.jpg"></img>
-            <button className="px-1 flex flex-col justify-center text-2xl font-extrabold" onClick={() => {
+            <button className="px-1 flex flex-col justify-center text-2xl font-merriweather font-extrabold" onClick={() => {
                 router("/")
             }}>
                 BlinkFlow

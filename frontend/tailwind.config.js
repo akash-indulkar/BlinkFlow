@@ -28,7 +28,12 @@ export default {
           '50%': { width: '70%', left: '30%' },
           '100%': { width: '100%', left: '0%' },
         }
-      }
+      },
+       fontFamily: {
+        gothic: ['Special Gothic Expanded One', 'sans-serif'],
+        opensans: ['Open Sans', 'sans-serif'],
+        merriweather: ['Merriweather', 'sans-serif'],
+        }
     },
   },
   plugins: [],
