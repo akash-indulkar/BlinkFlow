@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Flow } from "../utils/Flow";
+import { Flow } from "../types/Flow";
 import { FlowTable } from "../components/FlowTable";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
 import { Loader } from "../components/Loader";

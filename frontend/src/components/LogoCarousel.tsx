@@ -9,17 +9,17 @@ export const LogoCarousel = () => {
         "https://res.cloudinary.com/dadualj4l/image/upload/v1752497388/Telegram_2019_Logo_ktqy2v.svg"
     ]
 
-    return <div className="relative overflow-hidden py-8 bg-#f9faff">
-        <div className="absolute left-0 top-0 h-full w-[300px] bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 h-full w-[300px] bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+    return <div className="relative overflow-hidden py-6 bg-#f9faff">
+        <div className="absolute left-0 top-0 h-full w-[90px] md:w-[400px] bg-gradient-to-r from-[#f9faff] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 h-full w-[90px] md:w-[400px] bg-gradient-to-l from-[#f9faff] to-transparent z-10 pointer-events-none" />
 
-        <div className="animate-scroll flex space-x-16 w-max">
+        <div className="animate-scroll flex space-x-8 sm:space-x-12 lg:space-x-16 w-max">
             {[...logos, ...logos].map((logo, index) => (
                 <img
                     key={index}
                     src={logo}
                     alt={`Logo ${index}`}
-                    className="h-20 px-6 shrink-0 w-auto object-contain"
+                    className="h-14 sm:h-16 md:h-20 px-4 sm:px-6 shrink-0 w-auto object-contain"
                 />
             ))}
         </div>

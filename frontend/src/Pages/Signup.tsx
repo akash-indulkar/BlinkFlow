@@ -17,62 +17,70 @@ export const Signup = () => {
     const router = useNavigate();
     const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-    return <div className="main-content flex justify-center">
-        {isLoading && <Loader />}
-        <div className="flex mt-[14px] p-10 rounded shadow-lg max-w-4xl bg-white">
-            <div className="flex-1 justify-center items-center  h-130 w-130 pt-20">
-                <img className="flex justify-center" src="https://res.cloudinary.com/dadualj4l/image/upload/v1752934191/original-9962183004b3c442a836dc3b3e43d49b_lsnezv.jpg" />
-            </div>
-            <div className="flex-1">
-                <div className="px-4">
-                    <div className="font-semibold text-xl text-center w-[400px]">
+    return (
+        <div className="main-content flex justify-center px-4">
+            {isLoading && <Loader />}
+            <div className="flex flex-col md:flex-row mt-2 p-6 md:p-10 rounded shadow-lg max-w-4xl w-full bg-white">
+                <div className="flex-1 flex justify-center items-center py-6">
+                    <img
+                        className="hidden md:block w-full max-w-xs md:max-w-sm object-contain"
+                        src="https://res.cloudinary.com/dadualj4l/image/upload/v1752934191/original-9962183004b3c442a836dc3b3e43d49b_lsnezv.jpg"
+                        alt="Sign up illustration"/>
+                </div>
+                <div className="flex-1 px-4">
+                    <div className="font-semibold text-lg sm:text-xl text-center mb-2">
                         Join millions worldwide who automate their work using BlinkFlow.
                     </div>
-                    <div className="text-sm text-center w-[400px]">
+                    <div className="text-sm text-center text-gray-600 mb-4">
                         14-day trial of premium features & apps
                     </div>
-                </div>
-                <div className="shadow-lg border bg-[white] px-4 py-4 m-5 rounded w-[400px]">
-                    <GoogleLoginButton/>
-                    <div className="my-2 text-center text-gray-500">or</div>
-
-                    <Input label={"Name"} onChange={e => {
-                        setName(e.target.value)
-                    }} type="text" placeholder="Your name"></Input>
-                    <Input onChange={e => {
-                        setEmail(e.target.value)
-                    }} label={"Email"} type="email" placeholder="Your Email"></Input>
-                    <Input onChange={e => {
-                        setPassword(e.target.value)
-                    }} label={"Password"} type="password" placeholder="Password"></Input>
-
-                    <div className="pt-4">
-                        <PrimaryButton minWidth="min-w-[340px]" isLoading={isLoading} onClick={async () => {
-
-                            try {
-                                setIsLoading(true)
-                                const response = await axios.post(`${backendURL}/user/signup`, JSON.stringify({
-                                    email,
-                                    password,
-                                    name
-                                }), {
-                                    headers: {
-                                        "Content-type": "application/json"
+                    <div className="shadow-lg border bg-white px-4 py-6 rounded w-full max-w-sm mx-auto">
+                        <GoogleLoginButton />
+                        <div className="my-2 text-center text-gray-500">or</div>
+                        <Input
+                            label={"Name"}
+                            onChange={(e) => setName(e.target.value)}
+                            type="text"
+                            placeholder="Your name"/>
+                        <Input
+                            onChange={(e) => setEmail(e.target.value)}
+                            label={"Email"}
+                            type="email"
+                            placeholder="Your Email"/>
+                        <Input
+                            onChange={(e) => setPassword(e.target.value)}
+                            label={"Password"}
+                            type="password"
+                            placeholder="Password"/>
+                        <div className="pt-4">
+                            <PrimaryButton
+                                minWidth="min-w-full"
+                                isLoading={isLoading}
+                                onClick={async () => {
+                                    try {
+                                        setIsLoading(true);
+                                        const response = await axios.post(
+                                            `${backendURL}/user/signup`,
+                                            JSON.stringify({ email, password, name }),
+                                            { headers: { "Content-type": "application/json" } }
+                                        );
+                                        setIsLoading(false);
+                                        if (response.data.token) {
+                                            login(response.data.token);
+                                        }
+                                        toast.success("Your account has been created successfully!");
+                                        router("/dashboard");
+                                    } catch (error) {
+                                        setIsLoading(false);
                                     }
-                                });
-                                setIsLoading(false)
-                                if (response.data.token) {
-                                    login(response.data.token)
-                                }
-                                toast.success("You account has been created successfully!")
-                                router("/dashboard");
-                            } catch (error) {
-                                setIsLoading(false)
-                            }
-                        }} size="medium">Get started free</PrimaryButton>
+                                }}
+                                size="medium">
+                                Get started for free
+                            </PrimaryButton>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    )
 }
