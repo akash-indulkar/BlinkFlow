@@ -13,18 +13,24 @@ export const Appbar = () => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const backendURL = import.meta.env.VITE_BACKEND_URL;
     const { logout } = useContext(AuthContext)
-    try {
-        axios.get(`${backendURL}/user/me`, {
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token"),
-                "Content-type": "application/json"
-            }
-        })
-            .then(res => {
-                setName(res.data.name)
-                setIsLoading(false)
+    const token = localStorage.getItem("token")
+    const fetchUserData = async () => {
+        try {
+            const res = await axios.get(`${backendURL}/user/me`, {
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-type": "application/json"
+                }
             })
-    } catch (error) {
+            setName(res.data.name)
+            setIsLoading(false)
+        } catch (error) {
+            logout();
+            window.location.href = "/login/redirect"
+        }
+    }
+    if (token) {
+        fetchUserData();
     }
 
     if (isLoading) {
