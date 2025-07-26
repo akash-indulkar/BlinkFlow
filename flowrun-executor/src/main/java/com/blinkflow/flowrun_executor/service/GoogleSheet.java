@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GoogleSheet {
-	public static void addRowInSheet(Map<String, Object> metadata) {
+	public static void addRowInSheet(Map<String, Object> metadata, Map<String, Object> map) {
 		System.out.println("Google Sheet service " + metadata.toString());
 	}
 }
