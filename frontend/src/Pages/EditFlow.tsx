@@ -19,7 +19,7 @@ import { AddActionNode } from '../components/ReactFlow/AddActionNode';
 import { Modal } from '../components/Modal';
 import toast from 'react-hot-toast';
 import { Loader } from '../components/Loader';
-
+import { DeviceRecommendationToast } from '../components/DeviceRecommendationToast';
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -35,8 +35,6 @@ function useAvailableActionsAndTriggers() {
       .then(res => setAvailableActions(res.data))
   }, [])
 
-  console.log(availableTriggers)
-  console.log(availableActions)
   return {
     availableActions,
     availableTriggers
@@ -78,6 +76,7 @@ export const EditFlow = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userID, setUserID] = useState();
   const [isLoading, setIsLoading] = useState<boolean>(true)
+
 
   useEffect(() => {
     axios.get(`${backendURL}/flow/${flowID}`, {
@@ -147,7 +146,7 @@ export const EditFlow = () => {
     newNodes.push({
       id: '0',
       type: 'customNode',
-      position: { x: 775, y: 150 },
+      position: { x: window.innerWidth / 2, y: 150 },
       data: {
         name: selectedTrigger?.name || "Select a Trigger",
         image: selectedTrigger?.image || "",
@@ -161,7 +160,7 @@ export const EditFlow = () => {
       newNodes.push({
         id: `${action.index}`,
         type: 'customNode',
-        position: { x: 775, y: 150 + (i + 1) * 120 },
+        position: { x: window.innerWidth / 2, y: 150 + (i + 1) * 120 },
         data: {
           name: action.availableActionName || "Select an Action",
           image: action.availableActionImage || "",
@@ -186,7 +185,7 @@ export const EditFlow = () => {
       id: 'add-button',
       type: 'addActionNode',
       position: {
-        x: 775,
+        x: window.innerWidth / 2,
         y: 240 + selectedActions.length * 120,
       },
       data: {
@@ -230,7 +229,8 @@ export const EditFlow = () => {
   return (
     <div style={{ height: '100vh', position: 'relative' }}>
       {isLoading && <Loader />}
-      <div onClick={() => setIsEditing(true)} onBlur={() => setIsEditing(false)} className="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md shadow-xl px-4 py-2 rounded-full flex items-center gap-2 border border-gray-200">
+      <DeviceRecommendationToast />
+      <div onClick={() => setIsEditing(true)} onBlur={() => setIsEditing(false)} className="absolute top-20 left-1/2 transform -translate-x-1/2 z-30 bg-white/80 backdrop-blur-md shadow-xl px-4 py-2 rounded-full flex items-center gap-2 border border-gray-200">
         {isEditing ? (
           <input
             value={flowName}
@@ -255,17 +255,17 @@ export const EditFlow = () => {
           </>
         )}
       </div>
-      <div className="flex justify-end p-2 absolute right-0 top-20 z-50">
+      <div className="flex justify-end p-2 absolute right-0 top-20 z-30">
         <PrimaryButton minWidth='min-w-[170px]' isLoading={false} onClick={() => {
           router("/dashboard")
         }}>Go to Dashboard</PrimaryButton>
       </div>
-      <div className="flex justify-end p-4 absolute right-0 top-[120px] z-50">
-        <PrimaryButton minWidth='min-w-[145px]' isLoading={isLoading}  onClick={async () => {
+      <div className="flex justify-end p-4 absolute right-0 top-[120px] z-30">
+        <PrimaryButton minWidth='min-w-[145px]' isLoading={isLoading} onClick={async () => {
           if (!selectedTrigger?.availableTriggerID) {
             return;
           }
-        
+
           await axios.put(`${backendURL}/flow/update/${flowID}`, {
             "userID": userID,
             "name": flowName,

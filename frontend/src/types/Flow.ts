@@ -1,5 +1,5 @@
 export interface Flow {
-        flowID: number,
+    flowID: number,
     name: string,
     userID: number,
     availableTriggerID: number,
@@ -7,11 +7,11 @@ export interface Flow {
     flowTriggerImage: string,
     flowTriggerMetadata: any,
     flowActions:
-        {
-            availableActionID: number,
-            flowActionName: string,
-            flowActionImage: string,
-            metadata: any,
-            sortingOrder: number
-        }[]
+    {
+        availableActionID: number,
+        flowActionName: string,
+        flowActionImage: string,
+        metadata: any,
+        sortingOrder: number
+    }[]
 }

@@ -28,7 +28,7 @@ export const FlowTable = ({
     }
 
     return <div className="p-4 ">
-        {flows.map(flow => <div className="flex border-b border-t px-3 py-3">
+        {flows.map(flow => <div key={flow.flowID} className="flex border-b border-t px-3 py-3">
             <div className="flex justify-start basis-[20%]">
                 <svg className=" m-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="20" width="20" color="GrayWarm10" name="miscBoltOutlined">
                     <path fill="#2D2E2E" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm1-14-5.87 7H11v5l5.87-7H13V6Z"></path>
@@ -55,9 +55,9 @@ export const FlowTable = ({
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentcolor"
-                    stroke-width="1"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     className="m-1 p-1 w-9 h-9 hover:cursor-pointer text-center hover:text-blue-500"
                 >
                     <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
@@ -74,9 +74,9 @@ export const FlowTable = ({
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="1"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     className="m-1 size-8 pt-1 hover:cursor-pointer hover:text-red-500"
                 >
                     <path d="M4 7h16" />

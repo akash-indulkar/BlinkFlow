@@ -51,7 +51,7 @@ export const Dashboard = () => {
 
     return <div className="main-content flex-col justify-center ">
         {isLoading && <Loader />}
-        <div className="flex justify-center pt-8">
+        <div className="flex justify-center pt-8 px-4">
             <div className="max-w-screen-lg	 w-full">
                 <div className="flex justify-between ">
                     <div className="text-2xl font-bold">
