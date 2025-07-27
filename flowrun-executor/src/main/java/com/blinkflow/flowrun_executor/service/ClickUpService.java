@@ -1,8 +1,6 @@
 package com.blinkflow.flowrun_executor.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -14,33 +12,25 @@ import org.springframework.web.client.RestTemplate;
 import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
 @Service
-public class AsanaService {
-	private final String url = "https://app.asana.com/api/1.0/tasks";
-	
+public class ClickUpService {
 	private final RestTemplate restTemplate;
 	
 	@Autowired
-	public AsanaService(RestTemplate restTemplate) {
+	public ClickUpService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 	
-	public void addTaskToAsanaProject(Map<String, Object> flowRunMetadata, Map<String, Object> asanaMetadata) throws Exception {
+	public void createTaskInClickUpList(Map<String, Object> flowRunMetadata, Map<String, Object> clickUpMetadata) throws Exception {
+		final String url = "https://api.clickup.com/api/v2/list/" + clickUpMetadata.get("listID").toString() + "/task";
+		
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(asanaMetadata.get("personalAccessToken").toString());
+		headers.set("Authorization", clickUpMetadata.get("APIToken").toString());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("name", asanaMetadata.get("taskName").toString());
-		
-		String serializableMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
-		data.put("notes", serializableMessage);
-		
-		List<String> projects = new ArrayList<String>();
-		projects.add(asanaMetadata.get("projectID").toString());
-		data.put("projects",projects);
-		
 		Map<String, Object> body = new HashMap<String, Object>();
-		body.put("data", data);
+		body.put("name", clickUpMetadata.get("taskName"));
+		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
+		body.put("description", serializableMetadataMessage);
 		
 		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String,Object>>(body, headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
@@ -48,8 +38,8 @@ public class AsanaService {
 		if(response.getStatusCode().is2xxSuccessful()) {
 			return;
 		}else {
-			System.err.println("Asana error: " + response.getBody());
-			throw new Exception("Failed to execute Asana action");
+			System.err.println("ClickUp error : " + response.getBody());
+			throw new Exception("Failed to execute ClickUp action");
 		}
 	}
 }

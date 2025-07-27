@@ -24,7 +24,7 @@ public class NotionService {
 	}
 	
 	public void insertIntoNotionDoc(Map<String, Object> flowRunMetadata, Map<String, Object> notionMetadata) throws Exception {
-		final String url = "https://api.notion.com/v1/blocks/"+ notionMetadata.get("pageID") +"/children";
+		final String url = "https://api.notion.com/v1/blocks/"+ notionMetadata.get("pageID").toString() +"/children";
 		HttpHeaders headers =  new HttpHeaders();
 		headers.setBearerAuth(notionMetadata.get("notionSecret").toString());
 		headers.setContentType(MediaType.APPLICATION_JSON);

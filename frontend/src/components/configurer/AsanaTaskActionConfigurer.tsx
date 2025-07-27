@@ -7,9 +7,11 @@ export const AsanaTaskActionConfigurer = ({ setMetadata }: {
 }) => {
     const [personalAccessToken, setPersonalAccessToken] = useState("");
     const [projectID, setProjectID] = useState("");
+    const [taskName, setTaskName] = useState("");
     const handleSubmit = () => {
         setMetadata({
             personalAccessToken,
+            taskName,
             projectID
         });
     };
@@ -23,7 +25,11 @@ export const AsanaTaskActionConfigurer = ({ setMetadata }: {
             setProjectID(e.target.value)
             e.target.setCustomValidity("")
         }}></Input>
-        <div className="pt-4 pb-4 border-black text-xs text-gray-500">To enable integration with your Asana project, please provide your <strong>Personal Access Token</strong> and <strong>Project ID</strong> where you want tasks to be created. You need to create a project and generate a Personal Access Token first.
+        <Input label={"Task Name"} type={"text"} placeholder="Name" onChange={(e) => {
+            setTaskName(e.target.value)
+            e.target.setCustomValidity("")
+        }}></Input>
+        <div className="pt-4 pb-4 border-black text-xs text-gray-500">To enable integration with your Asana project, please provide your <strong>Personal Access Token</strong>, <strong>Task Name</strong> and <strong>Project ID</strong> where you want tasks to be created. You need to create a project and generate a Personal Access Token first.
             You can generate a Personal Access Token from <a href="https://app.asana.com/0/my-apps"
                 target="_blank" rel="noopener noreferrer"
                 className="text-blue-600 underline">Asana's Developer Console</a>.
@@ -42,6 +48,6 @@ export const AsanaTaskActionConfigurer = ({ setMetadata }: {
             You can find your Project ID in your URL after /project/ as "https://app.asana.com/1/1111111111111/project/Your_Project_ID" when you open your project.
             Your token will be stored securely and only used to access your authorized project.
         </div>
-        <BaseButton isInactive={!personalAccessToken.trim() || !projectID.trim()}>Submit</BaseButton>
+        <BaseButton isInactive={!personalAccessToken.trim() || !projectID.trim() || !taskName.trim()}>Submit</BaseButton>
     </form>
 }
