@@ -15,7 +15,7 @@ import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
 @Service
 public class TelegramService {
-	private RestTemplate restTemplate;
+	private final RestTemplate restTemplate;
 	
 	@Autowired
 	public TelegramService(RestTemplate restTemplate) {
