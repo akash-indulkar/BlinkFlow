@@ -30,10 +30,10 @@ function useAvailableActionsAndTriggers() {
 
   useEffect(() => {
     axios.get(`${backendURL}/triggers/availabletriggers`)
-      .then(res => setAvailableTriggers(res.data))
+      .then(response => setAvailableTriggers(response.data.data))
 
     axios.get(`${backendURL}/actions/availableactions`)
-      .then(res => setAvailableActions(res.data))
+      .then(response => setAvailableActions(response.data.data))
 
     setIsLoading(false)
   }, [])
@@ -87,8 +87,8 @@ export const CreateFlow = () => {
         "Content-type": "application/json"
       }
     })
-      .then(res => {
-        setUserID(res.data.id)
+      .then(response => {
+        setUserID(response.data.data.id)
       })
   })
 

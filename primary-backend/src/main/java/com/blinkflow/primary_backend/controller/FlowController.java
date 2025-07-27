@@ -1,7 +1,6 @@
 package com.blinkflow.primary_backend.controller;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.blinkflow.primary_backend.dto.APIResponse;
 import com.blinkflow.primary_backend.dto.FlowRequestDTO;
 import com.blinkflow.primary_backend.dto.FlowResponseDTO;
 import com.blinkflow.primary_backend.service.FlowService;
@@ -29,37 +29,33 @@ public class FlowController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> createFlow(@Valid @RequestBody FlowRequestDTO flowReq){
-		Optional<FlowResponseDTO> response = flowService.createFlow(flowReq);
-		if(response.isPresent()) return ResponseEntity.status(HttpStatus.CREATED).body(response.get());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to invalid data");
+	public ResponseEntity<APIResponse<FlowResponseDTO>> createFlow(@Valid @RequestBody FlowRequestDTO flowReq){
+		FlowResponseDTO response = flowService.createFlow(flowReq);
+		return ResponseEntity.status(HttpStatus.CREATED).body(new APIResponse<FlowResponseDTO>("Flow created successfully", response));
 	}
 	
 	@DeleteMapping("/delete/{flowID}")
-	public ResponseEntity<?> deleteFlow(@PathVariable Long flowID){
-		Optional<String> response = flowService.deleteFlowByID(flowID);
-		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch your flows");
+	public ResponseEntity<APIResponse<Long>> deleteFlow(@PathVariable Long flowID){
+		Long response = flowService.deleteFlowByID(flowID);
+		return ResponseEntity.status(HttpStatus.OK).body(new APIResponse<Long>("Flow deleted successfully", response));
 	}
 	
 	@PutMapping("/update/{flowID}")
-	public ResponseEntity<?> updateFlow(@PathVariable Long flowID, @Valid @RequestBody FlowRequestDTO flowReq){
-		Optional<FlowResponseDTO> response = flowService.updateFlowByID(flowID, flowReq);
-		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch your flows");
+	public ResponseEntity<APIResponse<FlowResponseDTO>> updateFlow(@PathVariable Long flowID, @Valid @RequestBody FlowRequestDTO flowReq){
+		FlowResponseDTO response = flowService.updateFlowByID(flowID, flowReq);
+		return ResponseEntity.ok(new APIResponse<FlowResponseDTO>("Flow updated successfully", response));
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> getAllFlows(){
-		Optional<List<FlowResponseDTO>> response = flowService.getAllFlows();
-		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch your flows");
+	public ResponseEntity<APIResponse<List<FlowResponseDTO>>> getAllFlows(){
+		List<FlowResponseDTO> response = flowService.getAllFlows();
+		String message = response.isEmpty() ? "No flows found" : "Flows fetched successfully";
+		return ResponseEntity.ok(new APIResponse<List<FlowResponseDTO>>(message, response));
 	}
 	
 	@GetMapping("/{flowID}")
-	public ResponseEntity<?> getFlow(@PathVariable Long flowID){
-		Optional<FlowResponseDTO> response = flowService.getFlowByID(flowID);
-		if(response.isPresent()) return ResponseEntity.status(HttpStatus.OK).body(response.get());
-		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch your flows");
+	public ResponseEntity<APIResponse<FlowResponseDTO>> getFlow(@PathVariable Long flowID){
+		FlowResponseDTO response = flowService.getFlowByID(flowID);
+		return ResponseEntity.ok(new APIResponse<FlowResponseDTO>("Flow fetched successfully", response));
 	}
 }

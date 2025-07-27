@@ -29,10 +29,10 @@ function useAvailableActionsAndTriggers() {
 
   useEffect(() => {
     axios.get(`${backendURL}/triggers/availabletriggers`)
-      .then(res => setAvailableTriggers(res.data))
+      .then(response => setAvailableTriggers(response.data.data))
 
     axios.get(`${backendURL}/actions/availableactions`)
-      .then(res => setAvailableActions(res.data))
+      .then(response => setAvailableActions(response.data.data))
   }, [])
 
   return {
@@ -86,15 +86,15 @@ export const EditFlow = () => {
       }
     })
       .then(response => {
-        setExistingFlowName(response.data.name)
-        setUserID(response.data.userID)
+        setExistingFlowName(response.data.data.name)
+        setUserID(response.data.data.userID)
         setExistingTrigger({
-          availableTriggerID: response.data.availableTriggerID,
-          name: response.data.flowTriggerName,
-          image: response.data.flowTriggerImage,
-          metadata: response.data.flowTriggerMetadata
+          availableTriggerID: response.data.data.availableTriggerID,
+          name: response.data.data.flowTriggerName,
+          image: response.data.data.flowTriggerImage,
+          metadata: response.data.data.flowTriggerMetadata
         })
-        const formattedActions = response.data.flowActions.map((action: {
+        const formattedActions = response.data.data.flowActions.map((action: {
           availableActionID: number,
           flowActionName: string,
           flowActionImage: string,
@@ -108,7 +108,6 @@ export const EditFlow = () => {
           metadata: action.metadata
         }));
         setExistingActions(formattedActions)
-        console.log(response.data)
       })
   }, [])
 

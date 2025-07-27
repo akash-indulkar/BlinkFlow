@@ -65,8 +65,8 @@ export const Signup = () => {
                                             { headers: { "Content-type": "application/json" } }
                                         );
                                         setIsLoading(false);
-                                        if (response.data.token) {
-                                            login(response.data.token);
+                                        if (response.data.data.token) {
+                                            login(response.data.data.token);
                                         }
                                         toast.success("Your account has been created successfully!");
                                         router("/dashboard");

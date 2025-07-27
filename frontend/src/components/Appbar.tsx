@@ -17,13 +17,13 @@ export const Appbar = () => {
     
     const fetchUserData = async () => {
         try {
-            const res = await axios.get(`${backendURL}/user/me`, {
+            const response = await axios.get(`${backendURL}/user/me`, {
                 headers: {
                     "Authorization": "Bearer " + token,
                     "Content-type": "application/json"
                 }
             })
-            setName(res.data.name)
+            setName(response.data.data.name)
             setIsLoading(false)
         } catch (error) {
             logout();

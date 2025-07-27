@@ -19,8 +19,8 @@ function useFlows() {
                 "Content-type": "application/json"
             }
         })
-            .then(res => {
-                setFlows(res.data);
+            .then(response => {
+                setFlows(response.data.data);
                 setIsLoading(false)
             })
     }, []);

@@ -20,19 +20,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 	}
 	
 	public UserDetails loadUserById(Long userID) throws UsernameNotFoundException {
-		Optional<User> user = urepo.findById(userID);
-		if(user.isEmpty()) {
-			throw new UsernameNotFoundException("User not found");
-		}
-		return new UserPrincipal(user.get());
+		User user = urepo.findById(userID)
+				.orElseThrow(()-> new UsernameNotFoundException("User not found"));
+		return new UserPrincipal(user);
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		User user = urepo.findByEmail(email);
-		if(user == null) {
-			throw new UsernameNotFoundException("User not found");
-		}
+		User user = Optional.ofNullable(urepo.findByEmail(email))
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 		return new UserPrincipal(user);
 	}
 }

@@ -30,8 +30,8 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
 			org.springframework.security.core.Authentication authentication) throws IOException, ServletException {
 		OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
 
-		Optional<UserResponseDTO> responseDTO = userService.authenticateUserUsingOAuth(oAuth2User);
-		String redirectUrl = frontendRedirectURL + "?token=" + responseDTO.get().getToken();
+		UserResponseDTO responseDTO = userService.authenticateUserUsingOAuth(oAuth2User);
+		String redirectUrl = frontendRedirectURL + "?token=" + responseDTO.getToken();
 		response.sendRedirect(redirectUrl);
 	}
 }

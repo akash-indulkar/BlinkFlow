@@ -55,15 +55,15 @@ export const Login = ({isAuthorized} : LoginPageProps) => {
                                     onClick={async () => {
                                         try {
                                             setIsLoading(true);
-                                            const res = await axios.post(
+                                            const response = await axios.post(
                                                 `${backendURL}/user/login`,
                                                 JSON.stringify({ email, password }),
                                                 {
                                                     headers: { "Content-type": "application/json" },
                                                 }
                                             );
-                                            if (res.data.token) {
-                                                login(res.data.token);
+                                            if (response.data.data.token) {
+                                                login(response.data.data.token);
                                             }
                                             toast.success("You've logged in successfully!");
                                             setIsLoading(false);
