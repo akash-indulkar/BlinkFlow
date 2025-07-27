@@ -14,9 +14,12 @@ import com.blinkflow.primary_backend.service.AvailableTriggerService;
 @RestController
 @RequestMapping("/triggers")
 public class AvailableTriggerController {
-
+	private final AvailableTriggerService triggerService;
+	
 	@Autowired
-	private AvailableTriggerService triggerService;
+	public AvailableTriggerController(AvailableTriggerService triggerService) {
+		this.triggerService = triggerService;
+	}
 	
 	@GetMapping("/availabletriggers")
 	public ResponseEntity<?> getTrigger(){

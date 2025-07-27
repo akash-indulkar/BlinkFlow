@@ -24,14 +24,16 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class FlowRunService {
-	@Autowired
-	private FlowRepository flowRepo;
+	private final FlowRepository flowRepo;
+	private final FlowRunRepository flowRunRepo;
+	private final FlowRunOutBoxRepository flowRunOutBoxRepo;
 	
 	@Autowired
-	private FlowRunRepository flowRunRepo;
-	
-	@Autowired
-	private FlowRunOutBoxRepository flowRunOutBoxRepo;
+	public FlowRunService(FlowRepository flowRepo, FlowRunRepository flowRunRepo, FlowRunOutBoxRepository flowRunOutBoxRepo) {
+		this.flowRepo = flowRepo;
+		this.flowRunRepo = flowRunRepo;
+		this.flowRunOutBoxRepo = flowRunOutBoxRepo;
+	}
 
     @Transactional
 	public Optional<FlowRunResponseDTO> intiateFlowRun(Long userID, Long flowID, Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException {

@@ -11,8 +11,12 @@ import com.blinkflow.primary_backend.repository.AvailableActionRepository;
 
 @Service
 public class AvailableActionService {
+	private final AvailableActionRepository actionRepo;
+	
 	@Autowired
-	private AvailableActionRepository actionRepo;
+	public AvailableActionService(AvailableActionRepository actionRepo) {
+		this.actionRepo = actionRepo;
+	}
 
 	public Optional<List<AvailableResponseDTO>> getAvailableActions() {
 		List<AvailableAction> availableActions = actionRepo.findAll();

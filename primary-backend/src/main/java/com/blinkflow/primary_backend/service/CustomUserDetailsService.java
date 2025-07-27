@@ -12,8 +12,12 @@ import com.blinkflow.primary_backend.repository.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
+	private final UserRepository urepo;
+	
 	@Autowired
-	private UserRepository urepo;
+	public CustomUserDetailsService(UserRepository urepo) {
+		this.urepo = urepo;
+	}
 	
 	public UserDetails loadUserById(Long userID) throws UsernameNotFoundException {
 		Optional<User> user = urepo.findById(userID);

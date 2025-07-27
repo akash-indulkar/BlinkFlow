@@ -20,15 +20,16 @@ import com.blinkflow.flowrun_producer.repository.FlowRunRepository;
 public class FlowRunProducerService {
 	@Value("${kafka.topic}")
 	private String kafkaTopic;
+	private final KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate;
+	private final FlowRunOutBoxRepository flowRunOutBoxRepo;
+	private final FlowRunRepository flowRunRepo;
 	
 	@Autowired
-	private KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate;
-	
-	@Autowired
-	private FlowRunOutBoxRepository flowRunOutBoxRepo;
-	
-	@Autowired
-	private FlowRunRepository flowRunRepository;
+	public FlowRunProducerService(KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate, FlowRunOutBoxRepository flowRunOutBoxRepo, FlowRunRepository flowRunRepo) {
+		this.kafkaTemplate = kafkaTemplate;
+		this.flowRunOutBoxRepo = flowRunOutBoxRepo;
+		this.flowRunRepo = flowRunRepo;
+	}
 	
 	@Scheduled(fixedDelay = 500)
 	@Transactional
@@ -39,11 +40,11 @@ public class FlowRunProducerService {
 		for(FlowRunOutBox flowRunOutBox : flowRunOutBoxs) {
 			FlowRunEventPayload payload = FlowRunEventPayload.builder().flowRunID(flowRunOutBox.getFlowRunID()).stage(1).retryCount(0).build();
 			kafkaTemplate.send(kafkaTopic, payload).get();
-			FlowRun flowRun = flowRunRepository.findById(flowRunOutBox.getFlowRunID()).get();
+			FlowRun flowRun = flowRunRepo.findById(flowRunOutBox.getFlowRunID()).get();
 			flowRun.setStatus(FlowRunStatus.RUNNING);
 			flowRuns.add(flowRun);
 		}
-		flowRunRepository.saveAll(flowRuns);
+		flowRunRepo.saveAll(flowRuns);
 		flowRunOutBoxRepo.deleteAll(flowRunOutBoxs);
 	}		
 }

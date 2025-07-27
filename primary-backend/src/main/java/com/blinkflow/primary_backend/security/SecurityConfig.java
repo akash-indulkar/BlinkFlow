@@ -23,15 +23,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
-	@Autowired
-	private UserDetailsService userDetailsService;
-	
-	@Autowired
-	private JWTFilter jwtFilter;
-	
+	private final UserDetailsService userDetailsService;
+	private final JWTFilter jwtFilter;
+    private final CustomOAuth2SuccessHandler successHandler;
+    
     @Autowired
-    private CustomOAuth2SuccessHandler successHandler;
+    public SecurityConfig(UserDetailsService userDetailsService, JWTFilter jwtFilter, CustomOAuth2SuccessHandler successHandler) {
+    	this.userDetailsService = userDetailsService;
+    	this.jwtFilter = jwtFilter;
+    	this.successHandler = successHandler;
+    }
    
     @Value("${frontend.redirect.url}")
 	private String frontendRedirectURL;

@@ -17,9 +17,12 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+	private final UserService userService;
 	
 	@Autowired
-	private UserService userService;
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
 	
 	@PostMapping("/signup")
 	public ResponseEntity<?> signup(@Valid @RequestBody UserRequestDTO reqUser){

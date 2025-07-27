@@ -33,17 +33,17 @@ export const FlowTable = ({
                 <svg className=" m-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="20" width="20" color="GrayWarm10" name="miscBoltOutlined">
                     <path fill="#2D2E2E" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm1-14-5.87 7H11v5l5.87-7H13V6Z"></path>
                 </svg>
-                <div className="pt-1 truncate overflow-hidden text-ellipsis max-w-[140px]">{flow.name}</div>
+                <div className="pt-1 truncate overflow-hidden text-ellipsis max-w-[140px] text-center">{flow.name}</div>
             </div>
             <div className="flex basis-[18%]">
                 <img className="w-8 h-8 p-0.5" src={flow.flowTriggerImage}></img>
                 {flow.flowActions.length != 0 && <div className="flex">
                     <img className="w-8 h-8 p-0.5" src={flow.flowActions[0]?.flowActionImage}></img>
-                    {flow.flowActions.length > 2 ? <span className="text-xl">+{flow.flowActions.length - 1}</span> : <div>{flow.flowActions[1] && <img className="w-8 h-8 p-0.5" src={flow.flowActions[1].flowActionImage}></img>}</div>}
+                    {flow.flowActions.length > 2 ? <span className="text-xl text-center">+{flow.flowActions.length - 1}</span> : <div>{flow.flowActions[1] && <img className="w-8 h-8 p-0.5" src={flow.flowActions[1].flowActionImage}></img>}</div>}
                 </div>
                 }
             </div>
-            <div className="pt-1 flex justify-center basis-[55%]">{`${import.meta.env.VITE_HOOKS_URL}/hooks/catch/${flow.userID}/${flow.flowID}`}</div>
+            <div className="pt-1 flex text-center justify-center basis-[55%]">{`${import.meta.env.VITE_HOOKS_URL}/hooks/catch/${flow.userID}/${flow.flowID}`}</div>
             <div className="flex justify-end basis-[18%]">
 
                 <svg onClick={() => {

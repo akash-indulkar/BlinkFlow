@@ -11,9 +11,12 @@ import com.blinkflow.primary_backend.repository.AvailableTriggerRepository;
 
 @Service
 public class AvailableTriggerService {
-	@Autowired
-	private AvailableTriggerRepository triggerRepo;
+	private final AvailableTriggerRepository triggerRepo;
 
+	@Autowired
+	public AvailableTriggerService(AvailableTriggerRepository triggerRepo) {
+		this.triggerRepo = triggerRepo;
+	}
 	public Optional<List<AvailableResponseDTO>> getAvailableTrigger() {
 		List<AvailableTrigger> availableTriggers = triggerRepo.findAll();
 		if(availableTriggers == null) return Optional.empty();

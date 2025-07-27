@@ -21,8 +21,12 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/flow")
 public class FlowController {
+	private final FlowService flowService; 
+	
 	@Autowired
-	private FlowService flowService; 
+	public FlowController(FlowService flowService) {
+		this.flowService = flowService;
+	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<?> createFlow(@Valid @RequestBody FlowRequestDTO flowReq){

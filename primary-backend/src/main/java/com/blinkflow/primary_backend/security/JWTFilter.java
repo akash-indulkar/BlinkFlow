@@ -17,12 +17,14 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JWTFilter extends OncePerRequestFilter{
-
-	@Autowired
-	private JWTService jwtService;
+	private final JWTService jwtService;
+	private final CustomUserDetailsService myUser;
 	
 	@Autowired
-	private CustomUserDetailsService myUser;
+	public JWTFilter(JWTService jwtService, CustomUserDetailsService myUser) {
+		this.jwtService = jwtService;
+		this.myUser = myUser;
+	}
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

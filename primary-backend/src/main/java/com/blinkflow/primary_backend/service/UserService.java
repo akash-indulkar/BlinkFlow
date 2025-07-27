@@ -20,17 +20,18 @@ import jakarta.validation.Valid;
 
 @Service
 public class UserService {
+	private final UserRepository urepo;
+	private final JWTService jwtService;
+	private final BCryptPasswordEncoder encoder;
+	private final AuthenticationManager authManager;
+	
 	@Autowired
-	private UserRepository urepo;
-
-	@Autowired
-	private JWTService jwtService;
-
-	@Autowired
-	private BCryptPasswordEncoder encoder;
-
-	@Autowired
-	private AuthenticationManager authManager;
+	public UserService(UserRepository urepo, JWTService jwtService, BCryptPasswordEncoder encoder, AuthenticationManager authManager) {
+		this.urepo = urepo;
+		this.jwtService = jwtService;
+		this.encoder = encoder;
+		this.authManager = authManager;
+	}
 
 	public Optional<UserResponseDTO> authenticateUser(@Valid UserRequestDTO reqUser) {
 		Authentication auth = authManager

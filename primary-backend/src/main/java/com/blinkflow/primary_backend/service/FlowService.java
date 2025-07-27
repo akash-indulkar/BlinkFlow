@@ -29,17 +29,18 @@ import jakarta.validation.Valid;
 
 @Service
 public class FlowService {
+	private final UserRepository userRepo;
+	private final FlowRepository flowRepo;
+	private final AvailableTriggerRepository availableTriggerRepo;
+	private final AvailableActionRepository availableActionRepo;
+	
 	@Autowired
-	private UserRepository userRepo;
-
-	@Autowired
-	private FlowRepository flowRepo;
-
-	@Autowired
-	private AvailableTriggerRepository availableTriggerRepo;
-
-	@Autowired
-	private AvailableActionRepository availableActionRepo;
+	public FlowService(UserRepository userRepo, FlowRepository flowRepo, AvailableTriggerRepository availableTriggerRepo, AvailableActionRepository availableActionRepo) {
+		this.userRepo = userRepo;
+		this.flowRepo = flowRepo;
+		this.availableTriggerRepo = availableTriggerRepo;
+		this.availableActionRepo = availableActionRepo;
+	}
 
 	public Optional<FlowResponseDTO> createFlow(@Valid FlowRequestDTO flowReq) {
 		Optional<User> user = userRepo.findById(flowReq.getUserID());

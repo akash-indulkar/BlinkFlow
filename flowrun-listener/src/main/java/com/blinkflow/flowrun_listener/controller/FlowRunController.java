@@ -24,8 +24,12 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/flowrun")
 public class FlowRunController {
+	private final FlowRunService flowRunService;
+
 	@Autowired
-	private FlowRunService flowRunService;
+	public FlowRunController(FlowRunService flowRunService) {
+		this.flowRunService = flowRunService;
+	}
 	
 	@PostMapping("/initiate/{userID}/{flowID}")
 	public ResponseEntity<?> initiateFlowRun(@PathVariable Long userID, @PathVariable Long flowID, @RequestBody Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException{

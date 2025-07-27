@@ -14,8 +14,12 @@ import com.blinkflow.primary_backend.service.AvailableActionService;
 @RestController
 @RequestMapping("/actions")
 public class AvailableActionController {
+	private final AvailableActionService actionService;
+	
 	@Autowired
-	private AvailableActionService actionService;
+	public AvailableActionController(AvailableActionService actionService) {
+		this.actionService = actionService;
+	}
 	
 	@GetMapping("/availableactions")
 	public ResponseEntity<?> getActions(){
