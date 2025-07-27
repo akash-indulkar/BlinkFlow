@@ -5,8 +5,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 @Service
-public class Email {
-	public static void sendEmail(Map<String, Object> metadata, Map<String, Object> map) throws Exception {
+public class EmailService {
+	public void sendEmail(Map<String, Object> metadata, Map<String, Object> map) throws Exception {
 		System.out.println("send email service " + metadata.toString());
 	}
 }

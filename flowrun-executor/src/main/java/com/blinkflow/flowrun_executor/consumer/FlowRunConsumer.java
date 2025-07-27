@@ -15,9 +15,13 @@ import com.blinkflow.flowrun_executor.model.FlowRun;
 import com.blinkflow.flowrun_executor.model.enums.ActionType;
 import com.blinkflow.flowrun_executor.model.enums.FlowRunStatus;
 import com.blinkflow.flowrun_executor.repository.FlowRunRepository;
-import com.blinkflow.flowrun_executor.service.Email;
+import com.blinkflow.flowrun_executor.service.AsanaService;
+import com.blinkflow.flowrun_executor.service.ClickUpService;
+import com.blinkflow.flowrun_executor.service.EmailService;
 import com.blinkflow.flowrun_executor.service.NotionService;
 import com.blinkflow.flowrun_executor.service.SlackService;
+import com.blinkflow.flowrun_executor.service.TelegramService;
+import com.blinkflow.flowrun_executor.service.TrelloService;
 
 @Component
 public class FlowRunConsumer {
@@ -28,15 +32,27 @@ public class FlowRunConsumer {
 	private KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate;
 	private FlowRunRepository flowRunRepo;
 
+	private EmailService emailService;
 	private SlackService slackService;
 	private NotionService notionService;
+	private AsanaService asanaService;
+	private ClickUpService clickUpService;
+	private TelegramService telegramService;
+	private TrelloService trelloService;
 
 	@Autowired
-	public FlowRunConsumer(KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate, FlowRunRepository flowRunRepo, SlackService slackService, NotionService notionService) {
-	    this.kafkaTemplate = kafkaTemplate;
-	    this.flowRunRepo = flowRunRepo;
+	public FlowRunConsumer(KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate, FlowRunRepository flowRunRepo,
+			EmailService emailService, SlackService slackService, NotionService notionService,
+			AsanaService asanaService, ClickUpService clickUpService, TelegramService telegramService,
+			TrelloService trelloService) {
+		this.kafkaTemplate = kafkaTemplate;
+		this.flowRunRepo = flowRunRepo;
 		this.slackService = slackService;
-	    this.notionService = notionService;
+		this.notionService = notionService;
+		this.asanaService = asanaService;
+		this.clickUpService = clickUpService;
+		this.telegramService = telegramService;
+		this.trelloService = trelloService;
 	}
 
 	@Transactional
@@ -62,12 +78,20 @@ public class FlowRunConsumer {
 			return;
 		}
 		try {
-			if (flowAction.getActionType().getName().equals(ActionType.SEND_EMAIL.getName()))
-				Email.sendEmail(flowRun.getMetadata(), flowAction.getMetadata());
-			else if (flowAction.getActionType().getName().equals(ActionType.SLACK_NOTIFICATION.getName()))
+			if (flowAction.getActionType().getName().equals(ActionType.EMAIL.getName()))
+				emailService.sendEmail(flowRun.getMetadata(), flowAction.getMetadata());
+			else if (flowAction.getActionType().getName().equals(ActionType.SLACK.getName()))
 				slackService.sendMessageToSlackChannel(flowRun.getMetadata(), flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.NOTION.getName()))
 				notionService.insertIntoNotionDoc(flowRun.getMetadata(), flowAction.getMetadata());
+			else if (flowAction.getActionType().getName().equals(ActionType.ASANA.getName()))
+				asanaService.addTaskToAsanaProject(flowRun.getMetadata(), flowAction.getMetadata());
+			else if (flowAction.getActionType().getName().equals(ActionType.CLICKUP.getName()))
+				clickUpService.createTaskInClickUpList(flowRun.getMetadata(), flowAction.getMetadata());
+			else if (flowAction.getActionType().getName().equals(ActionType.TELEGRAM.getName()))
+				telegramService.sendMessageToTelegramChannel(flowRun.getMetadata(), flowAction.getMetadata());
+			else if (flowAction.getActionType().getName().equals(ActionType.TRELLO.getName()))
+				trelloService.createCardInTrelloList(flowRun.getMetadata(), flowAction.getMetadata());
 		} catch (Exception e) {
 			if (payload.getRetryCount() >= MAX_RETRIES) {
 				System.out.println("Flow Run with ID: " + payload.getFlowRunID()
