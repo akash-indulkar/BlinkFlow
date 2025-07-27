@@ -10,7 +10,7 @@ public class MetadataFormatter {
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
-            return mapper.writeValueAsString(metadata);
+            return "New event has triggered " + mapper.writeValueAsString(metadata);
         } catch (JsonProcessingException e) {
             return metadata.toString();
         }
