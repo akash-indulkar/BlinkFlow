@@ -22,10 +22,13 @@ import com.blinkflow.flowrun_executor.service.NotionService;
 import com.blinkflow.flowrun_executor.service.SlackService;
 import com.blinkflow.flowrun_executor.service.TelegramService;
 import com.blinkflow.flowrun_executor.service.TrelloService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class FlowRunConsumer {
 	private static final int MAX_RETRIES = 5;
+	private static final Logger logger = LoggerFactory.getLogger(SlackService.class);
 
 	@Value("${kafka.topic}")
 	private String kafkaTopic;
@@ -60,7 +63,7 @@ public class FlowRunConsumer {
 	public void listen(FlowRunEventPayload payload, Acknowledgment acknowledgment) throws Exception {
 		Optional<FlowRun> optionalFlowRun = flowRunRepo.findById(payload.getFlowRunID());
 		if (optionalFlowRun.isEmpty()) {
-			System.out.println("FlowRun not found for ID: " + payload.getFlowRunID());
+			logger.error("FlowRun not found for ID: " + payload.getFlowRunID());
 			acknowledgment.acknowledge();
 			return;
 		}
@@ -68,7 +71,7 @@ public class FlowRunConsumer {
 		List<FlowAction> flowActions = flowRun.getFlow().getFlowActions();
 		int stage = payload.getStage();
 		if (stage < 0 || stage > flowActions.size()) {
-			System.out.println("Invalid stage: " + stage);
+			logger.error("Invalid stage: " + stage);
 			acknowledgment.acknowledge();
 			return;
 		}
@@ -94,14 +97,14 @@ public class FlowRunConsumer {
 				trelloService.createCardInTrelloList(flowRun.getMetadata(), flowAction.getMetadata());
 		} catch (Exception e) {
 			if (payload.getRetryCount() >= MAX_RETRIES) {
-				System.out.println("Flow Run with ID: " + payload.getFlowRunID()
+				logger.error("Flow Run with ID: " + payload.getFlowRunID()
 						+ " is failed to execute after multiple retries!");
 				flowRun.setStatus(FlowRunStatus.FAILED);
 				flowRunRepo.save(flowRun);
 				acknowledgment.acknowledge();
 				return;
 			}
-			System.out.println("Action failed to execute, again repushing it to queue!");
+			logger.info("Action failed to execute, again repushing it to queue!");
 			payload.setRetryCount(payload.getRetryCount() + 1);
 			kafkaTemplate.send(kafkaTopic, payload);
 			acknowledgment.acknowledge();

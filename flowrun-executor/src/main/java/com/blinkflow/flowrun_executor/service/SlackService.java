@@ -2,6 +2,8 @@ package com.blinkflow.flowrun_executor.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,12 +11,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
 @Service
 public class SlackService {
-
+	private static final Logger logger = LoggerFactory.getLogger(SlackService.class);
 	private final RestTemplate restTemplate;
 
 	@Autowired
@@ -40,7 +41,7 @@ public class SlackService {
 		if (response.getStatusCode().is2xxSuccessful() && response.getBody().contains("\"ok\":true")) {
 			return;
 		} else {
-			System.err.println("Slack error: " + response.getBody());
+			logger.error("Slack error: " + response.getBody());
 			throw new Exception("Failed to execute Slack action");
 		}
 	}

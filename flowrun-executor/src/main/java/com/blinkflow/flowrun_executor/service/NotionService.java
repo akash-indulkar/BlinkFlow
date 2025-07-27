@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +19,7 @@ import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 @Service
 public class NotionService {
 	private final RestTemplate restTemplate;
+	private static final Logger logger = LoggerFactory.getLogger(NotionService.class);
 	
 	@Autowired
 	public NotionService(RestTemplate restTemplate) {
@@ -62,7 +65,7 @@ public class NotionService {
 		if (response.getStatusCode().is2xxSuccessful()) {
 			return;
 		} else {
-			System.err.println("Notion error: " + response.getBody());
+			logger.error("Notion error: " + response.getBody());
 			throw new Exception("Failed to execute Notion action");
 		}
 	}

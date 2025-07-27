@@ -2,6 +2,8 @@ package com.blinkflow.flowrun_executor.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,8 @@ import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 @Service
 public class ClickUpService {
 	private final RestTemplate restTemplate;
+	private static final Logger logger = LoggerFactory.getLogger(ClickUpService.class);
+
 	
 	@Autowired
 	public ClickUpService(RestTemplate restTemplate) {
@@ -38,7 +42,7 @@ public class ClickUpService {
 		if(response.getStatusCode().is2xxSuccessful()) {
 			return;
 		}else {
-			System.err.println("ClickUp error : " + response.getBody());
+			logger.error("ClickUp error : " + response.getBody());
 			throw new Exception("Failed to execute ClickUp action");
 		}
 	}

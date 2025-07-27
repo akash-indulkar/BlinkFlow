@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.blinkflow.flowrun_listener.dto.FlowRunResponseDTO;
+import com.blinkflow.flowrun_listener.exception.AuthenticationException;
+import com.blinkflow.flowrun_listener.exception.EntityNotFound;
+import com.blinkflow.flowrun_listener.exception.FlowRunException;
 import com.blinkflow.flowrun_listener.model.Flow;
 import com.blinkflow.flowrun_listener.model.FlowRun;
 import com.blinkflow.flowrun_listener.model.FlowRunOutBox;
@@ -36,40 +39,44 @@ public class FlowRunService {
 	}
 
     @Transactional
-	public Optional<FlowRunResponseDTO> intiateFlowRun(Long userID, Long flowID, Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException {
-		Flow flow = flowRepo.findByUserIdAndId(userID, flowID);
-		if(flow == null) return Optional.empty();
+	public FlowRunResponseDTO intiateFlowRun(Long userID, Long flowID, Map<String, Object> requestBody, HttpServletRequest request) throws InvalidKeyException, NoSuchAlgorithmException, IOException {
+		Flow flow = Optional.ofNullable(flowRepo.findByUserIdAndId(userID, flowID))
+				.orElseThrow(() -> new FlowRunException("Flow not found"));
 		
 		Object secretObj = flow.getFlowTrigger().getMetadata().get("secret");
 		if(secretObj != null) {
 			final String secret = String.valueOf(secretObj);
 			Enumeration<String> headers = request.getHeaderNames();
-			final String receivedSignature = SignatureGetter.getSignatureFromHeader(headers, request);
-			if(receivedSignature == null) return Optional.empty();
-			final String rawPayload = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-			if(rawPayload.isEmpty()) return Optional.empty();
+			final String receivedSignature = Optional.ofNullable(SignatureGetter.getSignatureFromHeader(headers, request))
+												.orElseThrow(() -> new AuthenticationException("SHA256 Signature not found"));
+			final String rawPayload = Optional.ofNullable(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())))
+												.orElseThrow(() -> new EntityNotFound("Empty request body received"));
 			Boolean isSignatureValid = SignatureValidator.verifySignature(receivedSignature, secret, rawPayload);
-			if(!isSignatureValid) return Optional.empty();
+			if(!isSignatureValid) throw new AuthenticationException("Invalid SHA256 Signature");
 		}
 		
-		FlowRun flowRun = FlowRun.builder()
-							.flow(flow)
-							.metadata(requestBody)
-							.status(FlowRunStatus.PENDING)
-							.build();
-		FlowRun savedFlowRun = flowRunRepo.save(flowRun);
-		
-		FlowRunOutBox flowRunOutBox = FlowRunOutBox.builder()
-										.flowRunID(savedFlowRun.getId())
-										.build();
-		FlowRunOutBox savedFlowRunOutBox = flowRunOutBoxRepo.save(flowRunOutBox);
-		
-		FlowRunResponseDTO response = FlowRunResponseDTO.builder()
-										.flowRunID(savedFlowRun.getId())
-										.status(savedFlowRun.getStatus())
-										.message("FlowRun has been initiated")
-										.build();
-		return Optional.of(response);
+		try {
+			FlowRun flowRun = FlowRun.builder()
+					.flow(flow)
+					.metadata(requestBody)
+					.status(FlowRunStatus.PENDING)
+					.build();
+			FlowRun savedFlowRun = flowRunRepo.save(flowRun);
+			
+			FlowRunOutBox flowRunOutBox = FlowRunOutBox.builder()
+					.flowRunID(savedFlowRun.getId())
+					.build();
+			FlowRunOutBox savedFlowRunOutBox = flowRunOutBoxRepo.save(flowRunOutBox);
+			
+			FlowRunResponseDTO response = FlowRunResponseDTO.builder()
+					.flowRunID(savedFlowRun.getId())
+					.status(savedFlowRun.getStatus())
+					.message("FlowRun has been initiated")
+					.build();
+			return response;
+		} catch (Exception e) {
+			throw new FlowRunException("Failed to run the flow");
+		}
 	}
 
 }

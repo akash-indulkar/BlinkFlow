@@ -1,6 +1,8 @@
 package com.blinkflow.flowrun_executor.service;
 
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +15,7 @@ import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
 @Service
 public class TrelloService {
+	private static final Logger logger = LoggerFactory.getLogger(TrelloService.class);
 	private final RestTemplate restTemplate;
 	
 	@Autowired
@@ -42,7 +45,7 @@ public class TrelloService {
 		if(response.getStatusCode().is2xxSuccessful()) {
 			return;
 		}else {
-			System.err.println("Trello error: " + response.getBody());
+			logger.error("Trello error: " + response.getBody());
 			throw new Exception("Failed to execute Trello Action");
 		}
 	}

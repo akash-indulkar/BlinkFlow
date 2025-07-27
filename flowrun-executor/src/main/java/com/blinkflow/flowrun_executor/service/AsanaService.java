@@ -12,11 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.blinkflow.flowrun_executor.util.MetadataFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class AsanaService {
+	private static final Logger logger = LoggerFactory.getLogger(AsanaService.class);
 	private final String url = "https://app.asana.com/api/1.0/tasks";
-	
 	private final RestTemplate restTemplate;
 	
 	@Autowired
@@ -48,7 +50,7 @@ public class AsanaService {
 		if(response.getStatusCode().is2xxSuccessful()) {
 			return;
 		}else {
-			System.err.println("Asana error: " + response.getBody());
+			logger.error("Asana error: " + response.getBody());
 			throw new Exception("Failed to execute Asana action");
 		}
 	}
