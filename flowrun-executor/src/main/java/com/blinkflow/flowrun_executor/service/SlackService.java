@@ -10,13 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.blinkflow.flowrun_executor.util.MetadataFormatter;
+
 @Service
-public class Slack {
+public class SlackService {
 
 	private final RestTemplate restTemplate;
 
 	@Autowired
-	public Slack(RestTemplate restTemplate) {
+	public SlackService(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
 	}
 
@@ -26,11 +28,15 @@ public class Slack {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(flowRunMetadata.get("OAuthToken").toString());
 		headers.setContentType(MediaType.APPLICATION_JSON);
+		
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("channel", flowRunMetadata.get("channelID"));
-		body.put("message", slackMetadata);
-		HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
+		body.put("message", serializableMetadataMessage);
+		
+		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(body, headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+		
 		if (response.getStatusCode().is2xxSuccessful() && response.getBody().contains("\"ok\":true")) {
 			return;
 		} else {

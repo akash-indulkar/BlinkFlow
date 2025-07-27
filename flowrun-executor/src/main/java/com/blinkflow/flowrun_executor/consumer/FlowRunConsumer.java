@@ -9,7 +9,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.blinkflow.flowrun_executor.dto.FlowRunEventPayload;
 import com.blinkflow.flowrun_executor.model.FlowAction;
 import com.blinkflow.flowrun_executor.model.FlowRun;
@@ -17,9 +16,8 @@ import com.blinkflow.flowrun_executor.model.enums.ActionType;
 import com.blinkflow.flowrun_executor.model.enums.FlowRunStatus;
 import com.blinkflow.flowrun_executor.repository.FlowRunRepository;
 import com.blinkflow.flowrun_executor.service.Email;
-import com.blinkflow.flowrun_executor.service.GoogleSheet;
-import com.blinkflow.flowrun_executor.service.Notion;
-import com.blinkflow.flowrun_executor.service.Slack;
+import com.blinkflow.flowrun_executor.service.NotionService;
+import com.blinkflow.flowrun_executor.service.SlackService;
 
 @Component
 public class FlowRunConsumer {
@@ -27,18 +25,18 @@ public class FlowRunConsumer {
 
 	@Value("${kafka.topic}")
 	private String kafkaTopic;
-
-	@Autowired
 	private KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate;
+	private FlowRunRepository flowRunRepo;
+
+	private SlackService slackService;
+	private NotionService notionService;
 
 	@Autowired
-	FlowRunRepository flowRunRepo;
-
-	private Slack slackService;
-
-	@Autowired
-	public FlowRunConsumer(Slack slackService) {
-	    this.slackService = slackService;
+	public FlowRunConsumer(SlackService slackService, NotionService notionService) {
+	    this.kafkaTemplate = kafkaTemplate;
+	    this.flowRunRepo = flowRunRepo;
+		this.slackService = slackService;
+	    this.notionService = notionService;
 	}
 
 	@Transactional
@@ -68,10 +66,8 @@ public class FlowRunConsumer {
 				Email.sendEmail(flowRun.getMetadata(), flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.SLACK_NOTIFICATION.getName()))
 				slackService.sendMessageToSlackChannel(flowRun.getMetadata(), flowAction.getMetadata());
-			else if (flowAction.getActionType().getName().equals(ActionType.GOOGLE_SHEET.getName()))
-				GoogleSheet.addRowInSheet(flowRun.getMetadata(), flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.NOTION.getName()))
-				Notion.insertIntoNotionDoc(flowRun.getMetadata(), flowAction.getMetadata());
+				notionService.insertIntoNotionDoc(flowRun.getMetadata(), flowAction.getMetadata());
 		} catch (Exception e) {
 			if (payload.getRetryCount() >= MAX_RETRIES) {
 				System.out.println("Flow Run with ID: " + payload.getFlowRunID()
