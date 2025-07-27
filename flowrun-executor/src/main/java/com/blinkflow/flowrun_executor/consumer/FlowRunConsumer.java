@@ -32,7 +32,7 @@ public class FlowRunConsumer {
 	private NotionService notionService;
 
 	@Autowired
-	public FlowRunConsumer(SlackService slackService, NotionService notionService) {
+	public FlowRunConsumer(KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate, FlowRunRepository flowRunRepo, SlackService slackService, NotionService notionService) {
 	    this.kafkaTemplate = kafkaTemplate;
 	    this.flowRunRepo = flowRunRepo;
 		this.slackService = slackService;
