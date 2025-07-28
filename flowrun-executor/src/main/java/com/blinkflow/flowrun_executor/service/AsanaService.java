@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.blinkflow.flowrun_executor.exception.ActionExecutionException;
 import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +52,7 @@ public class AsanaService {
 			return;
 		}else {
 			logger.error("Asana error: " + response.getBody());
-			throw new Exception("Failed to execute Asana action");
+			throw new ActionExecutionException("Failed to execute Asana action");
 		}
 	}
 }

@@ -5,20 +5,20 @@ import { BaseButton } from "../buttons/BaseButton";
 export const EmailActionConfigurer = ({ setMetadata }: {
     setMetadata: (params: any) => void;
 }) => {
-    const [email, setEmail] = useState("");
+    const [emailID, setEmailID] = useState("");
     const [subject, setSubject] = useState("");
     const [body, setBody] = useState("");
     const handleSubmit = () => {
         setMetadata({
-            email,
+            emailID,
             subject,
-            body,
+            body
         });
     };
 
     return <form onSubmit={handleSubmit}>
         <Input label={"To"} type={"email"} placeholder="To" onChange={(e) => {
-            setEmail(e.target.value)
+            setEmailID(e.target.value)
             e.target.setCustomValidity("")
         }}></Input>
         <Input label={"Subject"} type={"text"} placeholder="Subject" onChange={(e) => {setSubject(e.target.value) }}></Input>
@@ -26,7 +26,7 @@ export const EmailActionConfigurer = ({ setMetadata }: {
             <label>Body</label><p className="pl-1 text-red-500">*</p>
         </div>
         <textarea required className="mb-2 pl-4 pt-2 w-full min-h-[100px] text-sm text-gray-900 bg-gray-50 rounded border border-gray-300 focus:outline focus:outline-indigo-500" placeholder="Body" onChange={(e) => setBody(e.target.value)}></textarea>
-        <BaseButton isInactive={!email.trim() || !subject.trim() || !body.trim()}>Submit</BaseButton>
+        <BaseButton isInactive={!emailID.trim() || !subject.trim() || !body.trim()}>Submit</BaseButton>
     </form>
 
 }

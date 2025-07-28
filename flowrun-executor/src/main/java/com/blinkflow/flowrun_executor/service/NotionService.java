@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.blinkflow.flowrun_executor.exception.ActionExecutionException;
 import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
 @Service
@@ -66,7 +68,7 @@ public class NotionService {
 			return;
 		} else {
 			logger.error("Notion error: " + response.getBody());
-			throw new Exception("Failed to execute Notion action");
+			throw new ActionExecutionException("Failed to execute Notion action");
 		}
 	}
 }

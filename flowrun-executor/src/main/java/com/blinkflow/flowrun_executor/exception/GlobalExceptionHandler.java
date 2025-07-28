@@ -9,8 +9,13 @@ import org.slf4j.LoggerFactory;
 public class GlobalExceptionHandler {
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler(Exception.class)
-    public void handleGeneral(Exception e) {
-    	logger.error("Internal server error" + e.getMessage());
-    }
+	@ExceptionHandler(ActionExecutionException.class)
+	public void handleActionExecutionException(ActionExecutionException e) {
+		logger.error("Internal server error" + e.getMessage());
+	}
+    
+	@ExceptionHandler(Exception.class)
+	public void handleGeneral(Exception e) {
+		logger.error("Internal server error" + e.getMessage());
+	}
 }
