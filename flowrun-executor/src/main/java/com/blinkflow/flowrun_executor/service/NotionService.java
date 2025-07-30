@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,7 +34,7 @@ public class NotionService {
 		HttpHeaders headers =  new HttpHeaders();
 		headers.setBearerAuth(notionMetadata.get("notionSecret").toString());
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.set("Notion-version", "2022-06-28");
+		headers.set("Notion-Version", "2022-06-28");
 		
 		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
 		
@@ -62,8 +63,8 @@ public class NotionService {
 		body.put("children", childrenList);
 		
 		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String,Object>>(body, headers);
+		restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PATCH, request, String.class);
-		
 		if (response.getStatusCode().is2xxSuccessful()) {
 			return;
 		} else {

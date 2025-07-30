@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 @Component
 public class FlowRunConsumer {
 	private static final int MAX_RETRIES = 5;
-	private static final Logger logger = LoggerFactory.getLogger(SlackService.class);
+	private static final Logger logger = LoggerFactory.getLogger(FlowRunConsumer.class);
 
 	@Value("${kafka.topic}")
 	private String kafkaTopic;
@@ -50,6 +50,7 @@ public class FlowRunConsumer {
 			TrelloService trelloService) {
 		this.kafkaTemplate = kafkaTemplate;
 		this.flowRunRepo = flowRunRepo;
+		this.emailService= emailService; 
 		this.slackService = slackService;
 		this.notionService = notionService;
 		this.asanaService = asanaService;
@@ -104,7 +105,7 @@ public class FlowRunConsumer {
 				acknowledgment.acknowledge();
 				return;
 			}
-			logger.info("Action failed to execute, again repushing it to queue!");
+			logger.info(e.getMessage() + " Action failed to execute, again repushing it to queue!");
 			payload.setRetryCount(payload.getRetryCount() + 1);
 			kafkaTemplate.send(kafkaTopic, payload);
 			acknowledgment.acknowledge();
@@ -112,7 +113,7 @@ public class FlowRunConsumer {
 		}
 		if (payload.getStage() < flowActions.size()) {
 			FlowRunEventPayload newPayload = FlowRunEventPayload.builder().flowRunID(payload.getFlowRunID())
-					.stage(payload.getStage() + 1).build();
+					.stage(payload.getStage() + 1).retryCount(payload.getRetryCount()).build();
 			kafkaTemplate.send(kafkaTopic, newPayload);
 		} else {
 			flowRun.setStatus(FlowRunStatus.SUCCESS);

@@ -29,17 +29,16 @@ public class SlackService {
 
 	public void sendMessageToSlackChannel(Map<String, Object> flowRunMetadata, Map<String, Object> slackMetadata) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(flowRunMetadata.get("OAuthToken").toString());
+		headers.setBearerAuth(slackMetadata.get("OAuthToken").toString());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 		Map<String, Object> body = new HashMap<String, Object>();
-		body.put("channel", flowRunMetadata.get("channelID"));
+		body.put("channel", slackMetadata.get("channelID").toString());
 		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
-		body.put("message", serializableMetadataMessage);
+		body.put("text", serializableMetadataMessage);
 		
 		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String, Object>>(body, headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-		
 		if (response.getStatusCode().is2xxSuccessful() && response.getBody().contains("\"ok\":true")) {
 			return;
 		} else {

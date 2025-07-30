@@ -15,8 +15,9 @@ export const FlowTable = ({
     setFlows: React.Dispatch<React.SetStateAction<Flow[]>>
 }) => {
     const router = useNavigate();
-    const [showModal, setShowModal] = useState<boolean>(false);
+    const [selectedFlowID, setSelectedFlowID] = useState<number | null>(null);
     const deleteFlow = (flowID: number) => {
+        console.log(flowID)
         axios.delete(`${backendURL}/flow/delete/${flowID}`, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
@@ -24,7 +25,7 @@ export const FlowTable = ({
         })
         toast.success("Flow deleted successfully!");
         setFlows(prevFlows => prevFlows.filter(flow => flow.flowID != flowID))
-        setShowModal(false)
+        setSelectedFlowID(null)
     }
 
     return <div className="p-4 ">
@@ -66,7 +67,7 @@ export const FlowTable = ({
                 </svg>
 
                 <svg onClick={() => {
-                    setShowModal(true)
+                    setSelectedFlowID(flow.flowID)
                 }}
                     xmlns="http://www.w3.org/2000/svg"
                     width="32"
@@ -85,7 +86,7 @@ export const FlowTable = ({
                     <path d="M10 12l4 4m0 -4l-4 4" />
                 </svg>
 
-                {showModal && <ConfirmationToast message="Are you sure you want to delete this flow?" onConfirm={() => deleteFlow(flow.flowID)} onCancel={() => { setShowModal(false) }} />}
+                {selectedFlowID === flow.flowID  && <ConfirmationToast message="Are you sure you want to delete this flow?" onConfirm={() => deleteFlow(flow.flowID)} onCancel={() => { setSelectedFlowID(null) }} />}
             </div>
         </div>)}
     </div>

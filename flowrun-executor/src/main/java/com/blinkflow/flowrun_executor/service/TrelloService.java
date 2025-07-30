@@ -9,9 +9,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import com.blinkflow.flowrun_executor.exception.ActionExecutionException;
 import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
@@ -19,6 +19,7 @@ import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 public class TrelloService {
 	private static final Logger logger = LoggerFactory.getLogger(TrelloService.class);
 	private final RestTemplate restTemplate;
+	private final String url = "https://api.trello.com/1/cards";
 	
 	@Autowired
 	public TrelloService(RestTemplate restTemplate) {
@@ -28,22 +29,17 @@ public class TrelloService {
 	public void createCardInTrelloList(Map<String, Object> flowRunMetadata, Map<String, Object> trelloMetadata) throws Exception {
 		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
 		
-		UriComponentsBuilder builder = UriComponentsBuilder
-				.fromHttpUrl("https://api.trello.com/1/cards")
-				.queryParam("key", trelloMetadata.get("APIKey").toString())
-				.queryParam("token", trelloMetadata.get("APIToken").toString())
-				.queryParam("idList", trelloMetadata.get("listID").toString())
-				.queryParam("name", trelloMetadata.get("cardName").toString())
-				.queryParam("desc", serializableMetadataMessage);
-		
-		String url = builder.toUriString();
-		
+		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("key", trelloMetadata.get("APIKey").toString());
+		params.add("token", trelloMetadata.get("APIToken").toString());
+		params.add("idList", trelloMetadata.get("listID").toString()); 
+		params.add("name", trelloMetadata.get("cardName").toString()); 
+		params.add("desc", serializableMetadataMessage);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		
-		HttpEntity<?> request = new HttpEntity<>(headers);
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params,headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-		
 		if(response.getStatusCode().is2xxSuccessful()) {
 			return;
 		}else {

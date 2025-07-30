@@ -47,7 +47,6 @@ public class AsanaService {
 		
 		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String,Object>>(body, headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
-		
 		if(response.getStatusCode().is2xxSuccessful()) {
 			return;
 		}else {

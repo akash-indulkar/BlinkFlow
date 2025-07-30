@@ -4,6 +4,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class EmailService {
 	private final JavaMailSender mailSender;
 	private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
 
+	@Value("${spring.mail.username}")
+	private String fromEmailID;
+	
 	@Autowired
 	public EmailService(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
@@ -27,6 +31,7 @@ public class EmailService {
 		msg.setSubject(emailMetadata.get("subject").toString());
 		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
 		msg.setText(serializableMetadataMessage);
+		msg.setFrom(fromEmailID);
 		try {
 			mailSender.send(msg);
 		} catch(Exception e) {
