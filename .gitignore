@@ -24,5 +24,111 @@ primary-backend/.settings/
 primary-backend/*.iml
 primary-backend/mvnw
 primary-backend/mvnw.cmd
+# Ignore all .properties files
+*.properties
+
+# === Java / Spring Boot (Maven + IntelliJ) ===
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# Gradle
+.gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# VS Code
+.vscode/
+
+# STS / Eclipse
+*.classpath
+*.project
+*.settings/
+bin/
+
+# Spring Boot dev tools
+.spring-boot-devtools.properties
+
+# Configuration files you don't want to expose
+*.env
+*.properties
+application-dev.yml
+application-dev.properties
+application-local.yml
+application-local.properties
+
+# Database files
+*.db
+*.h2.db
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# === React (frontend) ===
+# Node modules
+node_modules/
+
+# Build output
+/build
+/dist
+
+# Test coverage
+coverage/
+
+# Environment files
+.env
+.env.*.local
+
+# React cache
+.npm/
+.yarn/
+.pnpm-store/
+.cache/
+.next/
+out/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# === Other ===
+*.swp
+*.swo
+*.bak
+*.tmp
+
+
 
 .metadata/

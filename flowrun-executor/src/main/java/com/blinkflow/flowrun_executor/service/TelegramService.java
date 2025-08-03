@@ -25,7 +25,7 @@ public class TelegramService {
 		this.restTemplate = restTemplate;
 	}
 	
-	public void sendMessageToTelegramChannel(Map<String, Object> flowRunMetadata, Map<String, Object> telegramMetadata) throws Exception {
+	public void sendMessageToTelegramChannel(String prettyFlowRunMetadataMessage, Map<String, Object> telegramMetadata) throws Exception {
 		final String url = "https://api.telegram.org/bot"+ telegramMetadata.get("botToken") + "/sendMessage";
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -34,8 +34,7 @@ public class TelegramService {
 		Map<String, Object>	body = new HashMap<String, Object>();
 		body.put("chat_id", telegramMetadata.get("channelUsername").toString());
 		
-		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
-		body.put("text", serializableMetadataMessage);
+		body.put("text", prettyFlowRunMetadataMessage);
 		
 		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String,Object>>(body, headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);

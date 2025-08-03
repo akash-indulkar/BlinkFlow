@@ -1,6 +1,5 @@
-package com.blinkflow.flowrun_executor.service;
+package com.blinkflow.primary_backend.service;
 
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import com.blinkflow.flowrun_executor.exception.ActionExecutionException;
-import com.blinkflow.flowrun_executor.util.MetadataFormatter;
+import com.blinkflow.primary_backend.exception.AuthenticationException;
 
 @Service
 public class EmailService {
@@ -25,17 +22,17 @@ public class EmailService {
 		this.mailSender = mailSender;
 	}
 	
-	public void sendEmail(String prettyFlowRunMetadataMessage, Map<String, Object> emailMetadata) throws Exception {
+	public void sendEmail(String email, String subject, String body) throws AuthenticationException {
 		SimpleMailMessage msg = new SimpleMailMessage();
-		msg.setTo(emailMetadata.get("emailID").toString());
-		msg.setSubject(emailMetadata.get("subject").toString());
-		msg.setText(prettyFlowRunMetadataMessage);
+		msg.setTo(email);
+		msg.setSubject(subject);
+		msg.setText(body);
 		msg.setFrom(fromEmailID);
 		try {
 			mailSender.send(msg);
 		} catch(Exception e) {
 			logger.error("Email Sender error : " + e.getMessage());
-			throw new ActionExecutionException("Failed to execute Email action");
+			throw new AuthenticationException("Failed to send Email");
 		}
 	}
 }

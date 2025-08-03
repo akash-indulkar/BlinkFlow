@@ -26,15 +26,13 @@ public class TrelloService {
 		this.restTemplate = restTemplate;
 	}
 	
-	public void createCardInTrelloList(Map<String, Object> flowRunMetadata, Map<String, Object> trelloMetadata) throws Exception {
-		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
-		
+	public void createCardInTrelloList(String prettyFlowRunMetadataMessage, Map<String, Object> trelloMetadata) throws Exception {
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 		params.add("key", trelloMetadata.get("APIKey").toString());
 		params.add("token", trelloMetadata.get("APIToken").toString());
 		params.add("idList", trelloMetadata.get("listID").toString()); 
 		params.add("name", trelloMetadata.get("cardName").toString()); 
-		params.add("desc", serializableMetadataMessage);
+		params.add("desc", prettyFlowRunMetadataMessage);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		

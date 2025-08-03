@@ -22,6 +22,8 @@ import com.blinkflow.flowrun_executor.service.NotionService;
 import com.blinkflow.flowrun_executor.service.SlackService;
 import com.blinkflow.flowrun_executor.service.TelegramService;
 import com.blinkflow.flowrun_executor.service.TrelloService;
+import com.blinkflow.flowrun_executor.util.MetadataFormatter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +36,7 @@ public class FlowRunConsumer {
 	private String kafkaTopic;
 	private KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate;
 	private FlowRunRepository flowRunRepo;
-
+	private MetadataFormatter formatter;
 	private EmailService emailService;
 	private SlackService slackService;
 	private NotionService notionService;
@@ -45,11 +47,12 @@ public class FlowRunConsumer {
 
 	@Autowired
 	public FlowRunConsumer(KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate, FlowRunRepository flowRunRepo,
-			EmailService emailService, SlackService slackService, NotionService notionService,
+			MetadataFormatter formatter, EmailService emailService, SlackService slackService, NotionService notionService,
 			AsanaService asanaService, ClickUpService clickUpService, TelegramService telegramService,
 			TrelloService trelloService) {
 		this.kafkaTemplate = kafkaTemplate;
 		this.flowRunRepo = flowRunRepo;
+		this.formatter = formatter;
 		this.emailService= emailService; 
 		this.slackService = slackService;
 		this.notionService = notionService;
@@ -81,21 +84,22 @@ public class FlowRunConsumer {
 			acknowledgment.acknowledge();
 			return;
 		}
+		String prettyFlowRunMetadataMessage = formatter.metadataToPrettyMessage(flowRun.getMetadata());
 		try {
 			if (flowAction.getActionType().getName().equals(ActionType.EMAIL.getName()))
-				emailService.sendEmail(flowRun.getMetadata(), flowAction.getMetadata());
+				emailService.sendEmail(prettyFlowRunMetadataMessage, flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.SLACK.getName()))
-				slackService.sendMessageToSlackChannel(flowRun.getMetadata(), flowAction.getMetadata());
+				slackService.sendMessageToSlackChannel(prettyFlowRunMetadataMessage, flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.NOTION.getName()))
-				notionService.insertIntoNotionDoc(flowRun.getMetadata(), flowAction.getMetadata());
+				notionService.insertIntoNotionDoc(prettyFlowRunMetadataMessage, flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.ASANA.getName()))
-				asanaService.addTaskToAsanaProject(flowRun.getMetadata(), flowAction.getMetadata());
+				asanaService.addTaskToAsanaProject(prettyFlowRunMetadataMessage, flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.CLICKUP.getName()))
-				clickUpService.createTaskInClickUpList(flowRun.getMetadata(), flowAction.getMetadata());
+				clickUpService.createTaskInClickUpList(prettyFlowRunMetadataMessage, flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.TELEGRAM.getName()))
-				telegramService.sendMessageToTelegramChannel(flowRun.getMetadata(), flowAction.getMetadata());
+				telegramService.sendMessageToTelegramChannel(prettyFlowRunMetadataMessage, flowAction.getMetadata());
 			else if (flowAction.getActionType().getName().equals(ActionType.TRELLO.getName()))
-				trelloService.createCardInTrelloList(flowRun.getMetadata(), flowAction.getMetadata());
+				trelloService.createCardInTrelloList(prettyFlowRunMetadataMessage, flowAction.getMetadata());
 		} catch (Exception e) {
 			if (payload.getRetryCount() >= MAX_RETRIES) {
 				logger.error("Flow Run with ID: " + payload.getFlowRunID()

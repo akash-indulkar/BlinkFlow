@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -20,22 +19,21 @@ export default {
         }
       },
       animation: {
-        'loader-bar': 'loaderBarAnim 1.5s infinite linear'
+        "infinite-scroll": "infiniteScroll 20s linear infinite",
       },
       keyframes: {
-        loaderBarAnim: {
-          '0%': { width: '0%', left: '100%' },
-          '50%': { width: '70%', left: '30%' },
-          '100%': { width: '100%', left: '0%' },
+        infiniteScroll: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(calc(-50% - 32px))" }
         }
       },
-       fontFamily: {
+      fontFamily: {
         gothic: ['Special Gothic Expanded One', 'sans-serif'],
         opensans: ['Open Sans', 'sans-serif'],
         merriweather: ['Merriweather', 'sans-serif'],
-        }
+      }
     },
   },
   plugins: [],
-}
+} 
 

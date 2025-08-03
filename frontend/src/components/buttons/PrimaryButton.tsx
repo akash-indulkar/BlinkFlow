@@ -9,7 +9,8 @@ export const PrimaryButton = ({ children, onClick, size = "small", isLoading, mi
 }) => {
     if (isLoading) {
         return (
-            <div
+            <button
+                type="submit"
                 onClick={onClick}
                 className={`flex justify-center items-center 
                   ${size === "small" ? "text-sm" : size === "medium" ? "text-base" : "text-base md:text-xl"} 
@@ -32,13 +33,14 @@ export const PrimaryButton = ({ children, onClick, size = "small", isLoading, mi
              3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 
              13.803-3.7l3.181 3.182m0-4.991v4.99"/>
                 </svg>
-            </div>
+            </button>
         );
     }
 
     return (
-        <div
+        <button
             onClick={onClick}
+            type="submit"
             className={`flex justify-center items-center 
                 ${size === "small" ? "text-sm" : size === "medium" ? "text-base" : "text-base md:text-xl"} 
                 ${minWidth} 
@@ -46,7 +48,7 @@ export const PrimaryButton = ({ children, onClick, size = "small", isLoading, mi
                 font-[450] cursor-pointer shadow-xl 
                 bg-amber-700 text-white rounded-full`}>
             {children}
-        </div>
+        </button>
     );
 
 }

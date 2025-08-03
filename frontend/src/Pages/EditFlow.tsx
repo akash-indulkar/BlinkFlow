@@ -18,7 +18,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AddActionNode } from '../components/ReactFlow/AddActionNode';
 import { Modal } from '../components/Modal';
 import toast from 'react-hot-toast';
-import { Loader } from '../components/Loader';
 import { DeviceRecommendationToast } from '../components/DeviceRecommendationToast';
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
@@ -227,7 +226,6 @@ export const EditFlow = () => {
 
   return (
     <div style={{ height: '100vh', position: 'relative' }}>
-      {isLoading && <Loader />}
       <DeviceRecommendationToast />
       <div onClick={() => setIsEditing(true)} onBlur={() => setIsEditing(false)} className="absolute top-20 left-1/2 transform -translate-x-1/2 z-30 bg-white/80 backdrop-blur-md shadow-xl px-4 py-2 rounded-full flex items-center gap-2 border border-gray-200">
         {isEditing ? (

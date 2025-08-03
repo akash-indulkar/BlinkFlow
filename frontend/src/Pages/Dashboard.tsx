@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { Flow } from "../types/Flow";
 import { FlowTable } from "../components/FlowTable";
 import { PrimaryButton } from "../components/buttons/PrimaryButton";
-import { Loader } from "../components/Loader";
 
 function useFlows() {
     const [flows, setFlows] = useState<Flow[]>([]);
@@ -36,7 +35,6 @@ export const Dashboard = () => {
 
     if (!isLoading && flows.length === 0) {
         return <div className="pt-10 main-content flex-col justify-center ">
-            {isLoading && <Loader />}
             <div className="flex justify-center pt-8">
                 <img src="https://res.cloudinary.com/dadualj4l/image/upload/v1752380954/BlinkFlowCloudStore/not_found_dog-98fd5bff8642dd0089c45b3a82fe5d56_a5wiaw.svg"></img>
             </div>
@@ -50,7 +48,6 @@ export const Dashboard = () => {
     }
 
     return <div className="main-content flex-col justify-center ">
-        {isLoading && <Loader />}
         <div className="flex justify-center pt-8 px-4">
             <div className="max-w-screen-lg	 w-full">
                 <div className="flex justify-between ">

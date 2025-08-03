@@ -49,7 +49,7 @@ public class SecurityConfig {
 				.cors().and()
 				.csrf(customizer -> customizer.disable())
 				.authorizeHttpRequests(request -> request
-													.requestMatchers("/user/signup", "/user/login", "/actions/availableactions", "/triggers/availabletriggers")
+													.requestMatchers("/user/signup", "/user/login", "/user/signup/verify", "/user/login/forget", "/user/login/reset", "/actions/availableactions", "/triggers/availabletriggers")
 													.permitAll()
 													.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

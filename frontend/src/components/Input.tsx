@@ -13,7 +13,9 @@ export const Input = ({ label, placeholder, onChange, type }: {
                 <label>{label}</label><p className="pl-1 text-red-500">*</p>
             </div>
             <div className="flex relative">
-                <input required type={show ? "text" : "password"}
+                <input 
+                    required
+                    minLength={6} type={show ? "text" : "password"}
                     className="border text-sm rounded pr-10 px-4 py-2 w-full text-sm text-gray-900 bg-gray-50 rounded border border-gray-300 focus:outline focus:outline-indigo-500 invalid:text-red-600" placeholder={placeholder} onChange={onChange} />
                 <div
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-black"

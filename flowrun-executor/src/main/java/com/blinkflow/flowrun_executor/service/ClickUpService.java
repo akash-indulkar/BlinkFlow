@@ -25,7 +25,7 @@ public class ClickUpService {
 		this.restTemplate = restTemplate;
 	}
 	
-	public void createTaskInClickUpList(Map<String, Object> flowRunMetadata, Map<String, Object> clickUpMetadata) throws Exception {
+	public void createTaskInClickUpList(String prettyFlowRunMetadataMessage, Map<String, Object> clickUpMetadata) throws Exception {
 		final String url = "https://api.clickup.com/api/v2/list/" + clickUpMetadata.get("listID").toString() + "/task";
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -34,8 +34,7 @@ public class ClickUpService {
 		
 		Map<String, Object> body = new HashMap<String, Object>();
 		body.put("name", clickUpMetadata.get("taskName"));
-		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
-		body.put("description", serializableMetadataMessage);
+		body.put("description", prettyFlowRunMetadataMessage);
 		
 		HttpEntity<Map<String, Object>> request = new HttpEntity<Map<String,Object>>(body, headers);
 		ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);

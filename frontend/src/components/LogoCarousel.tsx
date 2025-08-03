@@ -13,7 +13,7 @@ export const LogoCarousel = () => {
         <div className="absolute left-0 top-0 h-full w-[90px] md:w-[400px] bg-gradient-to-r from-[#f9faff] to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 h-full w-[90px] md:w-[400px] bg-gradient-to-l from-[#f9faff] to-transparent z-10 pointer-events-none" />
 
-        <div className="animate-scroll flex space-x-8 sm:space-x-12 lg:space-x-16 w-max">
+        <div className="animate-infinite-scroll flex space-x-8 sm:space-x-12 lg:space-x-16 w-max">
             {[...logos, ...logos].map((logo, index) => (
                 <img
                     key={index}

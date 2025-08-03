@@ -11,6 +11,8 @@ import { NotFound } from './Pages/NotFound';
 import OAuth2Redirect from './Pages/OAuth2Redirect';
 import { PrivateRoute } from './auth/PrivateRoute';
 import { useDynamicViewport } from './hooks/useDynamicViewport';
+import { ForgetPassword } from './Pages/ForgetPassword';
+import { ResetPassword } from './Pages/ResetPassword';
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
                     <Route path={"/"} element={<Landing />} />
                     <Route path={"/signup"} element={<Signup />} />
                     <Route path={"/login"} element={<Login isAuthorized={true} />} />
+                    <Route path={"/login/forget"} element={<ForgetPassword/>} />
+                    <Route path={"/auth/reset-password"} element={<ResetPassword />} />
                     <Route path={"/login/oauth2/redirect"} element={<OAuth2Redirect />} />
                     <Route path={"/login/redirect"} element={<Login isAuthorized={false} />} />
                     <Route path={"/dashboard"} element={<PrivateRoute><Dashboard /></PrivateRoute>} />

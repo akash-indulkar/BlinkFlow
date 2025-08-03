@@ -29,17 +29,15 @@ public class NotionService {
 		this.restTemplate = restTemplate;
 	}
 	
-	public void insertIntoNotionDoc(Map<String, Object> flowRunMetadata, Map<String, Object> notionMetadata) throws Exception {
+	public void insertIntoNotionDoc(String prettyFlowRunMetadataMessage, Map<String, Object> notionMetadata) throws Exception {
 		final String url = "https://api.notion.com/v1/blocks/"+ notionMetadata.get("pageID").toString() +"/children";
 		HttpHeaders headers =  new HttpHeaders();
 		headers.setBearerAuth(notionMetadata.get("notionSecret").toString());
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Notion-Version", "2022-06-28");
 		
-		String serializableMetadataMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
-		
 		Map<String, Object> textContent = new HashMap<String, Object>();
-		textContent.put("content", serializableMetadataMessage);
+		textContent.put("content", prettyFlowRunMetadataMessage);
 		
 		Map<String, Object> text = new HashMap<String, Object>();
 		text.put("type", "text");

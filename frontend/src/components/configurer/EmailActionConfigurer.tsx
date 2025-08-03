@@ -18,7 +18,7 @@ export const EmailActionConfigurer = ({ setMetadata }: {
         <Input label={"To"} type={"email"} placeholder="To" onChange={(e) => {
             setEmailID(e.target.value)
             e.target.setCustomValidity("")
-        }}></Input>
+        }}/>
         <div className="pb-4">
             <Input label={"Subject"} type={"text"} placeholder="Subject" onChange={(e) => { setSubject(e.target.value) }} />
         </div>

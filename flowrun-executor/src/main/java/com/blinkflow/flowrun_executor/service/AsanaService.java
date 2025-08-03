@@ -27,7 +27,7 @@ public class AsanaService {
 		this.restTemplate = restTemplate;
 	}
 	
-	public void addTaskToAsanaProject(Map<String, Object> flowRunMetadata, Map<String, Object> asanaMetadata) throws Exception {
+	public void addTaskToAsanaProject(String prettyFlowRunMetadataMessage, Map<String, Object> asanaMetadata) throws Exception {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(asanaMetadata.get("personalAccessToken").toString());
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -35,8 +35,7 @@ public class AsanaService {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("name", asanaMetadata.get("taskName").toString());
 		
-		String serializableMessage = MetadataFormatter.toPrettyJson(flowRunMetadata);
-		data.put("notes", serializableMessage);
+		data.put("notes", prettyFlowRunMetadataMessage);
 		
 		List<String> projects = new ArrayList<String>();
 		projects.add(asanaMetadata.get("projectID").toString());
