@@ -39,43 +39,43 @@ export const Modal = ({ index, onSelect, availableItems }: { index: number, onSe
                     </button>
                 </div>
                 <div className="p-4 md:p-5 space-y-4">
-                    {step === 1 && selectedAction?.name === "Send an email" && <EmailActionConfigurer setMetadata={(metadata) => {
+                    {step === 1 && selectedAction?.name === "Send an Email" && <EmailActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata
                         })
                     }} />}
-                    {step === 1 && selectedAction?.name === "Add to Notion doc" && <NotionActionConfigurer setMetadata={(metadata) => {
+                    {step === 1 && selectedAction?.name === "Append to Notion Page" && <NotionActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata
                         })
                     }} />}
-                    {step === 1 && selectedAction?.name === "Send a slack notification" && <SlackActionConfigurer setMetadata={(metadata) => {
+                    {step === 1 && selectedAction?.name === "Send Slack Message" && <SlackActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata
                         })
                     }} />}
-                    {step === 1 && selectedAction?.name === "Send a message to Telegram channel" && <TelegramActionConfigurer setMetadata={(metadata) => {
+                    {step === 1 && selectedAction?.name === "Send Telegram Channel Message" && <TelegramActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata
                         })
                     }} />}
-                    {step === 1 && selectedAction?.name === "Add a task to Asana Project" && <AsanaTaskActionConfigurer setMetadata={(metadata) => {
+                    {step === 1 && selectedAction?.name === "Create Asana Task" && <AsanaTaskActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata
                         })
                     }} />}
-                    {step === 1 && selectedAction?.name === "Create card in Trello list" && <TrelloCardActionConfigurer setMetadata={(metadata) => {
+                    {step === 1 && selectedAction?.name === "Create Trello Card" && <TrelloCardActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata
                         })
                     }} />}
-                    {step === 1 && selectedAction?.name === "Create a task in ClickUp List" && <ClickUpTaskActionConfigurer setMetadata={(metadata) => {
+                    {step === 1 && selectedAction?.name === "Create ClickUp Task" && <ClickUpTaskActionConfigurer setMetadata={(metadata) => {
                         onSelect({
                             ...selectedAction,
                             metadata

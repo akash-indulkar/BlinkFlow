@@ -1,9 +1,8 @@
-import { ReactNode, useContext } from "react";
+import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext";
 
 export const PrivateRoute = ({ children } : {children : ReactNode}) => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true" || false;
 
   return isLoggedIn ? children : <Navigate to="/login/redirect" />;
 };

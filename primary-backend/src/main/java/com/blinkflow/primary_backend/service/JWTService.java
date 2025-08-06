@@ -40,7 +40,7 @@ private String secretKey;
 					.setClaims(claims)
 					.setSubject(id.toString())
 					.setIssuedAt(new Date(System.currentTimeMillis()))
-					.setExpiration(new Date(System.currentTimeMillis() + 1000*60*15))
+					.setExpiration(new Date(System.currentTimeMillis() + 1000*60*30))
 					.signWith(getKey(), SignatureAlgorithm.HS256)
 					.compact();
 	}

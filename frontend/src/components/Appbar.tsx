@@ -23,6 +23,7 @@ export const Appbar = () => {
                     "Content-type": "application/json"
                 }
             })
+            localStorage.setItem("isLoggedIn", "true");
             setName(response.data.data.name)
             setIsLoading(false)
         } catch (error) {

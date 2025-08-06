@@ -1,8 +1,8 @@
 import { createContext, useEffect, useState, ReactNode } from "react";
 
 export const AuthContext = createContext({
-  isLoggedIn: false,
-  login: (token: string) => { },
+  isLoggedIn: localStorage.getItem("isLoggedIn") === "true" || false,
+  login: (_token: string) => { },
   logout: () => { },
   isLoading: true
 });
@@ -19,12 +19,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = (token: string) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("isLoggedIn", "true");
     setIsLoggedIn(true);
     setIsLoading(false)
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
   };
 

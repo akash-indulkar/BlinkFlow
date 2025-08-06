@@ -3,31 +3,14 @@ import { Feature } from "./Feature"
 import { PrimaryButton } from "../buttons/PrimaryButton"
 import { SecondaryButton } from "../buttons/SecondaryButton"
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { HeroVideo } from "./HeroVideo";
 import { LogoCarousel } from "../LogoCarousel";
 
 export const Hero = () => {
-    const backendURL = import.meta.env.VITE_BACKEND_URL;
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
     const router = useNavigate();
     useEffect(() => {
-        try {
-            axios.get(`${backendURL}/user/me`, {
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem("token"),
-                    "Content-type": "application/json"
-                }
-            })
-                .then(res => {
-                    setIsLoggedIn(true)
-                })
-                .catch(e => {
-                    console.log(e)
-                })
-        } catch (error) {
-            console.log(error)
-        }
+        setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true" || false);
     })
     return <div>
         <div className="flex justify-center px-4">

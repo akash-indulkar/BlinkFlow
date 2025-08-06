@@ -26,6 +26,8 @@ public class SecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final JWTFilter jwtFilter;
     private final CustomOAuth2SuccessHandler successHandler;
+    @Value("${frontend.url}")
+    private String frontendURL;
     
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService, JWTFilter jwtFilter, CustomOAuth2SuccessHandler successHandler) {
@@ -80,7 +82,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurer(){
     	CorsConfiguration config = new CorsConfiguration();
-    	config.setAllowedOrigins(List.of("http://localhost:5173"));
+    	config.setAllowedOrigins(List.of(frontendURL));
     	config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     	config.setAllowedHeaders(List.of("*"));
     	config.setAllowCredentials(true);

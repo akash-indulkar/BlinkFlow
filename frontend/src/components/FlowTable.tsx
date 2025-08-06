@@ -44,7 +44,7 @@ export const FlowTable = ({
                 </div>
                 }
             </div>
-            <div className="pt-1 flex text-center justify-center basis-[55%]">{`${import.meta.env.VITE_HOOKS_URL}/hooks/catch/${flow.userID}/${flow.flowID}`}</div>
+            <div className="pt-1 flex text-center justify-center basis-[55%]">{`${import.meta.env.VITE_HOOKS_URL}/flowrun/initiate/${flow.userID}/${flow.flowID}`}</div>
             <div className="flex justify-end basis-[18%]">
 
                 <svg onClick={() => {
