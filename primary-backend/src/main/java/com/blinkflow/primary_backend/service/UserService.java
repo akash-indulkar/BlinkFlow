@@ -72,7 +72,7 @@ public class UserService {
 			User dbUser = urepo.findByEmail(emailID);
 			if (dbUser == null)
 				throw new RuntimeException("User does not exists, Please signup.");
-			OTPService.sendPasswordResetOTP(emailID, dbUser);
+			OTPService.sendPasswordResetOTP(emailID);
 			return "Password reset OTP sent successfully";
 		} catch (Exception e) {
 			throw new AuthenticationException("Failed to send password reset verification OTP: " + e.getMessage());
@@ -102,7 +102,7 @@ public class UserService {
 	public UserResponseDTO resetPassword(ResetOTPVerificationRequest OTPreq) {
 		try {
 			if (OTPService.verifyOtp(OTPreq.getEmailID(), OTPreq.getOTP())) {
-				User user = OTPService.getPasswordResetUserDetails(OTPreq.getEmailID());
+				User user = urepo.findByEmail(OTPreq.getEmailID());
 				user.setPassword(encoder.encode(OTPreq.getPassword()));
 				User updatedUser = urepo.save(user);
 				String token = jwtService.generateToken(updatedUser.getId());

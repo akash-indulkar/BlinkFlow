@@ -42,7 +42,7 @@ public class EmailOTPService {
 		mailService.sendEmail(reqUser.getEmail(), "One Time Password", "Your OTP for signup is: " + OTP);
 	}
 
-	public void sendPasswordResetOTP(@Valid String emailID, User dbUser) {
+	public void sendPasswordResetOTP(@Valid String emailID) {
 		Integer OTPcount = (Integer) redisTemplate.opsForValue().get("OTP_COUNT:" + emailID);
 		if (OTPcount == null) {
 			redisTemplate.opsForValue().set("OTP_COUNT:" + emailID, 1, Duration.ofMinutes(10));
@@ -54,7 +54,6 @@ public class EmailOTPService {
 
 		String OTP = String.format("%6d", new Random().nextInt(999999));
 		redisTemplate.opsForValue().set("OTP:" + emailID, OTP, Duration.ofMinutes(5));
-		redisTemplate.opsForValue().set("DBUSER:" + emailID, dbUser);
 
 		mailService.sendEmail(emailID, "One Time Password", "Your OTP for password reset is: " + OTP);
 	}
@@ -68,10 +67,6 @@ public class EmailOTPService {
 		String name = (String) redisTemplate.opsForValue().get("TEMP_USER_NAME:" + email);
 		String password = (String) redisTemplate.opsForValue().get("TEMP_USER_PASSWORD:" + email);
 		return UserRequestDTO.builder().email(email).name(name).password(password).build();
-	}
-
-	public User getPasswordResetUserDetails(String emailID) {
-		return (User) redisTemplate.opsForValue().get("DBUSER:" + emailID);
 	}
 
 	public void clearRedis(String email) {
