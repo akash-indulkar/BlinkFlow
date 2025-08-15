@@ -10,11 +10,11 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class SignatureValidator {
 
-	public static Boolean verifySignature(String receivedSignature, String secret, String rawPayload) throws InvalidKeyException, NoSuchAlgorithmException {
+	public static Boolean verifySignature(String receivedSignature, String secret, byte[] rawPayloadBytes) throws InvalidKeyException, NoSuchAlgorithmException {
 		final SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
         final Mac mac = Mac.getInstance("HmacSHA256");
         mac.init(keySpec);
-        final byte[] digest = mac.doFinal(rawPayload.getBytes(StandardCharsets.UTF_8));
+        final byte[] digest = mac.doFinal(rawPayloadBytes);
         final HexFormat hex = HexFormat.of();
         if(receivedSignature.startsWith("sha256")) {
         	final String calculatedSignature = "sha256=" + hex.formatHex(digest);

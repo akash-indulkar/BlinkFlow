@@ -49,7 +49,7 @@ const nodeOrigin: [number, number] = [0.5, 0];
 
 export const EditFlow = () => {
   const router = useNavigate();
-  const { flowID } = useParams();
+  const { flowID } = useParams<{ flowID: string }>();
   const { availableActions, availableTriggers } = useAvailableActionsAndTriggers();
   const [existingFlowName, setExistingFlowName] = useState<string>("")
   const [existingTrigger, setExistingTrigger] = useState<{ availableTriggerID: number, name: string, image: string, metadata: any }>();

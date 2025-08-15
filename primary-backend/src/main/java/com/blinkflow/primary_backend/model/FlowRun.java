@@ -1,5 +1,6 @@
 package com.blinkflow.primary_backend.model;
 
+import java.time.Instant;
 import java.util.Map;
 import com.blinkflow.primary_backend.config.JsonToMapConverter;
 import com.blinkflow.primary_backend.model.enums.FlowRunStatus;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,4 +38,13 @@ public class FlowRun {
 	private Flow flow;
 	@Enumerated(EnumType.STRING)
 	private FlowRunStatus status;
+	@Column(nullable = false, updatable = false)
+	private Instant triggeredAt;
+
+	@PrePersist
+	protected void onCreate() {
+		if (triggeredAt == null) {
+			triggeredAt = Instant.now();
+		}
+	}
 }

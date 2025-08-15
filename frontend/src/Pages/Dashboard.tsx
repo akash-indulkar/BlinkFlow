@@ -47,7 +47,7 @@ export const Dashboard = () => {
         </div>
     }
 
-    return <div className="main-content flex-col justify-center ">
+    return <div className="main-content flex-col justify-center">
         <div className="flex justify-center pt-8 px-4">
             <div className="max-w-screen-lg	 w-full">
                 <div className="flex justify-between ">
@@ -75,7 +75,7 @@ export const Dashboard = () => {
                         <div className="basis-[66%]">
                             <div className="flex justify-center">Webhook URL</div>
                         </div>
-                        <div className="basis-[7.3%]">
+                        <div className="basis-[10%]">
                             <div className="">Manage</div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@ export const Dashboard = () => {
                                     <div className="basis-[150%] h-6 bg-gray-300 dark:bg-gray-600 mb-2.5"></div>
                                 </div>
                                 <div className="basis-[50%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
-                                <div className="basis-[8%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
+                                <div className="basis-[15%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                             </div>
                             <div className="flex justify-between pt-4">
                                 <div className="flex gap-x-10 basis-[30%]">
@@ -99,7 +99,7 @@ export const Dashboard = () => {
                                     <div className="basis-[100%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                                 </div>
                                 <div className="basis-[50%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
-                                <div className="basis-[8%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
+                                <div className="basis-[15%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                             </div>
                             <div className="flex justify-between pt-4">
                                 <div className="flex gap-x-10 basis-[30%]">
@@ -107,7 +107,7 @@ export const Dashboard = () => {
                                     <div className="basis-[100%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                                 </div>
                                 <div className="basis-[50%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
-                                <div className="basis-[8%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
+                                <div className="basis-[15%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                             </div>
                             <div className="flex justify-between pt-4">
                                 <div className="flex gap-x-10 basis-[30%]">
@@ -115,7 +115,7 @@ export const Dashboard = () => {
                                     <div className="basis-[100%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                                 </div>
                                 <div className="basis-[50%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
-                                <div className="basis-[8%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
+                                <div className="basis-[15%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                             </div>
                             <div className="flex justify-between pt-4">
                                 <div className="flex gap-x-10 basis-[30%]">
@@ -123,7 +123,7 @@ export const Dashboard = () => {
                                     <div className="basis-[100%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                                 </div>
                                 <div className="basis-[50%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
-                                <div className="basis-[8%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
+                                <div className="basis-[15%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                             </div>
                             <div className="flex justify-between pt-4">
                                 <div className="flex gap-x-10 basis-[30%]">
@@ -131,7 +131,7 @@ export const Dashboard = () => {
                                     <div className="basis-[100%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                                 </div>
                                 <div className="basis-[50%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
-                                <div className="basis-[8%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
+                                <div className="basis-[15%] h-6 bg-gray-300  dark:bg-gray-600 mb-2.5"></div>
                             </div>
                         </div>
                     </div>

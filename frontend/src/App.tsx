@@ -13,7 +13,7 @@ import { PrivateRoute } from './auth/PrivateRoute';
 import { useDynamicViewport } from './hooks/useDynamicViewport';
 import { ForgetPassword } from './Pages/ForgetPassword';
 import { ResetPassword } from './Pages/ResetPassword';
-
+import { FlowRunLogs } from './Pages/FlowRunLogs';
 
 function App() {
     useDynamicViewport()
@@ -31,7 +31,8 @@ function App() {
                     <Route path={"/auth/reset-password"} element={<ResetPassword />} />
                     <Route path={"/login/oauth2/redirect"} element={<OAuth2Redirect />} />
                     <Route path={"/login/redirect"} element={<Login isAuthorized={false} />} />
-                    <Route path={"/dashboard"} element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                    <Route path={"/dashboard"} element={<PrivateRoute><Dashboard/></PrivateRoute>} />
+                    <Route path={"/flowrun/logs/:flowID"} element={<PrivateRoute><FlowRunLogs /></PrivateRoute>} />
                     <Route path={"/flow/create"} element={<PrivateRoute><CreateFlow /></PrivateRoute>} />
                     <Route path={"/flow/edit/:flowID"} element={<PrivateRoute><EditFlow /></PrivateRoute>} />
                     <Route path={"/*"} element={<NotFound />} />

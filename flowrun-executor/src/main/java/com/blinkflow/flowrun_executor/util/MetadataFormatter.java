@@ -46,7 +46,7 @@ public class MetadataFormatter {
 		List<Map<String, Object>> messages = List.of(Map.of("role", "system", "content",
 				"You convert webhook metadata into a short, meaningful summary. No headings or context—just the message. E.g. JSON: { \"event\": \"commit\", \"message\": \"Refactored service layer\" } → A commit was made: Refactored service layer."),
 				Map.of("role", "user", "content", "Format this JSON:\n\n" + jsonInput));
-		Map<String, Object> requestBody = Map.of("model", "meta-llama/llama-4-scout-17b-16e-instruct", "messages",
+		Map<String, Object> requestBody = Map.of("model", "openai/gpt-oss-120b", "messages",
 				messages);
 
 		HttpHeaders headers = new HttpHeaders();

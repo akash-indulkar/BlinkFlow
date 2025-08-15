@@ -49,9 +49,12 @@ public class FlowRunService {
 			Enumeration<String> headers = request.getHeaderNames();
 			final String receivedSignature = Optional.ofNullable(SignatureGetter.getSignatureFromHeader(headers, request))
 												.orElseThrow(() -> new AuthenticationException("SHA256 Signature not found"));
-			final String rawPayload = Optional.ofNullable(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())))
-												.orElseThrow(() -> new EntityNotFound("Empty request body received"));
-			Boolean isSignatureValid = SignatureValidator.verifySignature(receivedSignature, secret, rawPayload);
+			
+			byte[] rawPayloadBytes = request.getInputStream().readAllBytes();
+			if (rawPayloadBytes.length == 0) {
+	            throw new EntityNotFound("Empty request body received");
+	        }
+			Boolean isSignatureValid = SignatureValidator.verifySignature(receivedSignature, secret, rawPayloadBytes);
 			if(!isSignatureValid) throw new AuthenticationException("Invalid SHA256 Signature");
 		}
 		
