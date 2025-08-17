@@ -17,7 +17,6 @@ export const FlowTable = ({
     const router = useNavigate();
     const [selectedFlowID, setSelectedFlowID] = useState<number | null>(null);
     const deleteFlow = (flowID: number) => {
-        console.log(flowID)
         axios.delete(`${backendURL}/flow/delete/${flowID}`, {
             headers: {
                 Authorization: "Bearer " + localStorage.getItem("token")
