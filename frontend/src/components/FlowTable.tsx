@@ -29,13 +29,13 @@ export const FlowTable = ({
 
     return <div className="p-4 ">
         {flows.map(flow => <div key={flow.flowID} className="flex border-b border-t px-3 py-3">
-            <div className="flex justify-start basis-[20%]">
+            <div className="pt-1.5 flex justify-start basis-[20%]">
                 <svg className=" m-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="20" width="20" color="GrayWarm10" name="miscBoltOutlined">
                     <path fill="#2D2E2E" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm1-14-5.87 7H11v5l5.87-7H13V6Z"></path>
                 </svg>
                 <div className="pt-1 truncate overflow-hidden text-ellipsis max-w-[140px] text-center">{flow.name}</div>
             </div>
-            <div className="flex basis-[18%]">
+            <div className="pt-1.5 flex basis-[18%]">
                 <img className="w-8 h-8 p-0.5" src={flow.flowTriggerImage}></img>
                 {flow.flowActions.length != 0 && <div className="flex">
                     <img className="w-8 h-8 p-0.5" src={flow.flowActions[0]?.flowActionImage}></img>
@@ -43,7 +43,36 @@ export const FlowTable = ({
                 </div>
                 }
             </div>
-            <div className="pt-1 flex text-center justify-center basis-[55%]">{`${import.meta.env.VITE_HOOKS_URL}/flowrun/initiate/${flow.userID}/${flow.flowID}`}</div>
+            <div className="pt-2 flex text-center justify-center basis-[55%]">
+                <span>
+                    {`${import.meta.env.VITE_HOOKS_URL}/flowrun/initiate/${flow.userID}/${flow.flowID}`}
+                </span>
+                <div className="relative group">
+                    <svg
+                        onClick={() => {
+                            const url = `${import.meta.env.VITE_HOOKS_URL}/flowrun/initiate/${flow.userID}/${flow.flowID}`;
+                            navigator.clipboard.writeText(url);
+                            toast.success("Copied to clipboard!");
+                        }}
+                        className="ml-2 w-5 h-5 hover:cursor-pointer hover:text-blue-500"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
+                        <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
+                    </svg>
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+                        Copy
+                    </span>
+                </div>
+            </div>
             <div className="flex justify-end basis-[18%]">
                 <div className="relative group">
                     <svg onClick={() => {

@@ -10,7 +10,7 @@ export const TelegramActionConfigurer = ({ setMetadata }: {
     const handleSubmit = () => {
         setMetadata({
             botToken,
-            channelUsername
+            channelUsername: "@" + channelUsername
         });
     };
 
