@@ -40,6 +40,7 @@ public class FlowRun {
 	private FlowRunStatus status;
 	@Column(nullable = false, updatable = false)
 	private Instant triggeredAt;
+	private String prettyFlowRunMetadataMessage;
 
 	@PrePersist
 	protected void onCreate() {

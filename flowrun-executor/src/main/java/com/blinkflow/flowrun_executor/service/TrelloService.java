@@ -13,7 +13,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import com.blinkflow.flowrun_executor.exception.ActionExecutionException;
-import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
 @Service
 public class TrelloService {

@@ -1,24 +1,26 @@
 package com.blinkflow.primary_backend.service;
 
 import java.time.Duration;
+import java.security.SecureRandom;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.blinkflow.primary_backend.dto.UserRequestDTO;
 import com.blinkflow.primary_backend.exception.AuthenticationException;
-import com.blinkflow.primary_backend.model.User;
 import jakarta.validation.Valid;
 
 @Service
 public class EmailOTPService {
 	private final RedisTemplate<String, Object> redisTemplate;
 	private final EmailService mailService;
+	private final SecureRandom secureRandom;
 
 	@Autowired
-	public EmailOTPService(EmailService mailService, RedisTemplate<String, Object> redisTemplate) {
+	public EmailOTPService(EmailService mailService, RedisTemplate<String, Object> redisTemplate, SecureRandom secureRandom) {
 		this.mailService = mailService;
 		this.redisTemplate = redisTemplate;
+		this.secureRandom = secureRandom;
 	}
 
 	public void sendSignupOTP(UserRequestDTO reqUser) {
@@ -36,7 +38,7 @@ public class EmailOTPService {
 		redisTemplate.opsForValue().set("TEMP_USER_PASSWORD:" + reqUser.getEmail(), reqUser.getPassword(),
 				Duration.ofMinutes(10));
 
-		String OTP = String.format("%6d", new Random().nextInt(999999));
+		String OTP = String.format("%06d", 100000 + secureRandom.nextInt(900000));
 		redisTemplate.opsForValue().set("OTP:" + reqUser.getEmail(), OTP, Duration.ofMinutes(5));
 
 		mailService.sendEmail(reqUser.getEmail(), "One Time Password", "Your OTP for signup is: " + OTP);
@@ -52,7 +54,7 @@ public class EmailOTPService {
 			redisTemplate.opsForValue().increment("OTP_COUNT:" + emailID);
 		}
 
-		String OTP = String.format("%6d", new Random().nextInt(999999));
+		String OTP = String.format("%06d", 100000 + secureRandom.nextInt(900000));
 		redisTemplate.opsForValue().set("OTP:" + emailID, OTP, Duration.ofMinutes(5));
 
 		mailService.sendEmail(emailID, "One Time Password", "Your OTP for password reset is: " + OTP);
@@ -69,8 +71,16 @@ public class EmailOTPService {
 		return UserRequestDTO.builder().email(email).name(name).password(password).build();
 	}
 
-	public void clearRedis(String email) {
-		redisTemplate.delete("OTP:" + email);
-		redisTemplate.delete("TEMP_USER:" + email);
+	public void clearSignupRedis(String email) {
+	    redisTemplate.delete("OTP:" + email);
+	    redisTemplate.delete("TEMP_USER_NAME:" + email);
+	    redisTemplate.delete("TEMP_USER_PASSWORD:" + email);
+	    redisTemplate.delete("OTP_COUNT:" + email);
 	}
+
+	public void clearPasswordResetRedis(String email) {
+	    redisTemplate.delete("OTP:" + email);
+	    redisTemplate.delete("OTP_COUNT:" + email);
+	}
+
 }

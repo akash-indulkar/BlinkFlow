@@ -6,10 +6,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.blinkflow.flowrun_listener.util.MetadataFormatter;
 import com.blinkflow.flowrun_listener.dto.FlowRunResponseDTO;
 import com.blinkflow.flowrun_listener.exception.AuthenticationException;
 import com.blinkflow.flowrun_listener.exception.EntityNotFound;
@@ -30,12 +30,14 @@ public class FlowRunService {
 	private final FlowRepository flowRepo;
 	private final FlowRunRepository flowRunRepo;
 	private final FlowRunOutBoxRepository flowRunOutBoxRepo;
+	private final MetadataFormatter formatter;
 	
 	@Autowired
-	public FlowRunService(FlowRepository flowRepo, FlowRunRepository flowRunRepo, FlowRunOutBoxRepository flowRunOutBoxRepo) {
+	public FlowRunService(FlowRepository flowRepo, FlowRunRepository flowRunRepo, FlowRunOutBoxRepository flowRunOutBoxRepo, MetadataFormatter formatter) {
 		this.flowRepo = flowRepo;
 		this.flowRunRepo = flowRunRepo;
 		this.flowRunOutBoxRepo = flowRunOutBoxRepo;
+		this.formatter = formatter;
 	}
 
     @Transactional
@@ -59,10 +61,12 @@ public class FlowRunService {
 		}
 		
 		try {
+			String prettyFlowRunMetadataMessage = formatter.metadataToPrettyMessage(requestBody);
 			FlowRun flowRun = FlowRun.builder()
 					.flow(flow)
 					.metadata(requestBody)
 					.status(FlowRunStatus.PENDING)
+					.prettyFlowRunMetadataMessage(prettyFlowRunMetadataMessage)
 					.build();
 			FlowRun savedFlowRun = flowRunRepo.save(flowRun);
 			

@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
 import com.blinkflow.flowrun_executor.exception.ActionExecutionException;
-import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
 @Service
 public class EmailService {

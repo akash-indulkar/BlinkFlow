@@ -14,7 +14,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +39,7 @@ public class FlowRun {
 	private FlowRunStatus status;
 	@Column(nullable = false, updatable = false)
 	private Instant triggeredAt;
+	private String prettyFlowRunMetadataMessage;
 
 	@PrePersist
 	protected void onCreate() {

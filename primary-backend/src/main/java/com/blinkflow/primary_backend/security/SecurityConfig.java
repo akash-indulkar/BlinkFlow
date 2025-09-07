@@ -1,5 +1,6 @@
 package com.blinkflow.primary_backend.security;
 
+import java.security.SecureRandom;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,71 +26,74 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final JWTFilter jwtFilter;
-    private final CustomOAuth2SuccessHandler successHandler;
-    @Value("${frontend.url}")
-    private String frontendURL;
-    
-    @Autowired
-    public SecurityConfig(UserDetailsService userDetailsService, JWTFilter jwtFilter, CustomOAuth2SuccessHandler successHandler) {
-    	this.userDetailsService = userDetailsService;
-    	this.jwtFilter = jwtFilter;
-    	this.successHandler = successHandler;
-    }
-   
-    @Value("${frontend.redirect.url}")
+	private final CustomOAuth2SuccessHandler successHandler;
+	@Value("${frontend.url}")
+	private String frontendURL;
+
+	@Autowired
+	public SecurityConfig(UserDetailsService userDetailsService, JWTFilter jwtFilter,
+			CustomOAuth2SuccessHandler successHandler) {
+		this.userDetailsService = userDetailsService;
+		this.jwtFilter = jwtFilter;
+		this.successHandler = successHandler;
+	}
+
+	@Value("${frontend.redirect.url}")
 	private String frontendRedirectURL;
-    
+
 	@Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
-    }
-    
-    @Bean
-	SecurityFilterChain securityFilterChain(HttpSecurity http) throws  Exception{
-		
-				http
-				.cors().and()
-				.csrf(customizer -> customizer.disable())
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder(12);
+	}
+
+	@Bean
+	public SecureRandom secureRandom() {
+		return new SecureRandom();
+	}
+
+	@Bean
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+		http.cors().and().csrf(customizer -> customizer.disable())
 				.authorizeHttpRequests(request -> request
-													.requestMatchers("/user/signup", "/user/login", "/user/signup/verify", "/user/login/forget", "/user/login/reset", "/actions/availableactions", "/triggers/availabletriggers")
-													.permitAll()
-													.anyRequest().authenticated())
+						.requestMatchers("/user/signup", "/user/login", "/user/signup/verify", "/user/login/forget",
+								"/user/login/reset", "/actions/availableactions", "/triggers/availabletriggers")
+						.permitAll().anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authProvider())
-				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-				.oauth2Login(oauth -> oauth.successHandler(successHandler)
-											.failureHandler((request, response, exception) -> {
-												response.sendRedirect(frontendRedirectURL + "?error=true");
-											}));
-		
+				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).oauth2Login(
+						oauth -> oauth.successHandler(successHandler).failureHandler((request, response, exception) -> {
+							response.sendRedirect(frontendRedirectURL + "?error=true");
+						}));
+
 		return http.build();
-		
+
 	}
-    
-    @Bean
+
+	@Bean
 	AuthenticationProvider authProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailsService);
 		provider.setPasswordEncoder(passwordEncoder());
 		return provider;
 	}
-    
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+
+	@Bean
+	AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
 	}
-    
-    @Bean
-    public CorsConfigurationSource corsConfigurer(){
-    	CorsConfiguration config = new CorsConfiguration();
-    	config.setAllowedOrigins(List.of(frontendURL));
-    	config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    	config.setAllowedHeaders(List.of("*"));
-    	config.setAllowCredentials(true);
-    	
-    	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    	source.registerCorsConfiguration("/**", config);
-    	return source;
-    	
-    }
-} 
+
+	@Bean
+	public CorsConfigurationSource corsConfigurer() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowedOrigins(List.of(frontendURL));
+		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		config.setAllowedHeaders(List.of("*"));
+		config.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return source;
+
+	}
+}

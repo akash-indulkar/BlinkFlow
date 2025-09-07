@@ -16,14 +16,19 @@ export const OTPVerification = ({ email, name, password, type, onClose }: { emai
     const { login } = useContext(AuthContext);
 
     useEffect(() => {
+        setTimer(60);
         const countdown = setInterval(() => {
             setTimer((prev) => {
-                if (prev <= 1) clearInterval(countdown);
+                if (prev <= 1) {
+                    clearInterval(countdown);
+                    return 0;
+                }
                 return prev - 1;
             });
         }, 1000);
         return () => clearInterval(countdown);
     }, [timerKey]);
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const value = e.target.value;
@@ -58,51 +63,37 @@ export const OTPVerification = ({ email, name, password, type, onClose }: { emai
     };
 
     const handleResend = async () => {
-        if (type == "reset") {
-            try {
+        try {
+            if (type === "reset") {
                 await axios.post(
                     `${backendURL}/user/login/forget?emailID=${email}`,
-                    {
-                        headers: { "Content-type": "application/json" },
-                    }
+                    {},
+                    { headers: { "Content-type": "application/json" } }
                 );
-                toast.success("OTP resent successfully!");
-            } catch (error) {
-                const nextAttempts = resendOTPAttempts + 1;
-                setResendOTPAttempts(nextAttempts);
-                if (nextAttempts >= 3) {
-                    toast.error("You have exceeded the resend limit. Please try again later.");
-                    router("/");
-                } else {
-                    toast("OTP Resend Attempts left: " + (3 - nextAttempts));
-                }
-                setTimer(60);
-                setTimerKey((prev) => prev + 1);
-                setOtp(Array(6).fill(""));
-            }
-        } else if (type === "signup") {
-            try {
+            } else if (type === "signup") {
                 await axios.post(
                     `${backendURL}/user/signup`,
                     JSON.stringify({ email, password, name }),
                     { headers: { "Content-type": "application/json" } }
                 );
-                toast.success("OTP resent successfully!");
-            } catch (error) {
-                const nextAttempts = resendOTPAttempts + 1;
-                setResendOTPAttempts(nextAttempts);
-                if (nextAttempts >= 3) {
-                    toast.error("You have exceeded the resend limit. Please try again later.");
-                    router("/");
-                } else {
-                    toast("OTP Resend attempts left: " + (3 - nextAttempts));
-                }
-                setTimer(60);
-                setTimerKey((prev) => prev + 1);
-                setOtp(Array(6).fill(""));
             }
+            toast.success("OTP resent successfully!");
+        } catch (error) {
+            const nextAttempts = resendOTPAttempts + 1;
+            setResendOTPAttempts(nextAttempts);
+            if (nextAttempts >= 3) {
+                toast.error("You have exceeded the resend limit. Please try again later.");
+                router("/");
+                return;
+            } else {
+                toast("OTP Resend attempts left: " + (3 - nextAttempts));
+            }
+        } finally {
+            setOtp(Array(6).fill(""));
+            setTimerKey((prev) => prev + 1); 
         }
     };
+
 
     const handleSubmit = async () => {
         const otpCode = otp.join("");

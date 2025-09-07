@@ -1,6 +1,20 @@
 version: "3.8"
 
 services:
+  frontend:
+    image: akashxdev/blinkflow-frontend:v1
+    container_name: blinkflow-frontend
+    ports:
+      - "80:80"
+    environment:
+      VITE_BACKEND_URL: ${VITE_BACKEND_URL}
+      VITE_HOOKS_URL: ${VITE_HOOKS_URL}
+      VITE_GOOGLE_AUTH_URL: ${VITE_GOOGLE_AUTH_URL}
+    depends_on:
+      - primary-backend
+    networks:
+      - blinkflow-network
+
   primary-backend:
     image: akashxdev/blinkflow-primary-backend:v1
     container_name: blinkflow-primary-backend

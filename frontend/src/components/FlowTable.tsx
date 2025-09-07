@@ -54,7 +54,7 @@ export const FlowTable = ({
                             navigator.clipboard.writeText(url);
                             toast.success("Copied to clipboard!");
                         }}
-                        className="ml-2 w-5 h-5 hover:cursor-pointer hover:text-blue-500"
+                        className="ml-2 mt-1 w-5 h-5 hover:cursor-pointer hover:text-blue-500"
                         xmlns="http://www.w3.org/2000/svg"
                         width="32"
                         height="32"

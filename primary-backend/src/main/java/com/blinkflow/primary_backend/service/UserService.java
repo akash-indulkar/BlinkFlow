@@ -89,7 +89,7 @@ public class UserService {
 				String token = jwtService.generateToken(savedUser.getId());
 				UserResponseDTO response = UserMapper.toResponseDTO(savedUser);
 				response.setToken(token);
-				OTPService.clearRedis(savedUser.getEmail());
+				OTPService.clearPasswordResetRedis(savedUser.getEmail());
 				return response;
 			} else {
 				throw new AuthenticationException("OTP verification failed");
@@ -108,7 +108,7 @@ public class UserService {
 				String token = jwtService.generateToken(updatedUser.getId());
 				UserResponseDTO response = UserMapper.toResponseDTO(updatedUser);
 				response.setToken(token);
-				OTPService.clearRedis(user.getEmail());
+				OTPService.clearSignupRedis(user.getEmail());
 				return response;
 			} else {
 				throw new AuthenticationException("OTP verificatin failed");

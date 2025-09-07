@@ -22,7 +22,6 @@ import com.blinkflow.flowrun_executor.service.NotionService;
 import com.blinkflow.flowrun_executor.service.SlackService;
 import com.blinkflow.flowrun_executor.service.TelegramService;
 import com.blinkflow.flowrun_executor.service.TrelloService;
-import com.blinkflow.flowrun_executor.util.MetadataFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +35,6 @@ public class FlowRunConsumer {
 	private String kafkaTopic;
 	private KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate;
 	private FlowRunRepository flowRunRepo;
-	private MetadataFormatter formatter;
 	private EmailService emailService;
 	private SlackService slackService;
 	private NotionService notionService;
@@ -47,12 +45,11 @@ public class FlowRunConsumer {
 
 	@Autowired
 	public FlowRunConsumer(KafkaTemplate<String, FlowRunEventPayload> kafkaTemplate, FlowRunRepository flowRunRepo,
-			MetadataFormatter formatter, EmailService emailService, SlackService slackService, NotionService notionService,
+			EmailService emailService, SlackService slackService, NotionService notionService,
 			AsanaService asanaService, ClickUpService clickUpService, TelegramService telegramService,
 			TrelloService trelloService) {
 		this.kafkaTemplate = kafkaTemplate;
 		this.flowRunRepo = flowRunRepo;
-		this.formatter = formatter;
 		this.emailService= emailService; 
 		this.slackService = slackService;
 		this.notionService = notionService;
@@ -84,7 +81,7 @@ public class FlowRunConsumer {
 			acknowledgment.acknowledge();
 			return;
 		}
-		String prettyFlowRunMetadataMessage = formatter.metadataToPrettyMessage(flowRun.getMetadata());
+		String prettyFlowRunMetadataMessage = flowRun.getPrettyFlowRunMetadataMessage();
 		try {
 			if (flowAction.getActionType().getName().equals(ActionType.EMAIL.getName()))
 				emailService.sendEmail(prettyFlowRunMetadataMessage, flowAction.getMetadata());
